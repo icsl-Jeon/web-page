@@ -12,7 +12,7 @@ export default function Home({
   allPostsData: {
     name: string;
     title: string;
-    tags: string[];
+    tag: string[];
   }[];
 }) {
   return (
@@ -30,9 +30,13 @@ export default function Home({
       <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
         <h2 className={utilStyles.headingLg}>Blog</h2>
         <ul className={utilStyles.list}>
-          {allPostsData.map(({ name, title }) => (
+          {allPostsData.map(({ name, title, tag }) => (
             <li className={utilStyles.listItem} key={name}>
               <Link href={`/posts/${name}`}>{title}</Link>
+              <br></br>
+              {tag.map((tag, index) => {
+                return <Link href={`/tags/${tag}`}>{tag}</Link>;
+              })}
               <br />
             </li>
           ))}
@@ -44,6 +48,7 @@ export default function Home({
 
 export const getStaticProps: GetStaticProps = async () => {
   const allPostsData = getSortedPostsData();
+  console.log(allPostsData);
   return {
     props: {
       allPostsData,

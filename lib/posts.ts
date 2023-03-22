@@ -3,6 +3,7 @@ import path from "path";
 import matter from "gray-matter";
 import { remark } from "remark";
 import html from "remark-html";
+import { map } from "../pages/map";
 
 const postsDirectory = path.join(process.cwd(), "pages/posts");
 
@@ -13,14 +14,8 @@ export function getSortedPostsData() {
     const postName = fileName.replace(/\.tsx$/, "");
 
     const fullPath = path.join(postsDirectory, fileName);
-    console.log(fullPath);
 
-    const fileContents = fs.readFileSync(fullPath, "utf8");
-    const match = fileContents.match(/export const meta = ({[\s\S]+?});/);
-    const matchedString = match[1];
-    console.log(matchedString);
-
-    const meta = {};
+    const meta = map.get(postName);
 
     return {
       name: postName,
