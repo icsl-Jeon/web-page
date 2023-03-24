@@ -8,8 +8,13 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  color: blue
 }
 
 .backToHome {
   margin: 3rem 0 0;
+}
+
+.main {
+  color: red
 }
