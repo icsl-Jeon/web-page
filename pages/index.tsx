@@ -10,10 +10,9 @@ export default function Home({
   allPostsData,
 }: {
   allPostsData: {
-    date: string;
+    name: string;
     title: string;
-    id: string;
-    tags: string[];
+    tag: string[];
   }[];
 }) {
   return (
@@ -31,22 +30,14 @@ export default function Home({
       <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
         <h2 className={utilStyles.headingLg}>Blog</h2>
         <ul className={utilStyles.list}>
-          {allPostsData.map(({ id, date, title, tags }) => (
-            <li className={utilStyles.listItem} key={id}>
-              <Link href={`/posts/${id}`}>{title}</Link>
-              <ul>
-                {tags.map((tag, index) => {
-                  return (
-                    <Link href={`/posts/tags/${tag}`} key={index}>
-                      {tag}
-                    </Link>
-                  );
-                })}
-              </ul>
+          {allPostsData.map(({ name, title, tag }) => (
+            <li className={utilStyles.listItem} key={name}>
+              <Link href={`/posts/${name}`}>{title}</Link>
+              <br></br>
+              {tag.map((tag, index) => {
+                return <Link href={`/tags/${tag}`}>{tag}</Link>;
+              })}
               <br />
-              <small className={utilStyles.lightText}>
-                <Date dateString={date} />
-              </small>
             </li>
           ))}
         </ul>
