@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import html from "remark-html";
-import { map } from "../pages/map";
+import { map } from "../map";
 
 const postsDirectory = path.join(process.cwd(), "pages/posts");
 

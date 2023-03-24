@@ -1,7 +1,6 @@
 import { GetStaticProps, GetStaticPaths } from "next";
 import { getSortedPostsData } from "../../lib/posts";
-import { map } from "../map";
-import { Tag } from "../map";
+import { Tag } from "../../map";
 
 const TagPage = ({ posts }: { posts: { title: string }[] }) => {
   return (
