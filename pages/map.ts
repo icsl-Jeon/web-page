@@ -12,4 +12,5 @@ export enum Tag {
 export const map: Map<string, Meta> = new Map([
   ["post1", { title: "title of post1", tag: [Tag.Apple, Tag.Banana] }],
   ["post2", { title: "title of post2", tag: [Tag.Apple, Tag.Mango] }],
+  ["post3", { title: "title of post3", tag: [Tag.Apple, Tag.Mango] }],
 ]);

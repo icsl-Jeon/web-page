@@ -15,7 +15,6 @@ const TagPage = ({ posts }: { posts: { title: string }[] }) => {
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const tags = Object.values(Tag);
-  console.log("filtered", tags);
 
   const paths = tags.map((tag) => ({
     params: { tag: tag },
@@ -26,7 +25,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const posts = getSortedPostsData();
   const filteredPosts = posts.filter((post) =>
-    post.tag.includes(params?.tag as string)
+    post.tag?.includes(params?.tag as string)
   );
 
   return { props: { posts: filteredPosts } };
