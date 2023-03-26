@@ -11,8 +11,10 @@
     "next": "^13.0.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-force-graph": "^1.42.0",
     "remark": "^14.0.2",
-    "remark-html": "^15.0.1"
+    "remark-html": "^15.0.1",
+    "ts-node": "^10.9.1"
   },
   "devDependencies": {
     "@types/node": "^18.11.9",
