@@ -34,7 +34,10 @@ export function getSortedPostsData() {
 
 export function genRandomTree(N = 300, reverse = false) {
   return {
-    nodes: [...Array.from(Array(N).keys())].map((i) => ({ id: i })),
+    nodes: [...Array.from(Array(N).keys())].map((i) => ({
+      id: i,
+      group: Math.round(Math.random()),
+    })),
     links: [...Array.from(Array(N).keys())]
       .filter((id) => id)
       .map((id) => ({
