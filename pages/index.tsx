@@ -30,7 +30,7 @@ export default function Home({
   return (
     <div>
       <div>{forceGraph}</div>
-      <Layout home>
+      {/* <Layout home>
         <Head>
           <title>{siteTitle}</title>
         </Head>
@@ -57,7 +57,7 @@ export default function Home({
             ))}
           </ul>
         </section>
-      </Layout>
+      </Layout> */}
     </div>
   );
 }
