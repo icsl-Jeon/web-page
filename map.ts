@@ -4,9 +4,9 @@ interface Meta {
 }
 
 export enum Tag {
-  Apple = "#Apple",
-  Banana = "#Banana",
-  Mango = "#Mango",
+  Apple = "apple",
+  Banana = "banana",
+  Mango = "mango",
 }
 
 export const map: Map<string, Meta> = new Map([
