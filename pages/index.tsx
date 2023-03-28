@@ -140,17 +140,28 @@ export default function Home({
     loadForceGraph();
   }, [hoveredNode]);
   return (
-    <div className="relative">
-      <div
-        className="p-2 w-full animate-bounce absolute z-10  text-md sm:text-2xl transition-opacity
+    <>
+      <Head>
+        {" "}
+        <title>Boseong Jeon</title>
+        <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+          rel="stylesheet"
+        />
+      </Head>
+      <div className="relative">
+        <div
+          className="p-2 w-full animate-bounce absolute z-10  text-md sm:text-2xl transition-opacity
        duration-1000 delay-200 opacity-100 flex items-center justify-center sm:justify-start "
-      >
-        <p className="py-6 px-5 text-left  text-gray-600">
-          Click node to visit page 🤖{" "}
-        </p>
+        >
+          <p className="py-6 px-5 text-left  text-gray-600 font-sans">
+            Click node to visit page 🤖{" "}
+          </p>
+        </div>
+        <div>{forceGraph}</div>
       </div>
-      <div>{forceGraph}</div>
-    </div>
+    </>
   );
 }
 
