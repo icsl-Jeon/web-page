@@ -78,12 +78,12 @@ export default function Home({
           }}
           nodeCanvasObject={(node, ctx, globalScale) => {
             const label = node.id;
-            let fontSize = 36 / globalScale;
+            let fontSize = 2;
             ctx.fillStyle = "rgba(0, 0, 0, 1)";
 
             if ("group" in node) {
               if (node.group == 2) fontSize *= 1.2;
-              if (node.group == 1) fontSize /= 2;
+              if (node.group == 1) fontSize /= 1.6;
 
               if (node.group == 0) ctx.font = `bold ${fontSize}px Sans-Serif`;
               if (node.group == 1) ctx.font = ` ${fontSize}px Sans-Serif`;
@@ -111,7 +111,7 @@ export default function Home({
           }}
           onEngineStop={() => {
             if (fgRef.current === undefined) return;
-            fgRef.current.zoomToFit(1000);
+            fgRef.current.zoomToFit(1000, 20);
           }}
           cooldownTicks={5}
         />
