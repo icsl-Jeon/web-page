@@ -1,11 +1,12 @@
 import Head from "next/head";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useLayoutEffect, useRef } from "react";
 import Layout, { siteTitle } from "../components/layout";
 import utilStyles from "../styles/utils.module.css";
 import { getSortedPostsData } from "../lib/posts";
 import Link from "next/link";
 import { GetStaticProps } from "next";
 import { map } from "../map";
+
 export default function Home({
   allPostsData,
 }: {
@@ -20,18 +21,20 @@ export default function Home({
   const fgRef = useRef<any>();
 
   const [forceGraph, setForceGraph] = useState<null | JSX.Element>(null);
+  const [hoveredNode, setHoverNode] = useState<any>(null);
+
   useEffect(() => {
     async function loadForceGraph() {
       const myString = "Dr. Boseong Jeon🦊";
-      let nodes: Array<{ id: string; group: number }> = [
-        { id: myString, group: 2 },
+      let nodes: Array<{ id: string; group: number; isFocus: boolean }> = [
+        { id: myString, group: 2, isFocus: false },
       ];
       let links: Array<{ source: string; target: string }> = [];
       let tagSet = new Set();
 
       allPostsData.forEach((post) => {
         const postTitle = post.title;
-        nodes.push({ id: postTitle, group: 0 });
+        nodes.push({ id: postTitle, group: 0, isFocus: false });
 
         post.referring.forEach((refer) => {
           const referObject = map.get(refer);
@@ -42,13 +45,12 @@ export default function Home({
         });
         post.tag.forEach((tag) => {
           if (!tagSet.has(tag)) {
-            nodes.push({ id: tag, group: 1 });
+            nodes.push({ id: tag, group: 1, isFocus: false });
             tagSet.add(tag);
           }
           links.push({ source: postTitle, target: tag });
         });
       });
-      1;
 
       // Only load the component on the client-side, to avoid issues with `window`
       const { ForceGraph2D } = await import("react-force-graph");
@@ -83,7 +85,7 @@ export default function Home({
 
             if ("group" in node) {
               if (node.group == 2) fontSize *= 1.2;
-              if (node.group == 1) fontSize /= 1.6;
+              if (node.group == 1) fontSize /= 1.1;
 
               if (node.group == 0) ctx.font = `bold ${fontSize}px Sans-Serif`;
               if (node.group == 1) ctx.font = ` ${fontSize}px Sans-Serif`;
@@ -91,6 +93,7 @@ export default function Home({
 
               if (node.group == 2) ctx.fillStyle = "black";
             }
+
             if (
               label === undefined ||
               node.x === undefined ||
@@ -113,14 +116,39 @@ export default function Home({
             if (fgRef.current === undefined) return;
             fgRef.current.zoomToFit(1000, 20);
           }}
-          cooldownTicks={5}
+          cooldownTicks={3}
+          onNodeClick={(node, event) => {
+            if (!("group" in node)) return;
+
+            if (node.group === 0) {
+              const title = node.id;
+              let postId: string = "";
+              map.forEach((value, key) => {
+                if (value.title === title) postId = key;
+              });
+              window.location.href = `posts/${postId}`;
+            } else if (node.group === 1) {
+              const tagId = node.id;
+
+              window.location.href = `tags/${tagId}`;
+            }
+            // TODO group ===2 bio page
+          }}
         />
       );
     }
     loadForceGraph();
-  }, [allPostsData]);
+  }, [hoveredNode]);
   return (
-    <div>
+    <div className="relative">
+      <div
+        className="p-2 w-full animate-bounce absolute z-10  text-md sm:text-2xl transition-opacity
+       duration-1000 delay-200 opacity-100 flex items-center justify-center sm:justify-start "
+      >
+        <p className="py-6 px-5 text-left  text-gray-600">
+          Click node to visit page 🤖{" "}
+        </p>
+      </div>
       <div>{forceGraph}</div>
     </div>
   );
