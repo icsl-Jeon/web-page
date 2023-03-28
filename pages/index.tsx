@@ -143,7 +143,7 @@ export default function Home({
     <>
       <Head>
         {" "}
-        <title>Boseong Jeon</title>
+        <title>Boseong Jeon </title>
         <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
         <link
           href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
