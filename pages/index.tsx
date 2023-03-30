@@ -68,7 +68,7 @@ export default function Home({
             if (link.target.group == 0) return 1.2;
             else return 0;
           }}
-          backgroundColor="white"
+          backgroundColor="none"
           linkColor="gray"
           linkWidth={(link) => {
             if (link.target === undefined) return 0;
@@ -79,9 +79,8 @@ export default function Home({
             else return 1.5;
           }}
           nodeCanvasObject={(node, ctx, globalScale) => {
-            const label = node.id;
+            let label = node.id;
             let fontSize = 2;
-            ctx.fillStyle = "rgba(0, 0, 0, 1)";
 
             if ("group" in node) {
               if (node.group == 2) fontSize *= 1.2;
@@ -91,7 +90,8 @@ export default function Home({
               if (node.group == 1) ctx.font = ` ${fontSize}px Sans-Serif`;
               if (node.group == 2) ctx.font = `${fontSize}px Sans-Serif`;
 
-              if (node.group == 2) ctx.fillStyle = "black";
+              if (node.group == 1 && typeof label === "string")
+                label = "#".concat(label);
             }
 
             if (
@@ -100,6 +100,7 @@ export default function Home({
               node.y === undefined
             )
               return;
+
             const textWidth = ctx.measureText(label?.toString()).width;
             const bckgDimensions = [textWidth, fontSize].map(
               (n) => n + fontSize * 0.8
@@ -156,10 +157,12 @@ export default function Home({
        duration-1000 delay-200 opacity-100 flex items-center justify-center sm:justify-start "
         >
           <p className="py-6 px-5 text-left  text-gray-600 font-sans">
-            Click node to visit page 🤖{" "}
+            Try clicking or dragging texts 🤖{" "}
           </p>
         </div>
-        <div>{forceGraph}</div>
+        <div className="bg-gradient-to-tr from-white via-gray-100    to-slate-100">
+          {forceGraph}
+        </div>
       </div>
     </>
   );
