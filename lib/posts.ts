@@ -31,18 +31,3 @@ export function getSortedPostsData() {
   });
   return allPostsData;
 }
-
-export function genRandomTree(N = 300, reverse = false) {
-  return {
-    nodes: [...Array.from(Array(N).keys())].map((i) => ({
-      id: i,
-      group: Math.round(Math.random()),
-    })),
-    links: [...Array.from(Array(N).keys())]
-      .filter((id) => id)
-      .map((id) => ({
-        [reverse ? "target" : "source"]: id,
-        [reverse ? "source" : "target"]: Math.round(Math.random() * (id - 1)),
-      })),
-  };
-}
