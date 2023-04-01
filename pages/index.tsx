@@ -1,11 +1,10 @@
 import Head from "next/head";
 import { useState, useEffect, useLayoutEffect, useRef } from "react";
-import Layout, { siteTitle } from "../components/layout";
-import utilStyles from "../styles/utils.module.css";
 import { getSortedPostsData } from "../lib/posts";
-import Link from "next/link";
 import { GetStaticProps } from "next";
 import { map } from "../map";
+import Header from "../components/Header";
+import { Transition } from "@headlessui/react";
 
 export default function Home({
   allPostsData,
@@ -22,10 +21,29 @@ export default function Home({
 
   const [forceGraph, setForceGraph] = useState<null | JSX.Element>(null);
   const [hoveredNode, setHoverNode] = useState<any>(null);
+  const [loading, setIsLoading] = useState(true);
+
+  const [width, setWidth] = useState(0);
 
   useEffect(() => {
+    function handleResize() {
+      console.log("resize");
+      setWidth(window.innerWidth);
+    }
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [width]);
+
+  useEffect(() => {
+    setIsLoading(false);
+
     async function loadForceGraph() {
-      const myString = "Dr. Boseong Jeon🦊";
+      const myString: string = "Dr. Boseong Jeon 🦊";
       let nodes: Array<{ id: string; group: number; isFocus: boolean }> = [
         { id: myString, group: 2, isFocus: false },
       ];
@@ -57,6 +75,7 @@ export default function Home({
 
       setForceGraph(
         <ForceGraph2D
+          width={width}
           ref={fgRef}
           graphData={{ nodes: nodes, links: links }}
           linkDirectionalArrowLength={(link) => {
@@ -115,7 +134,7 @@ export default function Home({
           }}
           onEngineStop={() => {
             if (fgRef.current === undefined) return;
-            fgRef.current.zoomToFit(1000, 20);
+            fgRef.current.zoomToFit(1000, 50);
           }}
           cooldownTicks={3}
           onNodeClick={(node, event) => {
@@ -139,30 +158,57 @@ export default function Home({
       );
     }
     loadForceGraph();
-  }, [hoveredNode]);
+  }, [hoveredNode, width]);
   return (
     <>
       <Head>
         {" "}
         <title>Boseong Jeon </title>
-        <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
         <link
           href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
           rel="stylesheet"
         />
       </Head>
-      <div className="relative">
-        <div
-          className="p-2 w-full animate-bounce absolute z-10  text-md sm:text-2xl transition-opacity
-       duration-1000 delay-200 opacity-100 flex items-center justify-center sm:justify-start "
-        >
-          <p className="py-6 px-5 text-left  text-gray-600 font-sans">
-            Try clicking or dragging texts 🤖{" "}
-          </p>
+
+      <div className="">
+        <div className="fixed z-50 w-full ">
+          <Header />
         </div>
-        <div className="bg-gradient-to-tr from-white via-gray-100    to-slate-100">
-          {forceGraph}
+        <div className="fixed mx-auto w-full  sm:mx-0 sm:max-w-md z-20 inset-x-0 bottom-0 flex flex-col items-center sm:-translate-x-5">
+          <Transition
+            show={!loading}
+            enter="transition-all ease-in-out duration-1000 delay-[1500ms]"
+            enterFrom="opacity-0 translate-y-3"
+            enterTo="opacity-100 translate-y-0"
+            leave="transition-all ease-in-out duration-300"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="  flex items-center  text-2xl sm:text-xl p-4  bg-orange-100 m-2 rounded-lg ">
+              {" "}
+              Drag to move texts and click to visit
+              <button
+                onClick={() => {
+                  setIsLoading(true);
+                }}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  className="w-6 h-6 ml-1"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </button>
+            </div>
+          </Transition>
         </div>
+        {forceGraph}
       </div>
     </>
   );
