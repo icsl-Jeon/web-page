@@ -166,7 +166,7 @@ export default function Home({
       </Head>
 
       <div className="">
-        <div className="fixed z-50 w-full overflow-x-hidden max-w-full">
+        <div className="fixed z-50 w-full">
           <Header />
         </div>
         <div className="fixed mx-auto w-full  sm:mx-0 sm:max-w-md z-20 inset-x-0 bottom-0 flex flex-col items-center sm:-translate-x-12">

@@ -33,9 +33,8 @@ export default function Header({ category }: { category?: PageCategory }) {
 
   return (
     <div
-      className={`flex ${
-        isPortrait ? "flex-col" : "flex-row"
-      }   bg-slate-50 w-full shadow-md p-2  items-center `}
+      className={`flex ${isPortrait ? "flex-col" : "flex-row"}
+       bg-slate-100 w-full shadow-md p-2  items-center `}
     >
       <div className="flex flex-row justify-between  sm:ml-4 sm:mr-8 items-center  ">
         {isPortrait && (
