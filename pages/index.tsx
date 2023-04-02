@@ -27,7 +27,6 @@ export default function Home({
 
   useEffect(() => {
     function handleResize() {
-      console.log("resize");
       setWidth(window.innerWidth);
     }
 
@@ -164,17 +163,13 @@ export default function Home({
       <Head>
         {" "}
         <title>Boseong Jeon </title>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
-          rel="stylesheet"
-        />
       </Head>
 
       <div className="">
         <div className="fixed z-50 w-full ">
           <Header />
         </div>
-        <div className="fixed mx-auto w-full  sm:mx-0 sm:max-w-md z-20 inset-x-0 bottom-0 flex flex-col items-center sm:-translate-x-5">
+        <div className="fixed mx-auto w-full  sm:mx-0 sm:max-w-md z-20 inset-x-0 bottom-0 flex flex-col items-center sm:-translate-x-12">
           <Transition
             show={!loading}
             enter="transition-all ease-in-out duration-1000 delay-[1500ms]"
@@ -184,7 +179,7 @@ export default function Home({
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <div className="  flex items-center  text-2xl sm:text-xl p-4  bg-orange-100 m-2 rounded-lg ">
+            <div className="  flex items-center  text-base  p-4  bg-orange-100 m-2 rounded-lg ">
               {" "}
               Drag to move texts and click to visit
               <button

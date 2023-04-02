@@ -12,15 +12,17 @@ export function getSortedPostsData() {
     const postName = fileName.replace(/\.tsx$/, "");
     const fullPath = path.join(postsDirectory, fileName);
     const fileContents = fs.readFileSync(fullPath, "utf8");
-    const regex = /<Link href={([^}]+)}>/g;
+    const regex = /<Link href={([^}]+)}/g;
 
     const matches = fileContents.matchAll(regex);
 
     const result = Array.from(matches, (match) => {
       const hrefAttr = match[1];
       const matchHref = hrefAttr.match(/\/posts\/(\w+)/);
+
       return matchHref ? matchHref[1] : null;
     });
+    console.log(result);
     const meta = map.get(postName);
 
     return {
