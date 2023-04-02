@@ -24,7 +24,7 @@ export default function Post3() {
         <meta property="og:description" content={title} />
         <meta property="og:image" content="/images/post3/thumbnail.jpg" />
       </Head>
-      <div className="relative">
+      <div className="">
         <div className="fixed w-full z-50">
           <Header category={PageCategory.Blog} />
         </div>
