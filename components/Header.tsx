@@ -10,17 +10,21 @@ export default function Header({ category }: { category?: PageCategory }) {
 
   useEffect(() => {
     function handleResize() {
-      setWidth(window.innerWidth);
+      setWidth(window.outerWidth);
     }
     window.addEventListener("resize", handleResize);
+    window.addEventListener("orientationchange", handleResize);
+
     handleResize();
-    if (width >= 640) setCollapse(false);
-    else setCollapse(true);
-    return () => window.removeEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("orientationchange", handleResize);
+      window.addEventListener("resize", handleResize);
+    };
   }, []);
 
   useEffect(() => {
-    if (width >= 640) setCollapse(false);
+    if (width >= 500) setCollapse(false);
     else setCollapse(true);
   }, [width]);
 
