@@ -14,6 +14,8 @@ export default function Header({ category }: { category?: PageCategory }) {
     }
     window.addEventListener("resize", handleResize);
     handleResize();
+    if (width >= 640) setCollapse(false);
+    else setCollapse(true);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
