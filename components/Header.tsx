@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { PageCategory } from "../lib/types";
 import Link from "next/link";
+import { el } from "date-fns/locale";
 
 export default function Header({ category }: { category?: PageCategory }) {
-  const [collapse, setCollapse] = useState(false);
+  const [collapse, setCollapse] = useState(true);
 
   const [width, setWidth] = useState(0);
 
@@ -17,12 +18,13 @@ export default function Header({ category }: { category?: PageCategory }) {
   }, []);
 
   useEffect(() => {
-    if (width > 500) setCollapse(false);
+    if (width >= 640) setCollapse(false);
+    else setCollapse(true);
   }, [width]);
 
   return (
-    <div className=" flex flex-col sm:flex-row z-30 bg-slate-50 w-full shadow-md p-2  items-center">
-      <div className="flex flex-row justify-between  sm:ml-4 sm:mr-8 items-center -translate-y-1  ">
+    <div className=" flex flex-col sm:flex-row bg-slate-50 w-full shadow-md p-2  items-center ">
+      <div className="flex flex-row justify-between  sm:ml-4 sm:mr-8 items-center  ">
         <button
           className="block sm:hidden"
           onClick={() => {
@@ -34,7 +36,7 @@ export default function Header({ category }: { category?: PageCategory }) {
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 20 20"
             fill="currentColor"
-            className="w-10 h-10 "
+            className="w-8 h-8 "
           >
             <path
               fillRule="evenodd"
@@ -52,21 +54,23 @@ export default function Header({ category }: { category?: PageCategory }) {
         </a>
       </div>
 
-      {!collapse &&
-        Object.keys(PageCategory).map((key) => {
-          const categoryKey = key as keyof typeof PageCategory;
-          const isActive = categoryKey === String(category);
+      {Object.keys(PageCategory).map((key) => {
+        const categoryKey = key as keyof typeof PageCategory;
+        const isActive = categoryKey === String(category);
 
-          return (
-            <div
-              className={`m-1 p-3 rounded-xl text-gray-600 hover:text-orange-300 transition-colors duration-200  text-2xl ${
-                isActive ? " text-orange-500" : ""
-              }`}
-            >
-              <Link href={""}>{String(PageCategory[categoryKey])}</Link>
-            </div>
-          );
-        })}
+        return (
+          <div
+            key={key}
+            className={`m-1 sm:p-3 p-1 ${
+              collapse ? "hidden" : "inline"
+            }  rounded-xl text-gray-600 hover:text-orange-300 transition-transform  transition-colors duration-200  text-xl ${
+              isActive ? " text-orange-500" : ""
+            }`}
+          >
+            <Link href={""}>{String(PageCategory[categoryKey])}</Link>
+          </div>
+        );
+      })}
     </div>
   );
 }

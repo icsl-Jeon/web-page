@@ -5,10 +5,7 @@ import { AppProps } from "next/app";
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <div>
-      <Head>
-        {" "}
-        <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
-      </Head>
+      <Head> </Head>
       <Component {...pageProps} />
     </div>
   );
