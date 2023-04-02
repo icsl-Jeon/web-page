@@ -22,7 +22,6 @@ export function getSortedPostsData() {
 
       return matchHref ? matchHref[1] : null;
     });
-    console.log(result);
     const meta = map.get(postName);
 
     return {
