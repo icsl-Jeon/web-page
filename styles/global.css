@@ -5,14 +5,18 @@
 
 
 @layer base {
-    a{
-    }
+
     h1{
-        @apply sm:text-4xl text-2xl font-bold py-2 my-3
+        @apply sm:text-4xl text-3xl font-bold py-4 mt-5
     }
     h2{
-        @apply sm:text-2xl text-xl font-semibold  py-2 
+        @apply sm:text-2xl text-2xl font-semibold  py-3
     }
+
+    h3{
+        @apply sm:text-xl text-xl font-semibold  py-2 
+    }
+
     p{
         @apply text-gray-600 p-1 text-base
     }
@@ -20,17 +24,30 @@
         @apply max-w-xl sm:mx-auto m-5
     }
     li{
-        @apply text-gray-600 p-1 text-base
+        @apply text-gray-600 p-1 text-base list-disc list-inside
+    }
+    ul {
+        @apply my-3
     }
 
 }
 
 @layer utilities {
+    .caption{
+        @apply text-center text-sm text-gray-600
+    }
+    .inline-code{
+        @apply bg-orange-100 inline 
+    }
+    .link {
+        @apply text-orange-400
+    }
+
     .opening {
-      @apply bg-slate-100 p-2 rounded-lg my-4
+      @apply bg-slate-100 p-5 rounded-xl my-4 
     }
     .tag{
-        @apply bg-orange-100 px-2 py-1 pb-1.5 rounded-xl m-1 text-black hover:bg-orange-200 transition-colors duration-150
+        @apply bg-orange-100 px-2 py-1  pb-1.5 rounded-xl m-1 text-black hover:bg-orange-200 transition-colors duration-150
     }
     .title{
         @apply text-3xl sm:text-6xl font-semibold

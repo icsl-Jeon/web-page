@@ -13,7 +13,7 @@ const Heading: React.FC<Props> = ({ level, children }) => {
 
   return (
     <div
-      className="flex flex-row  items-center "
+      className="my-5"
       onMouseEnter={() => {
         setHover(true);
       }}
@@ -21,12 +21,12 @@ const Heading: React.FC<Props> = ({ level, children }) => {
         setHover(false);
       }}
     >
-      <TagName id={anchor} className="">
+      <TagName id={anchor} className="inline">
         {children}
       </TagName>
-      {hover && (
+      {
         <button
-          className="ml-3"
+          className="ml-3 inline-block opacity-20 hover:opacity-80"
           onClick={() => {
             const anchorLink = window.location.href.concat("#", anchor);
             navigator.clipboard.writeText(anchorLink);
@@ -58,7 +58,7 @@ const Heading: React.FC<Props> = ({ level, children }) => {
             />
           </svg>
         </button>
-      )}
+      }
     </div>
   );
 };

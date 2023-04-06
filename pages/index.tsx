@@ -150,6 +150,8 @@ export default function Home({
               const tagId = node.id;
 
               window.location.href = `tags/${tagId}`;
+            } else {
+              window.location.href = `bio/`;
             }
             // TODO group ===2 bio page
           }}
