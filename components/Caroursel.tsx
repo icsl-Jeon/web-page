@@ -1,7 +1,12 @@
 import { useState, useRef, useEffect } from "react";
 
 interface Props {
-  data: Array<{ title: string; link: string; imageUrl: string }>;
+  data: Array<{
+    title: string;
+    link: string;
+    imageUrl: string;
+    hoverImageUrl: string;
+  }>;
 }
 
 const Carousel: React.FC<Props> = ({ data }) => {
@@ -51,13 +56,13 @@ const Carousel: React.FC<Props> = ({ data }) => {
   }, []);
 
   return (
-    <div className="carousel my-12 mx-auto">
+    <div className="carousel my-8 mx-auto">
       <div className="relative overflow-hidden">
         <div className="flex justify-between absolute top left w-full h-full">
           {!isDisabled("prev") ? (
             <button
               onClick={movePrev}
-              className="hover:bg-blue-900/75 text-white w-10 h-full text-center opacity-75 hover:opacity-100 disabled:opacity-25 disabled:cursor-not-allowed z-10 p-0 m-0 transition-all ease-in-out duration-300"
+              className="hover:text-orange-400 bg-gradient-to-l from-transparent to-gray-600 text-orange-100 w-10 h-full text-center opacity-70 hover:opacity-80 disabled:cursor-not-allowed z-10 p-0 m-0 transition-all ease-in-out duration-300"
               // disabled={isDisabled("prev")}
             >
               <svg
@@ -82,7 +87,7 @@ const Carousel: React.FC<Props> = ({ data }) => {
           {!isDisabled("next") ? (
             <button
               onClick={moveNext}
-              className="hover:text-orange-400 bg-gradient-to-r from-transparent to-gray-300 text-orange-100 w-10 h-full text-center opacity-70 hover:opacity-80 disabled:cursor-not-allowed z-10 p-0 m-0 transition-all ease-in-out duration-300"
+              className="hover:text-orange-400 bg-gradient-to-r from-transparent to-gray-600 text-orange-100 w-10 h-full text-center opacity-70 hover:opacity-80 disabled:cursor-not-allowed z-10 p-0 m-0 transition-all ease-in-out duration-300"
               disabled={isDisabled("next")}
             >
               <svg
@@ -117,14 +122,19 @@ const Carousel: React.FC<Props> = ({ data }) => {
               >
                 <a
                   href={resource.link}
-                  className="rounded-t-xl h-full w-full aspect-square block bg-origin-padding bg-left-top bg-cover bg-no-repeat z-0"
+                  target="_blank"
+                  className="h-full w-full aspect-square block bg-origin-padding bg-left-top bg-cover  z-0 hover:opacity-0"
                   style={{ backgroundImage: `url(${resource.imageUrl || ""})` }}
                 ></a>
                 <a
                   href={resource.link}
-                  className="h-full w-full aspect-square block absolute top-0 left-0 transition-opacity duration-300 opacity-0 hover:opacity-100 bg-blue-800/75 z-10"
+                  target="_blank"
+                  className=" h-full w-full aspect-square  absolute top-0 left-0 bg-origin-padding bg-left-top bg-cover bg-no-repeat transition-opacity duration-700 opacity-0 hover:opacity-90 z-10 grid place-content-end"
+                  style={{
+                    backgroundImage: `url(${resource.hoverImageUrl || ""})`,
+                  }}
                 >
-                  <h3 className="text-white py-6 px-3 mx-auto text-xl">
+                  <h3 className="text-black p-1 mx-auto text-2xl bg-white bg-opacity-40">
                     {resource.title}
                   </h3>
                 </a>

@@ -65,6 +65,11 @@ export default function Index() {
               className="mx-1"
               style={{ height: 30, width: 30 }}
             />
+            <SocialIcon
+              url="https://medium.com/@junbs95"
+              className="mx-1"
+              style={{ height: 30, width: 30 }}
+            />
           </div>
           <br></br>
           Thank you for visiting my website! I am a robotics engineer who loves
@@ -121,9 +126,12 @@ export default function Index() {
           <br></br>
           <hr></hr>
           <h1>Publications</h1>
-          Here are some of my representative publications 📖
+          Here are some of my representative publications as the first author 📖
           {/* TODO */}
-          <Link href={"https://ieeexplore.ieee.org/document/8967840"}>
+          <Link
+            href={"https://ieeexplore.ieee.org/document/8967840"}
+            target="_blank"
+          >
             <Card
               useTagLink={false}
               title={
@@ -133,7 +141,10 @@ export default function Index() {
               tags={[Tag.TargetChasing, Tag.VisibilityMetric]}
             ></Card>
           </Link>
-          <Link href={"https://ieeexplore.ieee.org/abstract/document/9196703"}>
+          <Link
+            href={"https://ieeexplore.ieee.org/abstract/document/9196703"}
+            target="_blank"
+          >
             <Card
               useTagLink={false}
               title={
@@ -143,11 +154,14 @@ export default function Index() {
               tags={[Tag.CHOMP, Tag.Prediction]}
             ></Card>
           </Link>
-          <Link href={"https://ieeexplore.ieee.org/abstract/document/9557293"}>
+          <Link
+            href={"https://ieeexplore.ieee.org/abstract/document/9557293"}
+            target="_blank"
+          >
             <Card
               useTagLink={false}
               title={
-                "Autonomous Aerial Dual-Target Following Among Obstacle (IEEE Access)"
+                "Autonomous Aerial Dual-Target Following Among Obstacles (IEEE Access)"
               }
               imageSource="/images/bio/access.jpg"
               tags={[Tag.TargetChasing, Tag.OutdoorFlight]}
@@ -178,25 +192,31 @@ export default function Index() {
           <br></br>
           <hr></hr>
           <h1>Projects</h1>
-          Here are some of projects that I led, including for-company and
-          my-own-interest 🤠
+          Here are some of projects where I played a key role, including
+          for-company and my-own-interest 🤠
           <Carousel
             data={[
               {
-                title: "some title",
-                link: "/posts/post1",
-                imageUrl: "/images/bio/iros2019.png",
+                title:
+                  "Controller GUI for offboard ROS operation of multi-drone ",
+                link: "https://github.com/icsl-Jeon/px4_code2",
+                imageUrl: "/images/bio/px4-code2.png",
+                hoverImageUrl: "/images/bio/px4-code2-hover.png",
+              },
+
+              {
+                title: "🚘Autonomous driving in unstructured env.",
+                link: "/posts/not_prepared",
+                imageUrl: "/images/bio/autonomous-driving.JPG",
+                hoverImageUrl: "/images/bio/autonomous-driving-hover.png",
               },
               {
-                title: "some title",
-                link: "/posts/post1",
-                imageUrl: "/images/bio/iros2019.png",
+                title: "🚨Multi fleet task allocation for rescue robots",
+                link: "/posts/not_prepared",
+                imageUrl: "/images/bio/disaster-robots.PNG",
+                hoverImageUrl: "/images/bio/disaster-robots-hover.png",
               },
-              {
-                title: "some title",
-                link: "/posts/post1",
-                imageUrl: "/images/bio/iros2019.png",
-              },
+
               {
                 title: "some title",
                 link: "/posts/post1",
