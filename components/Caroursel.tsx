@@ -134,7 +134,7 @@ const Carousel: React.FC<Props> = ({ data }) => {
                     backgroundImage: `url(${resource.hoverImageUrl || ""})`,
                   }}
                 >
-                  <h3 className="text-black p-1 mx-auto text-2xl bg-white bg-opacity-40">
+                  <h3 className="text-black p-1 mx-auto text-2xl bg-white bg-opacity-60">
                     {resource.title}
                   </h3>
                 </a>

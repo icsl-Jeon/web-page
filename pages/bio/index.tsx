@@ -9,9 +9,30 @@ import Header from "../../components/Header";
 import { PageCategory } from "../../lib/types";
 import Head from "next/head";
 import Carousel from "../../components/Caroursel";
+import { project } from "./data";
+import ImageGrid from "../../components/ImageGrid";
 
 export default function Index() {
   const [loaded, setLoaded] = useState(false);
+
+  const [isPortrait, setIsPortrait] = useState(true);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const mediaQuery = window.matchMedia("(orientation: portrait)");
+
+    function handleOrientationChange(event: MediaQueryListEvent) {
+      setIsPortrait(event.matches);
+    }
+
+    setIsPortrait(mediaQuery.matches);
+
+    mediaQuery.addEventListener("change", handleOrientationChange);
+
+    return () => {
+      mediaQuery.removeEventListener("change", handleOrientationChange);
+    };
+  }, []);
+
   useEffect(() => {
     setLoaded(true);
   });
@@ -72,17 +93,19 @@ export default function Index() {
             />
           </div>
           <br></br>
-          Thank you for visiting my website! I am a robotics engineer who loves
-          building a robotic system and exploring the latest advancements in the
-          field of robotics. <br></br> As a dedicated researcher and a developer
-          with PhD, I have covered a wide range of areas from designing
-          hardwares, object recognition, online spatial mapping, and motion
-          planning & controls. <br></br>
-          Through this website, I hope to share my expertise and insights with
-          fellow robotics enthusiasts, students, and professionals. Here, you
-          will find informative articles, tutorials, and reviews on the latest
-          robotic technologies, as well as my thoughts on the future of robotics
-          and its impact on society.
+          <p>
+            Thank you for visiting my website! I am a robotics engineer who
+            loves building a robotic system and exploring the latest
+            advancements in the field of robotics. <br></br> As a dedicated
+            researcher and a developer with PhD, I have covered a wide range of
+            areas from designing hardwares, object recognition, online spatial
+            mapping, and motion planning & controls. <br></br>
+            Through this website, I hope to share my expertise and insights with
+            fellow robotics enthusiasts, students, and professionals. Here, you
+            will find informative articles, tutorials, and reviews on the latest
+            robotic technologies, as well as my thoughts on the future of
+            robotics and its impact on society.
+          </p>
           <br></br>
           <br></br>
           <hr></hr>
@@ -92,14 +115,13 @@ export default function Index() {
             <li className="">
               Received BS in mechanical & aerospace engineering at{" "}
               <a href="https://en.snu.ac.kr/" className="link">
-                <i>Seoul National University</i>
+                Seoul National University
               </a>{" "}
               {""}
               of South Korea, 2013-2017.
             </li>
             <li className="">
-              Received PhD in Robotics at{" "}
-              <i>Lab for Autonomous Robotics Research</i> (
+              Received PhD in Robotics at Lab for Autonomous Robotics Research (
               <a href="https://larr.snu.ac.kr/" className="link">
                 LARR
               </a>
@@ -110,7 +132,7 @@ export default function Index() {
               >
                 H. Jin Kim
               </a>
-              , 2017-2023. ( <b>5 yrs graduation 🦊</b>)
+              , 2017-2022. ( <b>5 yrs graduation 🥷</b>)
             </li>
           </ul>
           <h2>Company</h2>
@@ -121,12 +143,11 @@ export default function Index() {
             >
               Staff engineer
             </a>{" "}
-            at <i>Samsung Research</i>, 2023~.
+            at Samsung Research, 2023~.
           </li>
           <br></br>
-          <hr></hr>
           <h1>Publications</h1>
-          Here are some of my representative publications as the first author 📖
+          <p> My representative publications as the first author 📖</p>
           {/* TODO */}
           <Link
             href={"https://ieeexplore.ieee.org/document/8967840"}
@@ -135,7 +156,7 @@ export default function Index() {
             <Card
               useTagLink={false}
               title={
-                "Online trajectory generation of a mav for chasing a moving target in 3d dense environments (IROS2019)"
+                "Online trajectory generation of a mav for chasing a moving target in 3d dense environments "
               }
               imageSource="/images/bio/iros2019.png"
               tags={[Tag.TargetChasing, Tag.VisibilityMetric]}
@@ -148,7 +169,7 @@ export default function Index() {
             <Card
               useTagLink={false}
               title={
-                "Integrated Motion Planner for Real-time Aerial Videography with a Drone in a Dense Environment (ICRA2020)"
+                "Integrated Motion Planner for Real-time Aerial Videography with a Drone in a Dense Environment"
               }
               imageSource="/images/bio/icra2020.png"
               tags={[Tag.CHOMP, Tag.Prediction]}
@@ -160,9 +181,7 @@ export default function Index() {
           >
             <Card
               useTagLink={false}
-              title={
-                "Autonomous Aerial Dual-Target Following Among Obstacles (IEEE Access)"
-              }
+              title={"Autonomous Aerial Dual-Target Following Among Obstacles "}
               imageSource="/images/bio/access.jpg"
               tags={[Tag.TargetChasing, Tag.OutdoorFlight]}
             ></Card>
@@ -190,42 +209,26 @@ export default function Index() {
             </a>
           </div>
           <br></br>
-          <hr></hr>
           <h1>Projects</h1>
-          Here are some of projects where I played a key role, including
-          for-company and my-own-interest 🤠
-          <Carousel
-            data={[
-              {
-                title:
-                  "Controller GUI for offboard ROS operation of multi-drone ",
-                link: "https://github.com/icsl-Jeon/px4_code2",
-                imageUrl: "/images/bio/px4-code2.png",
-                hoverImageUrl: "/images/bio/px4-code2-hover.png",
-              },
-
-              {
-                title: "🚘Autonomous driving in unstructured env.",
-                link: "/posts/not_prepared",
-                imageUrl: "/images/bio/autonomous-driving.JPG",
-                hoverImageUrl: "/images/bio/autonomous-driving-hover.png",
-              },
-              {
-                title: "🚨Multi fleet task allocation for rescue robots",
-                link: "/posts/not_prepared",
-                imageUrl: "/images/bio/disaster-robots.PNG",
-                hoverImageUrl: "/images/bio/disaster-robots-hover.png",
-              },
-
-              {
-                title: "some title",
-                link: "/posts/post1",
-                imageUrl: "/images/bio/iros2019.png",
-              },
-            ]}
-          ></Carousel>
+          <p>
+            Projects where I played a key role, including for-company and
+            my-own-interest. (if your are mobile📱, kindly <u>click</u> below
+            images to open links)
+          </p>
+          {!isPortrait && <Carousel data={project}></Carousel>}
+          {isPortrait && <ImageGrid data={project}></ImageGrid>}
           <br></br>
-          <hr></hr>
+          <h1>Skills</h1>
+          <h2>Software</h2>
+          <p>
+            I am proficient in various languages including C++, Python,
+            Typescript, Matlab. I have experience using the following frameworks
+            & libraries:{" "}
+          </p>
+          <div className="p-1">
+            <ImageGrid data={project}></ImageGrid>
+          </div>
+          <h2>Hardware</h2>
         </section>
       </Transition>
     </div>
