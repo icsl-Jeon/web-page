@@ -83,7 +83,9 @@ export default function Header({ category }: { category?: PageCategory }) {
               isActive ? " text-orange-500" : ""
             }`}
           >
-            <Link href={""}>{String(PageCategory[categoryKey])}</Link>
+            <Link href={String(PageCategory[categoryKey]).toLocaleLowerCase()}>
+              {String(PageCategory[categoryKey])}
+            </Link>
           </div>
         );
       })}

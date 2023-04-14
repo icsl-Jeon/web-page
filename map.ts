@@ -5,9 +5,12 @@ interface Meta {
 }
 
 export enum Tag {
-  Apple = "apple",
-  Banana = "banana",
-  Mango = "mango",
+  TargetChasing = "target-chasing",
+  Prediction = "prediction",
+  CHOMP = "chomp",
+  VisibilityMetric = "visibility-metric",
+  OutdoorFlight = "outdoor-flight",
+  ROS2 = "ros2",
 }
 
 export const map: Map<string, Meta> = new Map([
@@ -15,7 +18,7 @@ export const map: Map<string, Meta> = new Map([
     "post1",
     {
       title: "Title of post1",
-      tag: [Tag.Apple, Tag.Banana],
+      tag: [Tag.TargetChasing, Tag.VisibilityMetric],
       date: "2023-03-30",
     },
   ],
@@ -23,15 +26,15 @@ export const map: Map<string, Meta> = new Map([
     "post2",
     {
       title: "Title of post2",
-      tag: [Tag.Apple, Tag.Mango],
+      tag: [Tag.TargetChasing, Tag.CHOMP, Tag.Prediction],
       date: "2023-03-30",
     },
   ],
   [
     "post3",
     {
-      title: "Title of post3",
-      tag: [Tag.Apple, Tag.Mango],
+      title: "What makes ROS2 different from ROS1",
+      tag: [Tag.ROS2],
       date: "2023-03-30",
     },
   ],
