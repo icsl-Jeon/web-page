@@ -18,7 +18,7 @@
     }
 
     p{
-        @apply text-gray-600 m-2 text-base
+        @apply text-gray-600 my-2 text-base
     }
     section{
         @apply max-w-xl sm:mx-auto m-5

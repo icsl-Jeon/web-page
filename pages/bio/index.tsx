@@ -9,7 +9,7 @@ import Header from "../../components/Header";
 import { PageCategory } from "../../lib/types";
 import Head from "next/head";
 import Carousel from "../../components/Caroursel";
-import { project } from "./data";
+import { project, skills, hardware } from "../../data";
 import ImageGrid from "../../components/ImageGrid";
 
 export default function Index() {
@@ -45,7 +45,7 @@ export default function Index() {
         <meta property="og:title" content="Bio of Boseong Jeon" />
         <meta property="og:image" content="/images/bio/profile.jpg" />
       </Head>
-      <div className="fixed w-full z-50">
+      <div className="fixed z-50 w-full">
         <Header category={PageCategory.Bio} />
       </div>
       <Transition
@@ -67,7 +67,7 @@ export default function Index() {
         />
         <section>
           <h1 className="title">Hello, this is Boseong Jeon </h1>
-          <div className="flex my-5 justify-center sm:justify-start">
+          <div className="my-5 flex justify-center sm:justify-start">
             <SocialIcon
               bgColor="skyblue"
               url="https://scholar.google.com/citations?user=ssYQ2w4AAAAJ"
@@ -146,6 +146,15 @@ export default function Index() {
             at Samsung Research, 2023~.
           </li>
           <br></br>
+
+          <h1>What I can bring</h1>
+          <h2>Online Spatial Mapping</h2>
+          <h2>Object Recognition & Prediction</h2>
+          <h2>Safe Motion Planning</h2>
+          <h2>Visible Motion Planning</h2>
+          <h2>Frontend Web Application</h2>
+
+          <br></br>
           <h1>Publications</h1>
           <p> My representative publications as the first author 📖</p>
           {/* TODO */}
@@ -197,7 +206,7 @@ export default function Index() {
                 viewBox="0 0 24 24"
                 strokeWidth={1.5}
                 stroke="currentColor"
-                className="w-6 h-6 mr-2"
+                className="mr-2 h-6 w-6"
               >
                 <path
                   strokeLinecap="round"
@@ -221,14 +230,30 @@ export default function Index() {
           <h1>Skills</h1>
           <h2>Software</h2>
           <p>
-            I am proficient in various languages including C++, Python,
-            Typescript, Matlab. I have experience using the following frameworks
-            & libraries:{" "}
+            I am proficient in various languages including{" "}
+            <b>C++, Python, Typescript, Matlab</b>. I am really comfortable to
+            use the following frameworks & libraries:{" "}
           </p>
           <div className="p-1">
-            <ImageGrid data={project}></ImageGrid>
+            <ImageGrid data={skills} border linkOn></ImageGrid>
           </div>
           <h2>Hardware</h2>
+          <p>
+            I enjoy using the below sensors and making a robot systems 😀 All
+            drones in the photos are <b>self-made</b>. You can check out how I
+            built drones from{" "}
+            <a
+              href="https://www.youtube.com/playlist?list=PLD7bQSC6yVYE_56UMzphefky5rGsk-qNQ"
+              target="_blank"
+              className="link"
+            >
+              my Youtube channel
+            </a>
+            .
+          </p>
+          <div className="p-1">
+            <ImageGrid data={hardware} border></ImageGrid>
+          </div>
         </section>
       </Transition>
     </div>
