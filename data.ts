@@ -14,7 +14,7 @@ export const project = [
   {
     title: "🚨Multi fleet task allocation for rescue robots",
     link: "/posts/not_prepared",
-    imageUrl: "/images/bio/disaster-robots.PNG",
+    imageUrl: "/images/bio/disaster-robots.png",
     hoverImageUrl: "/images/bio/disaster-robots-hover.png",
   },
   {
@@ -43,6 +43,22 @@ export const skills = [
     link: "https://github.com/icsl-Jeon/dual_chaser",
     imageUrl: "/images/bio/skill-ros.png",
   },
+  {
+    title: "CMake",
+    link: "https://github.com/icsl-Jeon/simple-cmake-package",
+    imageUrl: "/images/bio/skill-cmake.png",
+  },
+  {
+    title: "JIRA",
+    link: "https://team-fk.atlassian.net/jira/your-work",
+    imageUrl: "/images/bio/skill-jira.png",
+  },
+  {
+    title: "Git",
+    link: "https://github.com/icsl-Jeon",
+    imageUrl: "/images/bio/skill-github.png",
+  },
+
   {
     title: "Px4",
     link: "https://github.com/icsl-Jeon/px4_code2",
@@ -143,14 +159,14 @@ export const hardware = [
     imageUrl: "/images/bio/motor.png",
   },
   {
-    title: "Indoor drone with T-265",
+    title: "Indoor drone with T265",
     link: "",
     imageUrl: "/images/bio/drone-A.png",
   },
   {
-    title: "Indoor drone with D-265",
+    title: "Indoor drone with D435",
     link: "",
-    imageUrl: "/images/bio/drone-E.jpg",
+    imageUrl: "/images/bio/drone-E.JPG",
   },
   {
     title: "Outdoor Hexarotors with GPS",
