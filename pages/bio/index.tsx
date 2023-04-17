@@ -147,15 +147,123 @@ export default function Index() {
           </li>
           <br></br>
 
-          <h1>What I can bring</h1>
-          <h2>Online Spatial Mapping</h2>
-          <h2>Object Recognition & Prediction</h2>
-          <h2>Safe Motion Planning</h2>
-          <h2>Visible Motion Planning</h2>
-          <h2>Frontend Web Application</h2>
+          <h2>Skills</h2>
+          <h3>Real-time motion planning (major)</h3>
+          <p>
+            I majored in 3D real-time motion planning methods based on the 3D
+            vision data, which can avoid obstacles (including dynamic ones) and
+            chase a moving target. Although my main platform were drones, I can
+            deal with mobile robots and robotic arms also.
+          </p>
+          <img
+            className="object-contain "
+            src="images/bio/capability-motion-planning.gif"
+            alt={"Chasing two moving targets"}
+          ></img>
+          <ul>
+            <li>
+              Practical experiences in optimization-based planning methods such
+              as LQR, STOMP, and{" "}
+              <a
+                className="link"
+                href="https://github.com/icsl-Jeon/chomp_predict"
+                target="_blank"
+              >
+                CHOMP{" "}
+              </a>
+              .
+            </li>
+            <li>
+              Hierarchical{" "}
+              <a
+                className="link"
+                href="https://github.com/icsl-Jeon/traj_gen"
+                target="_href"
+              >
+                planning methods
+              </a>{" "}
+              which can joint global path planners and local planners.
+            </li>
+          </ul>
+          <h3>Online 3D spatial mapping and object tracking</h3>
+          <p>
+            I can efficiently process the incoming sensor data into
+            robot-recognizable forms for various tasks (obstacle mapping, target
+            tracking and prediction).{" "}
+          </p>
+          <img
+            className="object-contain "
+            src="images/bio/capability-spatial mapping.gif"
+            alt={"Predicting target by online mapping and object tracking"}
+          ></img>
+          <ul>
+            <li>
+              Online{" "}
+              <a
+                className="link"
+                href="https://github.com/icsl-Jeon/octomap_mapping"
+                target="_blank"
+              >
+                distance map
+              </a>{" "}
+              building from{" "}
+              <a
+                className="link"
+                href="https://octomap.github.io/"
+                target="_blank"
+              >
+                octomap
+              </a>{" "}
+              or{" "}
+              <a
+                className="link"
+                href="https://github.com/ethz-asl/voxblox"
+                target="_blank"
+              >
+                voxblox
+              </a>{" "}
+              .
+            </li>
+            <li>
+              Object recognition,{" "}
+              <a
+                className="link"
+                href="https://github.com/icsl-Jeon/zed2_client"
+                target="_blank"
+              >
+                tracking pose,
+              </a>{" "}
+              and{" "}
+              <a
+                className="link"
+                href="https://github.com/icsl-Jeon/chasing_utils"
+                target="_blank"
+              >
+                motion prediction
+              </a>
+              .
+            </li>
+            <li>
+              Hands-on-experience of visual inertia or lidar odometry algorithms
+            </li>
+          </ul>
+
+          <h3>System integration and leading field experiments</h3>
+          <p>
+            As a robotics engineer, I am confident in scheduling, and performing
+            experiments in any sites whether indoor, or outdoor.
+          </p>
+          <img
+            className="object-contain "
+            src="images/bio/capability-experiment.gif"
+            alt={"Leading experiment"}
+          ></img>
 
           <br></br>
-          <h1>Publications</h1>
+          <hr></hr>
+
+          <h1>Experiences</h1>
+          <h2>Publications</h2>
           <p> My representative publications as the first author 📖</p>
           {/* TODO */}
           <Link
@@ -218,7 +326,7 @@ export default function Index() {
             </a>
           </div>
           <br></br>
-          <h1>Projects</h1>
+          <h2>Projects</h2>
           <p>
             Projects where I played a key role, including for-company and
             my-own-interest. (if your are mobile📱, kindly <u>click</u> below
@@ -227,7 +335,9 @@ export default function Index() {
           {!isPortrait && <Carousel data={project}></Carousel>}
           {isPortrait && <ImageGrid data={project}></ImageGrid>}
           <br></br>
-          <h1>Skills</h1>
+          <hr></hr>
+
+          <h1>Background</h1>
           <h2>Software</h2>
           <p>
             I am proficient in various languages including{" "}
@@ -237,6 +347,8 @@ export default function Index() {
           <div className="p-1">
             <ImageGrid data={skills} border linkOn></ImageGrid>
           </div>
+          <br></br>
+
           <h2>Hardware</h2>
           <p>
             I enjoy using the below sensors and making a robot systems 😀 All
