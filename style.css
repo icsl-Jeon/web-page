@@ -1,3 +1,88 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  font-feature-settings: "rlig" 1, "calt" 1;
+}
+
+.home-content p {
+  margin-top: 1.5em;
+  line-height: 1.75em;
+}
+
+.home-content a {
+  --tw-ring-color: hsl(var(--nextra-primary-hue) 100% 50%/0.3);
+  --tw-text-opacity: 1;
+  text-underline-position: under;
+  text-decoration-line: underline;
+  text-decoration-thickness: from-font;
+  color: hsl(var(--nextra-primary-hue) 100% 50% / var(--tw-text-opacity));
+}
+
+figcaption {
+  font-size: 0.85rem;
+  line-height: 1.5rem;
+  display: block;
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+code.text-\[\.9em\] {
+  font-size: 14px;
+}
+
+@media screen and (max-width: 1200px) {
+  .home-content .hide-medium {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 720px) {
+  .home-content p {
+    font-size: 0.9rem;
+  }
+  .home-content .hide-small {
+    display: none;
+  }
+}
+
+.videoWrapper {
+  position: relative;
+  padding-bottom: 56.25%; /* 16:9 */
+  padding-top: 25px;
+  height: 0;
+  overflow: hidden;
+}
+.videoWrapper iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+@layer utilities {
+  .caption {
+    @apply text-center text-sm text-gray-600;
+  }
+  .inline-code {
+    @apply inline bg-orange-100;
+  }
+  .link {
+    @apply text-orange-400;
+  }
+
+  .opening {
+    @apply my-4 rounded-xl bg-slate-100 p-5;
+  }
+  .tag {
+    @apply m-1 rounded-xl bg-orange-100  px-2 py-1 pb-1.5 text-black transition-colors duration-150 hover:bg-orange-200;
+  }
+  .title {
+    @apply text-3xl font-semibold sm:text-6xl;
+  }
+  .date {
+    @apply text-base text-gray-500;
+  }
+}

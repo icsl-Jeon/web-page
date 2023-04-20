@@ -1,3 +1,122 @@
-# About
+import Image from "next/image";
+import YouTube, { YouTubeProps } from "react-youtube";
+import ImageGrid from "../components/ImageGrid";
+import { Card } from "../components/PostSummary";
+import { project } from "../public/data";
 
-This is the about page! This page is shown on the navbar.
+# Hello, I am Boseong Jeon 😃
+
+Thank you for visiting my website! I am a robotics engineer who loves building a
+robotic system and exploring the latest advancements in the field of robotics.\
+As a dedicated researcher and a developer with PhD, I have covered a wide range of
+areas from designing hardwares, object recognition, online spatial mapping, and motion
+planning & controls.\
+Through this website, I hope to share my expertise and insights with fellow
+robotics enthusiasts, students, and professionals. Here, you will find
+informative articles, tutorials, and reviews on the latest robotic technologies,
+as well as my thoughts on the future of robotics and its impact on society.
+
+## What Can I Bring ?
+
+### Real-time motion planning (major)
+
+<div className="px-5 my-10">
+  <YouTube videoId="ZBFRS5TpRvI" className="videoWrapper" />
+</div>
+
+I majored in 3D real-time motion planning methods based on the 3D vision data,
+which can avoid obstacles (including dynamic ones) and chase a moving target.
+Although my main platform were drones, I can deal with mobile robots and robotic
+arms also.
+
+- Practical experiences in optimization-based planning methods such as LQR,
+  STOMP, and [CHOMP](https://github.com/icsl-Jeon/chomp_predict)
+- Hierarchical planning [methods](https://github.com/icsl-Jeon/traj_gen) which
+  can joint global path planners and local planners.
+
+### Online 3D spatial mapping and object tracking
+
+<div className="px-5 my-10">
+  <YouTube videoId="Ux1_LinLegM" className="videoWrapper" />
+</div>
+
+I can efficiently process the incoming sensor data into robot-recognizable forms
+for various tasks (obstacle mapping, target tracking and prediction).
+
+- Online [distance map](https://github.com/icsl-Jeon/octomap_mapping) building
+  from octomap or voxblox
+- Object recognition, [tracking pose](https://github.com/icsl-Jeon/zed2_client),
+  and [motion prediction](https://github.com/icsl-Jeon/chasing_utils).
+- Hands-on-experiences of VIO and Lidar odometry algorithms such as LeGO-LOAM.
+
+### System integration and leading field experiments
+
+<div className="px-5 my-10">
+  <YouTube videoId="s0mc5209IiY" className="videoWrapper" />
+</div>
+
+As a robotics engineer, I am used to scheduling, and performing experiments in
+any sites whether indoor, or outdoor.
+
+# Experiences
+
+## Publications
+
+<div className="p-2">
+  <Card
+    useTagLink={false}
+    title={
+      "Online trajectory generation of a mav for chasing a moving target in 3d dense environments "
+    }
+    imageSource="/images/bio/iros2019.png"
+    tags={["Target chasing", "Hierarchical motion planning",]}
+  ></Card>
+
+{" "}
+
+<Card
+  useTagLink={false}
+  title={
+    "Integrated Motion Planner for Real-time Aerial Videography with a Drone in a Dense Environment"
+  }
+  imageSource="/images/bio/icra2020.png"
+  tags={["Optimization", "Target Prediction"]}
+></Card>{" "}
+
+<Card
+  useTagLink={false}
+  title={"Autonomous Aerial Dual-Target Following Among Obstacles "}
+  imageSource="/images/bio/access.jpg"
+  tags={["Outdoor flight", "Online mapping and object-tracking"]}
+></Card>
+</div>
+<div className="flex flex-row-reverse">
+  <a
+    href="https://scholar.google.com/citations?user=ssYQ2w4AAAAJ&hl=ko"
+    className="link flex"
+    target="_blank"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={1.5}
+      stroke="currentColor"
+      className="mr-1 h-6 w-6"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"
+      />
+    </svg>
+    <p>Discover more publications</p>
+  </a>
+</div>
+
+## Past projects
+
+<br />
+<div className="p-2">
+  <ImageGrid data={project} linkOn></ImageGrid>
+</div>
