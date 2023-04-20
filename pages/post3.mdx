@@ -1,0 +1,68 @@
+---
+title: Users of Vscode, Use CMake Extension Instead of c_cpp_properties.json
+date: 2023-04-20
+description: Very short guide why you use CMakeLists.txt for code completion
+thumbnail: /images/post3/main.png
+keywords: vscode, ubuntu, cmake
+---
+
+import Image from "next/image";
+import Frontmatter from "../components/Frontmatter";
+import Comment from "../components/Comment";
+
+# If You Use Vscode, Use CMake Extension Instead of `c_cpp_properties.json`
+
+<Frontmatter />
+
+For Ubuntu users working with CMake projects and writing C++ code, it's
+important to set up Visual Studio Code (VSCode) correctly for smooth
+auto-completion and debugging.
+
+Many of vscode users would use `c_cpp_properties.json` to
+[make vscode find headers](https://code.visualstudio.com/docs/cpp/c-cpp-properties-schema-reference)
+during code completion. But actually, this is not a good idea.
+
+## Pitfall of using c_cpp_properties.json
+
+If we rely on `c_cpp_properties.json`, we are **manually feeding** header search
+paths to vscode. Although this works for code-completion, your project might not
+be built correctly. The reason is simple. Success of building process does have
+nothing to do with vscode, and its supporter, `c_cpp_properties.json`, as
+compilers will use CMakeLists.txt for building, not the json file. (Consider you
+did not give anything how to compile your project in `c_cpp_properties.json`.)
+
+Due to this, users might come across a **mismatch** between vscode and
+compilers. For example, although your vscode found no problems in your code,
+your CMake project cannot be built while not finding some headers.
+
+## CMakeLists.txt has everything we need to know
+
+This is an example `CMakeLists.txt` (I brought this from my
+[repo](https://github.com/icsl-Jeon/simple-cmake-package/blob/master/CMakeLists.txt))
+
+```cmake
+project(my_awesome_project)
+
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+...
+find_package(SimplePackage REQUIRED)
+add_executable(client_project_executable main.cpp)
+target_link_libraries(client_project_executable simple_package)
+```
+
+As you can see, this file actually has every information a compiler needs to
+know.
+
+- `include_directories`: which folders to include to search headers.
+- `find_package`: which package to read and where to find the libraries and
+  headers of the packages.
+- `target_link_libraries`: which libraries to be linked.
+
+So, if vscode can **well-extract** the information, it is nonsense that we
+cannot do code-completion for our CMake project!
+
+<Image src={"/images/post3/mismatch.png"} width={600} height={500} />
+
+## Setup CMake extension for configure, build, and install
+
+TBD
