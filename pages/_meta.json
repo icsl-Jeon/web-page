@@ -3,7 +3,12 @@
   "another": "Another Page",
   "advanced": "Advanced (A Folder)",
   "about": {
-    "title": "About",
+    "title": "Bio",
+    "type": "page"
+  },
+
+  "skills": {
+    "title": "Skills",
     "type": "page"
   },
   "contact": {
