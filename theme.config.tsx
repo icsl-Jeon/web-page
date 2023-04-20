@@ -16,7 +16,7 @@ const config: DocsThemeConfig = {
   ),
   useNextSeoProps() {
     const { asPath } = useRouter();
-    if (asPath !== "/") {
+    if (true) {
       return {
         titleTemplate: "%s – Boseong Jeon",
       };
