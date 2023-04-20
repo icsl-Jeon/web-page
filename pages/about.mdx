@@ -4,6 +4,14 @@ import ImageGrid from "../components/ImageGrid";
 import { Card } from "../components/PostSummary";
 import { project } from "../public/data";
 
+<Image
+  src={"/images/bio/profile.jpg"}
+  width={600}
+  height={500}
+  className="mx-auto"
+/>
+<br />
+
 # Hello, I am Boseong Jeon 😃
 
 Thank you for visiting my website! I am a robotics engineer who loves building a
@@ -58,7 +66,18 @@ for various tasks (obstacle mapping, target tracking and prediction).
 As a robotics engineer, I am used to scheduling, and performing experiments in
 any sites whether indoor, or outdoor.
 
+<br />
+
 # Experiences
+
+## Education
+
+- Received BS in mechanical & aerospace engineering at
+  [Seoul National University](https://en.snu.ac.kr/), 2013-2017
+- Received PhD in Robotics at Lab for Autonomous Robotics Research
+  ([LARR](https://larr.snu.ac.kr/), advisor:
+  [H. Jin Kim](https://scholar.google.com/citations?user=TLQUwIMAAAAJ&hl=ko) ) ,
+  2017-2022. ( <b>5 yrs graduation 🥷</b>)
 
 ## Publications
 
@@ -69,26 +88,21 @@ any sites whether indoor, or outdoor.
       "Online trajectory generation of a mav for chasing a moving target in 3d dense environments "
     }
     imageSource="/images/bio/iros2019.png"
-    tags={["Target chasing", "Hierarchical motion planning",]}
+    tags={["Target chasing", "Hierarchical motion planning"]}
+  ></Card> <Card
+    useTagLink={false}
+    title={
+      "Integrated Motion Planner for Real-time Aerial Videography with a Drone in a Dense Environment"
+    }
+    imageSource="/images/bio/icra2020.png"
+    tags={["Optimization", "Target Prediction"]}
+  ></Card>{" "}
+  <Card
+    useTagLink={false}
+    title={"Autonomous Aerial Dual-Target Following Among Obstacles "}
+    imageSource="/images/bio/access.jpg"
+    tags={["Outdoor flight", "Online mapping and object-tracking"]}
   ></Card>
-
-{" "}
-
-<Card
-  useTagLink={false}
-  title={
-    "Integrated Motion Planner for Real-time Aerial Videography with a Drone in a Dense Environment"
-  }
-  imageSource="/images/bio/icra2020.png"
-  tags={["Optimization", "Target Prediction"]}
-></Card>{" "}
-
-<Card
-  useTagLink={false}
-  title={"Autonomous Aerial Dual-Target Following Among Obstacles "}
-  imageSource="/images/bio/access.jpg"
-  tags={["Outdoor flight", "Online mapping and object-tracking"]}
-></Card>
 </div>
 <div className="flex flex-row-reverse">
   <a
