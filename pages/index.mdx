@@ -1,13 +1,30 @@
-# Introduction
+import Image from "next/image";
+import { Card, Cards } from "nextra-theme-docs";
 
-Welcome to Nextra! This is a basic docs template. You can use it as a starting
-point for your own project :)
+<Cards>
+  {[
+    {
+      name: "Backstory of ROS 2 Release: Why Better than ROS 1 ?",
+      url: "/post1",
+      image: "/images/post1/main.png",
+    },
+    {
+name: "How to set up vscode for using WSL 2",
+url: "/post2",
+image: "/images/post2/main.png"
 
-## What is Nextra?
+    }
 
-A **simple**, **powerful** and **flexible** site generation framework with
-everything you love from Next.js.
+].map(({ name, url, image }) => (
 
-## Documentation
+<Card key={name} image arrow target="_blank" title={name} href={url}>
+  {" "}
+  <img
+    src={image}
+    alt={`${name} preview`}
+    className="object-cover
+[aspect-ratio:12/6.3]"
+  />{" "}
+</Card> ))}
 
-The documentation is available at [https://nextra.site](https://nextra.site).
+</Cards>

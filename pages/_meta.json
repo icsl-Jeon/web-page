@@ -1,20 +1,24 @@
 {
-  "index": "Introduction",
-  "another": "Another Page",
-  "advanced": "Advanced (A Folder)",
+  "index": {
+    "title": "Welcome to my website 😁",
+    "theme": {
+      "typesetting": "article"
+    }
+  },
+
   "about": {
-    "title": "Bio",
+    "title": "📓Bio",
     "type": "page"
   },
 
   "skills": {
-    "title": "Skills",
+    "title": "⚔️Skills",
     "type": "page"
   },
-  "contact": {
-    "title": "Contact ↗",
-    "type": "page",
-    "href": "https://twitter.com/shuding_",
-    "newWindow": true
+  "post1": {
+    "title": "DDS of ROS2"
+  },
+  "post2": {
+    "title": "WSL2 and vscode"
   }
 }
