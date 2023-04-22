@@ -1,6 +1,6 @@
 {
   "index": {
-    "title": "Welcome to my website 😁",
+    "title": "Welcome to my website🌟",
     "theme": {
       "typesetting": "article"
     }
@@ -20,5 +20,8 @@
   },
   "post2": {
     "title": "WSL2 and vscode"
+  },
+  "post3": {
+    "title": "Correct use of vscode for cmake project"
   }
 }
