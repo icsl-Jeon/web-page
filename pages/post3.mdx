@@ -9,6 +9,7 @@ keywords: vscode, ubuntu, cmake
 import Image from "next/image";
 import Frontmatter from "../components/Frontmatter";
 import Comment from "../components/Comment";
+import YouTube, { YouTubeProps } from "react-youtube";
 
 # If You Use Vscode, Use CMake Extension Instead of `c_cpp_properties.json`
 
@@ -20,7 +21,9 @@ auto-completion and debugging.
 
 Many of vscode users would use `c_cpp_properties.json` to
 [make vscode find headers](https://code.visualstudio.com/docs/cpp/c-cpp-properties-schema-reference)
-during code completion. But actually, this is not a good idea.
+during code completion (for the interested, checkout this
+[tutorial](https://youtu.be/XF_cSibAwAU)). But actually, this is not a good
+idea.
 
 ## Pitfall of using c_cpp_properties.json
 
@@ -63,6 +66,25 @@ cannot do code-completion for our CMake project!
 
 <Image src={"/images/post3/mismatch.png"} width={600} height={500} />
 
-## Setup CMake extension for configure, build, and install
+## Setup CMake extension for configure, build, and debug
 
-TBD
+### Prerequisites
+
+You should installed gcc, g++, gdb, cmake. If not installed, do:
+
+```sh
+sudo apt-get install gcc g++ gdb cmake
+```
+
+### How to use CMake extension
+
+Fully leveraging `CMakeLists.txt` on vscode can be done by
+[CMake extension](https://code.visualstudio.com/docs/cpp/cmake-linux). I
+uploaded on youtube how to setup the extension for configure, build, and debug
+👍
+
+<div className="sm:px-5 my-10">
+  <YouTube videoId="Qt_xhV0dKao" className="videoWrapper" />
+</div>
+
+<Comment />
