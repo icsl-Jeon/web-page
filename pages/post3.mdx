@@ -29,7 +29,7 @@ idea.
 
 If we rely on `c_cpp_properties.json`, we are **manually feeding** header search
 paths to vscode. Although this works for code-completion, your project might not
-be built correctly. The reason is simple. Success of building process does have
+be built correctly. The reason is simple. Success of building process has
 nothing to do with vscode, and its supporter, `c_cpp_properties.json`, as
 compilers will use CMakeLists.txt for building, not the json file. (Consider you
 did not give anything how to compile your project in `c_cpp_properties.json`.)
@@ -70,7 +70,7 @@ cannot do code-completion for our CMake project!
 
 ### Prerequisites
 
-You should installed gcc, g++, gdb, cmake. If not installed, do:
+You should install gcc, g++, gdb, and cmake. If not installed, do:
 
 ```sh
 sudo apt-get install gcc g++ gdb cmake
