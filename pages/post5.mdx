@@ -1,0 +1,120 @@
+---
+title: How to organize ROS project - design pattern
+date: 2023-04-23
+description:
+  When collaborating with others on a software project, it's important to ensure
+  that the codebase is consistent and well-formatted. This can be achieved
+  through the use of code formatting tools such as cmake-format and
+  clang-format. cmake-format is a tool that helps to format CMake files in a
+  consistent and readable manner. clang-format, on the other hand, is a tool
+  that can be used to format C++, Java, JavaScript, and other code in a
+  consistent style. By using these tools, developers can ensure that the
+  codebase is consistent and easy to read, which can make it easier for other
+  developers to understand and work with the code. This can be especially
+  important when working on large projects with many contributors, where
+  inconsistent formatting can lead to confusion and errors.
+thumbnail: /images/post5/main.png
+keywords: ros, cmake, design-pattern
+---
+
+import Image from "next/image";
+import Frontmatter from "../components/Frontmatter";
+import Comment from "../components/Comment";
+
+# How to Organize ROS Project - Design Pattern
+
+<Frontmatter />
+
+Look at some of famous projects including ROS interface:
+[octomap](https://github.com/OctoMap/octomap_ros),
+[voxblox](https://github.com/ethz-asl/voxblox),
+[cartographer](https://github.com/orgs/cartographer-project/repositories), and
+[zed](https://github.com/stereolabs). Can you guess what is shared between them?
+They tried to separate their core logic from ROS either by separating the
+repository or directories. In this article, we will walkthrough why it is
+important and how to setup the file structure and `CMakeList.txt` for your
+project.
+
+## 1. ROS as adapter, not entangler
+
+### What is adapter ?
+
+[_Adapter_](https://refactoring.guru/design-patterns/adapter) is a very famous
+design pattern, which can be understood with the following words: wrapper,
+interface, bridge,or interpreter. The below is a very compact example. Here,
+`Game.cpp` can be seen as a client code, which knows only `GameAsset` class. To
+perform some `my_core_logic` encapsulated inside `GameAsset`, we follow the
+below adapter pattern.
+
+```cpp filename="AdapterForGame.hpp"
+#include "my_core_logic.hpp"
+class AdapterForGameEditor: public GameAsset {
+  public:
+    void run() override;
+  ...
+  private:
+    CoreLogic core_logic_;
+  ...
+}
+```
+
+```cpp filename="AdapterForGame.cpp"
+void AdapterForGameEditor::run() {
+  core_logic_.run();
+}
+```
+
+```cpp filename="Game.cpp"
+#include "AdapterForGame.hpp"
+GameAsset* asset_with_core_logic = new AdapterForGameEditor();
+asset_with_core_logic->run();
+```
+
+### ROS and core logic on same file? Only if you are 100% sure that ROS is only outlet
+
+Let us assume that we have a core logic and it should be shipped to various
+platforms. This is the case for [ZED](https://github.com/stereolabs) SDK which
+should be delivered to [Unity](https://github.com/stereolabs/zed-unity),
+[Unreal](https://github.com/stereolabs/zed-UE5),
+[H-hub](https://github.com/stereolabs/zed-hub-examples), and
+[ROS 2](https://github.com/stereolabs/zed-ros2-wrapper),... If you are in a
+similar situation, it is insane if you entangle ROS code and pure logic which
+should be reused across different outlet. Of course, ZED did not go that way.
+See this picture:
+
+<Image
+  src="/images/post5/adapter.png"
+  width={1000}
+  height={1000}
+  className="my-3"
+/>
+
+### So, what is the direction?
+
+> I will assume you are using ROS2 with `ament_cmake`. I prepared a template
+> repository [here](https://github.com/icsl-Jeon/simple-ros2-package).
+
+Simple: **YOUR CORE LOGIC SHOULD RUN WITHOUT ROS**. Your aim is to make your
+logics reusable across many outlets. This entails the followings:
+
+- Your core logic inside a pure CMakeList project for easy reusability, not
+  [catkin](https://wiki.ros.org/catkin) or
+  [ament](https://design.ros2.org/articles/ament.html) formed package.
+- You have two different directories and projects: 1) `core` and 2)
+  `ros wrapper`.
+- `ros wrapper` does not build `core`. It only finds and uses it.
+- For your development convenience, `core` and `ros wrapper` could be built with
+  a single build command (`colcon build` or `catkin_make`)on a same workspace.
+- Testing your logic should be possible without ROS (this will be covered from
+  another article in the future).
+
+Now, I will introduce how to setup folder structure and write `CMakeLists.txt`
+for `core` and `ros wrapper`.
+
+## 2. File structure we want
+
+TBD
+
+## 3. Writing `CMakeLists.txt`
+
+TBD
