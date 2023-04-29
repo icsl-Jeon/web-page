@@ -1,6 +1,6 @@
 ---
 title: How to organize ROS project - design pattern
-date: 2023-04-23
+date: 2023-04-27
 description:
   When collaborating with others on a software project, it's important to ensure
   that the codebase is consistent and well-formatted. This can be achieved
@@ -46,7 +46,7 @@ interface, bridge,or interpreter. The below is a very compact example. Here,
 perform some `my_core_logic` encapsulated inside `GameAsset`, we follow the
 below adapter pattern.
 
-```cpp filename="AdapterForGame.hpp"
+```cpp filename="AdapterForGame.hpp" {1,2,7}
 #include "my_core_logic.hpp"
 class AdapterForGameEditor: public GameAsset {
   public:
@@ -69,6 +69,28 @@ void AdapterForGameEditor::run() {
 GameAsset* asset_with_core_logic = new AdapterForGameEditor();
 asset_with_core_logic->run();
 ```
+
+### ROS node can be also an adapter
+
+In a very similar manner, we can easily
+[find](https://github.com/stereolabs/zed-ros2-wrapper/blob/master/zed_components/src/zed_camera/include/zed_camera_component.hpp)
+the below adapter pattern code.
+
+```cpp {1,2,9}
+#include <sl/Camera.hpp> // core (~ adaptee)
+class ZedCamera : public rclcpp::Node{ // base class having ROS interfacing
+  ...
+  //
+  image_transport::CameraPublisher mPubRgb; // some publishers
+  clickedPtSub mClickedPtSub; // some subscriber
+
+  ...
+  sl::Camera mZed; // core class from
+}
+```
+
+As you can see, some core header is included as a member of ROS node, while the
+ros node has interface derived from `Node`.
 
 ### ROS and core logic on same file? Only if you are 100% sure that ROS is only outlet
 
@@ -111,10 +133,146 @@ logics reusable across many outlets. This entails the followings:
 Now, I will introduce how to setup folder structure and write `CMakeLists.txt`
 for `core` and `ros wrapper`.
 
-## 2. File structure we want
+## 2. Possible file structure
 
-TBD
+> _Disclaimer: I will discuss file structure affecting our build process, rather
+> than `launch` and `param` folders._
+
+If we looking to my [repo](https://github.com/icsl-Jeon/simple-ros2-package),
+there is one possible folder tree to achieve
+[aforementioned direction](/post5#so-what-is-the-direction). I personally
+motivated by [voxblox repository](https://github.com/ethz-asl/voxblox).
+
+```
+~/ros2_ws/src/simple-ros2-package/
+├── my_package
+│   ├── CMakeLists.txt
+│   ├── library_a
+│   │   ├── LibraryA.cpp
+│   │   └── LibraryA.hpp
+│   └── library_b
+│       ├── LibraryB.cpp
+│       └── LibraryB.hpp
+├── my_package_ros2
+│   ├── CMakeLists.txt
+│   ├── main.cpp
+│   ├── package.xml
+│   ├── visualizer
+│   │   ├── Visualizer.cpp
+│   │   └── Visualizer.hpp
+│   └── wrapper
+│       ├── Wrapper.cpp
+│       └── Wrapper.hpp
+└── README.md
+```
+
+Under this file structure, `colcon list` outputs the below:
+
+```
+jbs@jbs:~/ros2_ws$ colcon list
+my_package      src/simple-ros2-package/my_package      (cmake)
+my_package_ros2 src/simple-ros2-package/my_package_ros2 (ros.ament_cmake)
+```
+
+Please note that `my_package` is recognized as `cmake` and `my_package_ros2` as
+`ros.ament_cmake`.
+
+### Core library (pure cmake)
+
+In this folder structure, it is assumed that individual core library (library_a
+and library_b) will not be treated as a separate CMake project as they are
+compiled under a single CMake project (my_package). Anyway, it requires an extra
+effort to maintain many `CMakeLists.txt` under every single library folder.
+
+### ROS2 library (ament_cmake)
+
+In case of ROS2 library, it is noteworthy that we have `package.xml` to notify
+dependency on `my_package` (core).
+
+```xml {11}
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>my_package_ros2</name>
+  <version>0.0.0</version>
+  <description>TODO: Package description</description>
+  <maintainer email="jbs@todo.todo">jbs</maintainer>
+  <license>TODO: License declaration</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <depend>my_package</depend>
+  ...
+</package>
+~
+```
+
+**This is really important**. If you do not have the `<depend>` tag,
+`colcon build` might not reflect the correct build order (`my_package` ->
+`my_package_ros2`).
 
 ## 3. Writing `CMakeLists.txt`
 
-TBD
+### Core library
+
+For each library target (shown as `${LIBRARY}` which is either `library_a` or
+`library_b`), we perform the below:
+
+```cmake showLineNumbers
+...
+  add_library(${LIBRARY} SHARED ${LIBRARY_SOURCES} ${LIBRARY_HEADERS})
+
+  install(
+    TARGETS ${LIBRARY}
+    EXPORT ${LIBRARY}
+    LIBRARY DESTINATION lib
+    INCLUDES
+    DESTINATION include)
+  install(FILES ${LIBRARY_HEADERS} DESTINATION include/${LIBRARY})
+  export(TARGETS ${LIBRARY}
+          FILE "${CMAKE_CURRENT_BINARY_DIR}/${LIBRARY}Config.cmake")
+
+  install(
+    EXPORT ${LIBRARY}
+    FILE "${LIBRARY}Config.cmake"
+    DESTINATION share/${LIBRARY}/cmake)
+...
+```
+
+#### Install library and headers (L4-L10)
+
+If we do not include L8-L9, the client project (my_package_ros2) cannot find
+include directory of library when `find_package(library_a)`. This can be seen by
+`colcon build --packages-select my_package_ros2 --event-handlers console_direct+ --cmake-args -DCMAKE_VERBOSE_MAKEFILE=TRUE`
+
+##### When L8-L9 not included, output of `CMAKE_VERBOSE`
+
+```shell {4-5}
+[ 16%] Building CXX object CMakeFiles/visualizer.dir/visualizer/Visualizer.cpp.o
+/usr/bin/c++  -DDEFAULT_RMW_IMPLEMENTATION=rmw_fastrtps_cpp -DRCUTILS_ENABLE_FAULT_INJECTION -DSPDLOG_COMPILED_LIB
+
+-I/home/jbs/ros2_ws/src/simple-ros2-package/my_package_ros2
+-isystem /opt/ros/foxy/include
+
+ -o CMakeFiles/visualizer.dir/visualizer/Visualizer.cpp.o -c /home/jbs/ros2_ws/src/simple-ros2-package/my_package_ros2/visualizer/Visualizer.cpp
+
+In file included from /home/jbs/ros2_ws/src/simple-ros2-package/my_package_ros2/visualizer/Visualizer.cpp:1:
+/home/jbs/ros2_ws/src/simple-ros2-package/my_package_ros2/visualizer/Visualizer.hpp:4:10: fatal error: library_a/LibraryA.hpp: No such file or directory
+    4 | #include "library_a/LibraryA.hpp"
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~
+
+```
+
+##### When included,
+
+```shell {4-6}
+[ 16%] Building CXX object CMakeFiles/visualizer.dir/visualizer/Visualizer.cpp.o
+/usr/bin/c++  -DDEFAULT_RMW_IMPLEMENTATION=rmw_fastrtps_cpp -DRCUTILS_ENABLE_FAULT_INJECTION -DSPDLOG_COMPILED_LIB
+
+-I/home/jbs/ros2_ws/src/simple-ros2-package/my_package_ros2
+-isystem /opt/ros/foxy/include
+-isystem /home/jbs/ros2_ws/install/my_package/include
+
+  -o CMakeFiles/visualizer.dir/visualizer/Visualizer.cpp.o -c /home/jbs/ros2_ws/src/simple-ros2-package/my_package_ros2/visualizer/Visualizer.cpp
+```
+
+### ROS2 library
