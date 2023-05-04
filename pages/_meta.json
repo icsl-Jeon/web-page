@@ -15,13 +15,22 @@
     "title": "⚔️Skills",
     "type": "page"
   },
+
   "post1": {
     "title": "DDS of ROS2"
   },
+
   "post2": {
     "title": "WSL2 and vscode"
   },
+
   "post3": {
     "title": "Correctly using vscode for Cmake project"
+  },
+  "post4": {
+    "title": "Formatting for CMakeLists.txt and sources"
+  },
+  "post5": {
+    "title": "Adapter pattern of ROS: separation from core"
   }
 }
