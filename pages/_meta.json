@@ -32,5 +32,8 @@
   },
   "post5": {
     "title": "Adapter pattern of ROS: separation from core"
+  },
+  "post6": {
+    "title": "Setup vscode for ROS code completion and debugging"
   }
 }
