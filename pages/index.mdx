@@ -4,9 +4,19 @@ import { Card, Cards } from "nextra-theme-docs";
 <Cards>
   {[
     {
+      name: "Packaging a large (pure) CMake project",
+      url: "/post7",
+      image: "images/post7/main.png",
+    },
+    {
       name: "DDS of ROS2",
       url: "/post1",
       image: "/images/post1/main.png",
+    },
+    {
+      name: "Adapter pattern of ROS: separation from core",
+      url: "/post5",
+      image: "/images/post5/main.png",
     },
     {
       name: "WSL2 and vscode",
@@ -23,25 +33,23 @@ import { Card, Cards } from "nextra-theme-docs";
       url: "/post4",
       image: "/images/post4/main.png",
     },
-    {
-      name: "Adapter pattern of ROS: separation from core",
-      url: "/post5",
-      image: "/images/post5/main.png",
-    },
+
     {
       name: "Setup vscode for ROS code completion and debugging",
       url: "/post6",
       image: "/images/post6/main.png",
     },
-  ].map(({ name, url, image }) => (
-    <Card key={name} image arrow target="_blank" title={name} href={url}>
-      {" "}
-      <img
-        src={image}
-        alt={`${name} preview`}
-        className="object-cover
+
+].map(({ name, url, image }) => (
+
+<Card key={name} image arrow target="_blank" title={name} href={url}>
+  {" "}
+  <img
+    src={image}
+    alt={`${name} preview`}
+    className="object-cover
 [aspect-ratio:12/6.3]"
-      />{" "}
-    </Card>
-  ))}
+  />{" "}
+</Card> ))}
+
 </Cards>

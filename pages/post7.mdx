@@ -1,0 +1,360 @@
+---
+title: Packaging a large CMake project
+date: 2023-05-06
+description:
+  This article describes how to organize structure and write CMakeList files in
+  middle scaled project. Repository is also available where a ROS wrapper uses
+  the packaged CMake project.
+thumbnail: /images/post7/main.png
+keywords: cmake, design-pattern, project-organization
+---
+
+import Image from "next/image";
+import Frontmatter from "../components/Frontmatter";
+import Comment from "../components/Comment";
+
+# Packaging a large CMake project
+
+<Frontmatter />
+
+## Project description
+
+You can find the project repo
+[here](https://github.com/icsl-Jeon/simple-ros2-package/releases/tag/mid-size).
+
+### File structure
+
+I have three modules: `obstacle_manager`, `target_manager`, and `wrapper`. Each
+module has `module_name.cc` and `module_name.h` files.
+
+```
+my_package
+├── CMakeLists.txt
+├── include
+│   └── my_package
+├── src
+│   ├── obstacle_manager
+│   ├── target_manager
+│   └── wrapper
+└── test
+    ├── obstacle_manager_test.cc
+    ├── target_manager_test.cc
+    └── wrapper_test.cc
+```
+
+### Include graph
+
+<Image
+  src="/images/post7/include-dependency.png"
+  width={500}
+  height={500}
+  className="my-3"
+/>
+
+Each module is dependent on each other. `wrapper` is on the top of the
+hierarchy.
+
+```cpp filename="wrapper.h"
+#ifndef HEADER_WRAPPER
+#define HEADER_WRAPPER
+
+#include <string>
+
+#include "my_package/obstacle_manager/obstacle_manager.h"
+#include "my_package/target_manager/target_manager.h"
+
+namespace my_package {
+class Wrapper {
+private:
+  std::string name_{"Wrapper"};
+  ObstacleManager obstacle_manager_;
+  TargetManager target_manager_;
+
+public:
+  bool Plan() const;
+};
+} // namespace my_package
+
+#endif /* HEADER_WRAPPER */
+```
+
+## How to deliver this project
+
+- Each module is hardly used as a separate library. That is, I do not expect
+  module `obstacle_manager` to be used as a separate library for other consumer
+  library. I will compile all the sources and headers into a single library, as
+  [Cartographer](https://github.com/cartographer-project/cartographer/blob/ef00de2317dcf7895b09f18cc4d87f8b533a019b/CMakeLists.txt#L81)
+  did.
+- I want each module of this project will include headers using prefix
+  `my_package` as the below:
+
+  ```cpp filename="wrapper.h"
+  ...
+  #include "my_package/obstacle_manager/obstacle_manager.h"
+  #include "my_package/target_manager/target_manager.h"
+  ...
+  ```
+
+  Why? The consumer library (`my_package_ros2` in the repo) will also include
+  the headers such as below:
+
+  ```cpp filename="server.h (consumer)"
+  #ifndef HEADER_SERVER
+  #define HEADER_SERVER
+  #include "my_package/wrapper/wrapper.h"
+  #include <rclcpp/rclcpp.hpp>
+  ...
+  ```
+
+  To have the consistency, **`my_package` should have a folder `my_package`
+  inside root directory!**
+
+- The consumer library (`my_package_ros2`) should be able to find my headers and
+  link against my library by only `find_package` and `target_link_libraries`:
+  ```cmake {1,7} filename="consumer/CMakeLists.txt"
+  find_package(my_package REQUIRED)
+  add_library(server src/server/server.cc)
+  ament_target_dependencies(server rclcpp)
+  target_include_directories(
+    server PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+                  $<INSTALL_INTERFACE:include>)
+  target_link_libraries(server my_package)
+  ```
+  I prefer this way as Open3D
+  [did](https://github.com/isl-org/open3d-cmake-find-package/blob/master/CMakeLists.txt),
+  rather than exporting variables such as `XXX_INCLUDE_DIR` and `XXX_LIBRARIES`.
+  The latter requires extra files such as `XXXConfig.cmake.in` as
+  [this](https://github.com/OctoMap/octomap/blob/devel/octomap/octomap-config.cmake.in).
+
+## How to write `CMakeLists.txt`
+
+This is all my `CMakeLists.txt` got: (quite concise, isn't it? 😊)
+
+```cmake
+
+cmake_minimum_required(VERSION 3.5)
+project(my_package)
+
+find_package(Eigen3 REQUIRED)
+find_package(PCL REQUIRED COMPONENTS common)
+
+file(GLOB_RECURSE LIBRARY_HDRS "include/my_package/*.h")
+file(GLOB_RECURSE LIBRARY_SRCS "src/*.cc")
+file(GLOB TEST_SRCS "test/*.cc")
+
+add_library(${PROJECT_NAME} STATIC ${LIBRARY_SRCS} ${LIBRARY_HDRS})
+target_link_libraries(${PROJECT_NAME} ${PCL_LIBRARIES})
+target_include_directories(
+  ${PROJECT_NAME}
+  PUBLIC ${EIGEN_INCLUDE_DIR} ${PCL_INCLUDE_DIRS}
+         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
+         $<INSTALL_INTERFACE:include>)
+
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/include DESTINATION .)
+install(TARGETS ${PROJECT_NAME} EXPORT ${PROJECT_NAME}Config)
+install(EXPORT ${PROJECT_NAME}Config DESTINATION share/${PROJECT_NAME}/cmake)
+
+enable_testing()
+find_package(GTest REQUIRED)
+foreach(TEST_SRC ${TEST_SRCS})
+  get_filename_component(TEST_NAME ${TEST_SRC} NAME_WE)
+  add_executable(${TEST_NAME} ${TEST_SRC})
+  target_link_libraries(${TEST_NAME} ${PROJECT_NAME} GTest::GTest GTest::Main)
+  add_test(${TEST_NAME} ${TEST_NAME})
+endforeach()
+
+```
+
+### 1. Single `CMakeLists.txt` in `my_package` root directory
+
+I did not put `CMakeLists.txt` to each module folder. If I put it on individual
+folders, and `add_library` individually, every `CMakeLists.txt` should reflect
+dependency on other modules inside a package when `target_link_libraries`. For
+example,
+
+```cmake filename="obstacle_manager/CMakeList.txt"
+target_link_libraries(obstacle_manager PUBLIC ${PCL_LIBRARIES})
+
+target_include_directories(
+  obstacle_manager
+  PUBLIC $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}>
+  ...
+
+```
+
+```cmake filename="target_manager/CMakeLists.txt"
+target_link_libraries(target_manager PUBLIC obstacle_manager)
+```
+
+I found that this is not an elegant way unless I have concluded the module
+dependency tree, and working with others who have a solid background in `CMake`.
+
+### 2. GLOB to compile all sources and headers into a single library
+
+```cmake
+...
+file(GLOB_RECURSE LIBRARY_HDRS "include/my_package/*.h")
+file(GLOB_RECURSE LIBRARY_SRCS "src/*.cc")
+file(GLOB TEST_SRCS "test/*.cc")
+
+add_library(${PROJECT_NAME} STATIC ${LIBRARY_SRCS} ${LIBRARY_HDRS})
+...
+```
+
+I was motivated by that: Cartographer
+[collects all source files](https://github.com/cartographer-project/cartographer/blob/master/CMakeLists.txt#L82)
+and compile them into a
+[single library](https://github.com/cartographer-project/cartographer/blob/ef00de2317dcf7895b09f18cc4d87f8b533a019b/CMakeLists.txt#L187).
+
+### 3. Carry all dependency (Eigen / PCL) for consumer
+
+```cmake
+...
+target_link_libraries(${PROJECT_NAME} ${PCL_LIBRARIES})
+target_include_directories(
+  ${PROJECT_NAME}
+  PUBLIC ${EIGEN_INCLUDE_DIR} ${PCL_INCLUDE_DIRS}
+         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
+         $<INSTALL_INTERFACE:include>)
+...
+```
+
+I want to the consumer of `my_package` to use directly external headers (pcl /
+eigen) and all the headers of `my_package`, by linking `my_package`. For the
+purpose, I put `PUBLIC` keyword. What happens if I change it into `PRIVATE`?
+First problem is test executables are not compiled which would included headers
+of `my_package` by linking `my_pacakge` (`${PROJECT_NAME}`)!
+
+```cmake {2} filename="CMakeLists.txt"
+  ...
+  add_executable(${TEST_NAME} ${TEST_SRC})
+  target_link_libraries(${TEST_NAME} ${PROJECT_NAME} GTest::GTest GTest::Main)
+  ...
+```
+
+The compiler complains about headers of `my_package` not found:
+
+```
+/home/jbs/ros2_ws/src/simple-ros2-package/my_package/test/wrapper_test.cc:1:10: fatal error: my_package/wrapper/wrapper.h: No such file or directory
+    1 | #include "my_package/wrapper/wrapper.h"
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[2]: *** [CMakeFiles/wrapper_test.dir/build.make:63: CMakeFiles/wrapper_test.dir/test/wrapper_test.cc.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:82: CMakeFiles/wrapper_test.dir/all] Error 2
+make[1]: *** Waiting for unfinished jobs....
+/home/jbs/ros2_ws/src/simple-ros2-package/my_package/test/target_manager_test.cc:1:10: fatal error: my_package/target_manager/target_manager.h: No such file or directory
+    1 | #include "my_package/target_manager/target_manager.h"
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[2]: *** [CMakeFiles/target_manager_test.dir/build.make:63: CMakeFiles/target_manager_test.dir/test/target_manager_test.cc.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:109: CMakeFiles/target_manager_test.dir/all] Error 2
+/home/jbs/ros2_ws/src/simple-ros2-package/my_package/test/obstacle_manager_test.cc:1:10: fatal error: my_package/obstacle_manager/obstacle_manager.h: No such file or directory
+    1 | #include "my_package/obstacle_manager/obstacle_manager.h"
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+### 4. Install full include folder
+
+```cmake
+...
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/include DESTINATION .)
+...
+```
+
+#### Preliminary
+
+- `${CMAKE_SOURCE_DIR}`: directory where `CMakeLists.txt` is located. In this
+  case, `my_package` folder.
+- `${CMAKE_INSTALL_PREFIX}`: root directory of installation when invoking
+  `install` process. This is normally set by users or upstream CMakeLists.txt.
+  When we do `colcon build`, it is `/home/jbs/ros2_ws/install/my_package`.
+
+I already gathered all headers in `my_package/include`. This will be installed
+into `${CMAKE_INSTALL_PREFIX}`.
+
+#### Installation of include folder
+
+Assuming `my_package` in installed in
+`~/ros2_ws/src/simple-ros2-package/my_package`,
+`~/ros2_ws$ colcon build --packages-select my_package` will install
+
+```
+~/ros2_ws/install$ tree my_package/include -L 3
+my_package/include
+└── my_package
+    ├── obstacle_manager
+    │   └── obstacle_manager.h
+    ├── target_manager
+    │   └── target_manager.h
+    └── wrapper
+        └── wrapper.h
+```
+
+### 5. Help headers of `my_package` can find each other even after Install
+
+```cmake {4,5}
+target_include_directories(
+  ${PROJECT_NAME}
+  PUBLIC ${EIGEN_INCLUDE_DIR} ${PCL_INCLUDE_DIRS}
+         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
+         $<INSTALL_INTERFACE:include>)
+```
+
+#### Preliminary
+
+Official documents
+[here](https://cmake.org/cmake/help/latest/manual/cmake-generator-expressions.7.html#id29).
+
+- In `$<BUILD_INTERFACE:<blah-blah>>`, `blah-blah` will be effective only when
+  build process. When install process, it is treated as an empty. It applies
+  same for `$<INSTALL_INTERFACE:<blah-blah>>`
+- It is very common to delete all the sources and build outputs after
+  installation. (consider that `sudo apt-get install some_package` does not have
+  all sources and build outputs.) Thus, you should understand that
+  `${CMAKE_SOURCE_DIR}/include` can be deleted, and the installed targets (in
+  this case, `installation_path/lib/my_package.a`) cannot use
+  `~/ros2_ws/src/simple-ros2-package/my_package/include`. Read this
+  [thread](https://stackoverflow.com/questions/58729233/what-is-the-use-case-for-generator-expression-on-target-include-directories).
+
+#### When building `my_package`
+
+When building the sources into library, all the header-search should refer
+` $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>` which is
+`~/ros2_ws/src/simple_ros2_package/include` if I cloned the repo into
+`~/ros2_ws/src/`
+
+#### When installing `my_pacakge`
+
+[This process](https://motion-boseong.vercel.app/post7#4-install-full-include-folder)
+installed header files into `${CMAKE_INSTALL_PREFIX}/include`. So we should make
+sure that: library `my_package` should refer the folder when searching for
+headers. That is, `$<INSTALL_INTERFACE:include>` is needed.
+
+### 6. Install Config.cmake shipping library
+
+```cmake
+...
+install(TARGETS ${PROJECT_NAME} EXPORT ${PROJECT_NAME}Config)
+install(EXPORT ${PROJECT_NAME}Config DESTINATION share/${PROJECT_NAME}/cmake)
+...
+```
+
+Last part. we make `${PROJECT_NAME}Config` file (or some object?)
+[hold the property](https://cmake.org/cmake/help/latest/guide/tutorial/Adding%20Export%20Configuration.html)
+of target `${PROJECT_NAME}`. Then we install the file
+`${PROJECT_NAME}Config.cmake` into
+`${CMAKE_INSTALL_PREFIX}/share/my_package/cmake` so that other projects can find
+the target:
+
+```cmake filename="my_package_ros2/CMakeLists.txt" {2,9}
+
+find_package(los_keeper REQUIRED)
+
+add_library(los_server src/los_server/los_server.cc)
+ament_target_dependencies(los_server rclcpp)
+target_include_directories(
+  los_server PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+                    $<INSTALL_INTERFACE:include>)
+target_link_libraries(los_server los_keeper)
+
+```

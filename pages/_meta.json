@@ -35,5 +35,8 @@
   },
   "post6": {
     "title": "Setup vscode for ROS code completion and debugging"
+  },
+  "post7": {
+    "title": "Packaging a large (pure) CMake project"
   }
 }
