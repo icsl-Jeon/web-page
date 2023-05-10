@@ -30,11 +30,11 @@
   "post4": {
     "title": "Formatting for CMakeLists.txt and sources"
   },
-  "post5": {
-    "title": "Adapter pattern of ROS: separation from core"
-  },
   "post6": {
     "title": "Setup vscode for ROS code completion and debugging"
+  },
+  "post5": {
+    "title": "Adapter pattern of ROS: separation from core"
   },
   "post7": {
     "title": "Packaging a mid-size (pure) CMake project"

@@ -31,9 +31,7 @@ Look at some of famous projects including ROS interface:
 [cartographer](https://github.com/orgs/cartographer-project/repositories), and
 [zed](https://github.com/stereolabs). Can you guess what is shared between them?
 **They tried to separate their core logic from ROS either by separating the
-repository or directories.** In this article, we will walkthrough why it is
-important and how we can setup that kind of file structures and `CMakeList.txt`
-for your project.
+repository or directories.**
 
 ## ROS as adapter, not entangler
 
@@ -76,7 +74,7 @@ asset_with_core_logic->run();
 
 Here, `Game.cpp` can be seen as a client code, which knows only `GameAsset`
 class. To perform some `my_core_logic` encapsulated inside `GameAsset`, we can
-adopt the below adapter pattern for `GameAsset` by defining
+adopt the above adapter pattern for `GameAsset` by defining
 `AdapterForGameEditor` which understands the interface `GameAsset` while
 including core logic.
 
@@ -178,3 +176,6 @@ and a ros wrapping package as `ros-wrapper`, this can be achieved by:
   are built with a single build command (`colcon build` or `catkin_make`) on a
   workspace (e.g., `ros2_ws` or `catkin_ws`).
 - Testing `core` should be possible without `ros-wrapper`.
+
+**If you want to know how we can write `CMakeLists.txt` and design file
+structure, read the [next article](http://localhost:3000/post7) 😁.**
