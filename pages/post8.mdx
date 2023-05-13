@@ -21,7 +21,7 @@ import Comment from "../components/Comment";
   callback takes **2s** to complete?
 
 - Things more difficult: assume another topic is being published at every
-  **1s**, and the corresponding callback takes **4s** to complete. What will
+  **1s**, and the corresponding callback takes **2s** to complete. What will
   happen?
 
 As always, [full repo](https://github.com/icsl-Jeon/simple-ros2-thread) will
@@ -70,7 +70,7 @@ to member variables `processed_[short|long]_string_`.
 std::string
 SingleThreadSubscriber::ProcessString(const std::string &raw_string) {
   std::this_thread::sleep_for(
-      std::chrono::milliseconds(100 * raw_string.size()));
+      std::chrono::seconds(2));
   return "** " + raw_string + " **";
 };
 
@@ -84,9 +84,7 @@ void SingleThreadSubscriber::ShortTopicCallback(
 }
 ```
 
-`short_topic` has around 20 characters. So it will takes about **2s**, and
-`long_topic` will take **4s**. In this example, queue size for each topic is
-**10**.
+In this example, queue size for each topic is **10**.
 
 ## Results
 
