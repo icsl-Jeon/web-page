@@ -16,7 +16,7 @@ import Image from "next/image";
 import Frontmatter from "../../components/Frontmatter";
 import Comment from "../../components/Comment";
 
-# Multi Thread of ROS 2 with Callback group - Part 2 Mutually exclusive
+# Multi Thread of ROS 2 with Callback group - Part 2: Mutually exclusive
 
 <Frontmatter />
 
@@ -27,7 +27,7 @@ assume that you have a preliminary understanding of the callback groups.
 
 ## Key takeaways
 
-### 1. Callbacks in a same `MutuallyExclusive` group are exact the same with `SingleThreadedExecutor`.
+### 1. Callbacks in a same `MutuallyExclusive` group are NOT exactly same with `SingleThreadedExecutor`.
 
 In the
 [official documentation](https://docs.ros.org/en/foxy/How-To-Guides/Using-callback-groups.html#basics-of-callback-groups),
@@ -37,22 +37,22 @@ it is said that:
 > in parallel - essentially making it as if the callbacks in the group were
 > executed by a SingleThreadedExecutor.
 
-Then, some might expect that the callbacks in `MutuallyExclusive` group are
-working exactly the same as `SingleThreadedExecutor` performs the callbacks. For
-a delayed processing of the callbacks, this is not true.
+Then, some might expect that the callbacks in a same `MutuallyExclusive` group
+are working exactly the same as `SingleThreadedExecutor` processes the
+callbacks. For a delayed processing of the callbacks, this is not true.
 
 In [my previous article](<(http://localhost:3000/post8)>), callbacks in a
 `SingleThreadedExecutor` are processed in round robin (a.k.a., not FIFO) if the
 callbacks take more time than the speed of event happening. **But
 `MutuallyExclusive` group was not found to show this round-robin behavior.**
 
-### 2. Of course, callbacks in different Mutually Exclusive group are not thread-safe.
+### 2. Of course, callbacks in different Mutually Exclusive groups are not thread-safe.
 
 If you are expecting from `rclcpp` that this will keep thread-safety between
 different `MutuallyExclusive` groups, then do not. You should use mutex, and
 define critical sections.
 
-## Publisher and subscriber nodes
+## Testbed: publisher and subscriber nodes
 
 The overall scenario is very similar to the previous article. You can find all
 the codes [here](https://github.com/icsl-Jeon/simple-ros2-thread)
@@ -139,8 +139,8 @@ has three callbacks:
 
 ### 1. Putting callbacks together in a same `MutuallyExclusive` group
 
-For this testing, let us assume that `TimerCallback()` is not used, having only
-two subscription callbacks.
+For this test, let us assume that `TimerCallback()` is not used, having only two
+subscription callbacks.
 
 ```cpp {8, 15, 21}
 class MultiThreadMutuallyExclusiveSubscriber : public rclcpp::Node {
@@ -187,7 +187,7 @@ int main(int argc, char **argv) {
 
 #### Results
 
-Publisher node outputed the below:
+Publisher node output the below:
 
 ```shell {2, 9,12,24}
 jbs@jbs:~/ros2_ws$ ros2 run simple_thread_tester publisher_node
@@ -219,7 +219,7 @@ jbs@jbs:~/ros2_ws$ ros2 run simple_thread_tester publisher_node
 
 This is subscription result:
 
-```shell filename="MultiThreadedExecutor with MutuallyExclusive result"
+```shell filename="MultiThreadedExecutor with MutuallyExclusive result"  {2,3}
 jbs@jbs:~/ros2_ws$ ros2 run simple_thread_tester multi_thread_mutually_exclusive_subscriber_node
 [INFO] [1684497086.000256023] [subscriber_node]: Setting processed:  ** Short message (seq=0) **
 [INFO] [1684497088.205206606] [subscriber_node]: Setting processed:  ** Short message (seq=12) **
@@ -233,8 +233,8 @@ jbs@jbs:~/ros2_ws$ ros2 run simple_thread_tester multi_thread_mutually_exclusive
 
 ```
 
-Is is very clear: **callback for `long_topic` was not handled at all.** This is
-very different from the round-robin results of `SingleThreadedExecutor` (please
+Is is very clear: **callback for `long_topic` was hardly handled.** This is very
+different from the round-robin results of `SingleThreadedExecutor` (please
 ignore timestamps):
 
 ```cpp filename="SingleThreadedExecutor result"
@@ -249,16 +249,23 @@ jbs@jbs:~/ros2_ws$ ros2 run simple_thread_tester single_thread_subscriber_node
 [INFO] [1684494347.630739145] [subscriber_node]: Setting processed:  ** Short message (seq=131) **
 ```
 
-Apparently, the first subscription result processes the most recent new
-reception (event) after it finished the previous callback which takes about
-**2s**. This skipping behavior was reported in the
+Apparently, the first result suggests that `MultiThreadedExecutor` for
+`MutuallyExclusive` callback groups processes only `short_topic` as its callback
+has more chances to lock the mutex than `long_topic`. It is working as if
+`SingleThreadedExecutor` only for `short_topic`:
+
+- `short topic seq=0` was published and subscribed at **83s**.
+- `short topic seq=0` was finished for processing at **86s**.
+- `short topic seq=12` was received at **85** and the first in the queue at
+  **86** (queue size = 10).
+
+This skipping behavior was reported in the
 [issues](https://github.com/ros2/rclcpp/issues/2012), where a contributor
 _Barry-Xu-2018_
 [said](https://github.com/ros2/rclcpp/issues/2012#issuecomment-1238828464)
 `MultiThreadedExecutor` can
 [clear or (skip)](https://github.com/ros2/rclcpp/blob/9c82f6c9259157d811dc9360e496542bc2ead4c3/rclcpp/src/rclcpp/executor.cpp#LL470C5-L470C39)
-some waiting entities which became stale due to a
-[mutex lock](https://github.com/ros2/rclcpp/blob/foxy/rclcpp/src/rclcpp/executors/multi_threaded_executor.cpp#L67).
+some waiting entities due to mutex related issues.
 
 ### 2. Putting callbacks in different `MutuallyExclusive` groups
 
@@ -307,7 +314,7 @@ If you just run `multi_thread_reentrant_subscriber_node`
 ros2 run simple_thread_tester multi_thread_reentrant_subscriber_node
 ```
 
-initially it will not use mutexes initially. Thus, what we have is:
+Initially it will not use mutexes. Thus, what we have is:
 
 ```shell {23,24}
 jbs@jbs:~/ros2_ws$ ros2 run simple_thread_tester multi_thread_mutually_exclusive_subscriber_node
@@ -371,13 +378,13 @@ void MultiThreadMutuallyExclusiveSubscriber::ShortTopicCallback(
   ` in the mutex zone.
 </Callout>
 
-`subscriber_node` will use mutex by
+`subscriber_node` will use mutex by `param set`:
 
 ```shell
 ros2 param set /subscriber_node use_mutex true
 ```
 
-The result? thread safe!:
+The result? Thread safe!:
 
 ```cpp
 jbs@jbs:~/ros2_ws$ ros2 run simple_thread_tester multi_thread_mutually_exclusive_subscriber_node
