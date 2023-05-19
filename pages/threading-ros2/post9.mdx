@@ -13,8 +13,8 @@ keywords: thread, executor, ros2
 import { Callout } from "nextra-theme-docs";
 
 import Image from "next/image";
-import Frontmatter from "../components/Frontmatter";
-import Comment from "../components/Comment";
+import Frontmatter from "../../components/Frontmatter";
+import Comment from "../../components/Comment";
 
 # Multi-thread of ROS 2 with Callback Group - Part 1: Reentrant
 
@@ -229,3 +229,5 @@ But why `0.2` stride between `seq=18` and `seq=19` of `short_topic`?
 `seq=18` used the last available thread `140113868310272`, and `seq=19` should
 wait until the first thread `140113577211648` is freed from `seq=0` callback
 handling.
+
+<Comment />

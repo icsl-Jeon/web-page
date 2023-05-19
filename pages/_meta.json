@@ -20,31 +20,16 @@
     "title": "DDS of ROS2"
   },
 
-  "post2": {
-    "title": "WSL2 and vscode"
-  },
-
-  "post3": {
-    "title": "Correctly using vscode for Cmake project"
-  },
   "post4": {
     "title": "Formatting for CMakeLists.txt and sources"
   },
-  "post6": {
-    "title": "Setup vscode for ROS code completion and debugging"
-  },
+
   "post5": {
     "title": "Adapter pattern of ROS: separation from core"
   },
   "post7": {
     "title": "Packaging a mid-size (pure) CMake project"
   },
-
-  "post8": {
-    "title": "Single Thread of ROS 2, Not Necessarily FIFO. Could be Round Robin"
-  },
-
-  "post9": {
-    "title": "Multi-thread of ROS 2 with Callback Group - Part 1: Reentrant"
-  }
+  "threading-ros2": "Threading of ROS2",
+  "tools": "Tools"
 }
