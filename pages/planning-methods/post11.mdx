@@ -1,0 +1,52 @@
+---
+title:
+  RAPTOR Robust and Perception-aware Trajectory Replanning for Quadrotor Fast
+  Flight
+date: 2023-05-29
+description:
+  This article studies the RAPTOR motion planner which improves a local planning
+  for better risk-awareness and active exploration for the navigation in unkown
+  environments.
+thumbnail: /images/post11/main.png
+keywords: motion-planning, local-planning
+---
+
+import Frontmatter from "../../components/Frontmatter";
+import YouTube, { YouTubeProps } from "react-youtube";
+
+# RAPTOR: Robust and Perception-aware Trajectory Replanning for Quadrotor Fast Flight
+
+<Frontmatter />;
+
+This article will briefly study the
+[RAPTOR motion planner](https://ieeexplore.ieee.org/document/8758904) written by
+_Boyu Zhou_ when he was in HKUST (now, he is a professor in other university!)
+Overall, this paper is well-suited for those who are interested in local motion
+planning in unknown environments.
+
+<div className="sm:px-5 my-10">
+  <YouTube videoId="6wrh4G1-cQ4" className="videoWrapper" />
+</div>
+
+## Keys to fast-flying in completely unknown environments
+
+I will skip the very naive qualities such as computation speed of a motion
+planning algorithm to avoid abrupt obstacles. Instead, we will focus on the
+three:
+
+- Having a set of back-up motions (topologically distinct)
+- Risk-aware behavior to avoid collision in the unknown area
+- Leveraging yaw motion of active exploration to gather information
+
+This paper stacks the above considerations on top of his
+[original work](https://ieeexplore.ieee.org/abstract/document/8758904/) released
+in 2019. Thus, this paper (RAPTOR) requires basic backgrounds on the properties
+of B-Spline and its optimization on control points.
+
+## Pipeline of the local planner
+
+### 1. Optimistic generation of topologically distinct motion list (x,y,z)
+
+### 2. Risk-aware refinement for the motions (or for only the best)
+
+### 3. Active yaw planning for information-gathering.
