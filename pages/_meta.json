@@ -31,5 +31,6 @@
     "title": "Packaging a mid-size (pure) CMake project"
   },
   "threading-ros2": "Threading of ROS2",
-  "tools": "Tools"
+  "tools": "Tools",
+  "planning-methods": "Surveys on motion planning"
 }
