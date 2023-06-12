@@ -1,0 +1,103 @@
+---
+title: Very Short Overview of OMPL (Open Motion Planning Library)
+date: 2023-06-11
+description:
+  This article briefly outlines some characteristics of OMPL which is one of the
+  most well known motion planning library. From this writing, I hope you can get
+  an overview before starting OMPL
+thumbnail: /images/post13/main.png
+keywords: motion-planning, ompl, sampling-based-planner
+---
+
+import Frontmatter from "../../components/Frontmatter";
+
+# Very Short Overview of OMPL (Open Motion Planning Library)
+
+<Frontmatter />
+
+This article is devoted to provide a quick overview before you dive into OMPL.
+
+## 1. OMPL as starter of your motion planning project
+
+### Reliability
+
+OMPL is a very stable baseline for your motion planning development.
+
+Since 2010, from [Lydia Kavraki](https://www.cs.rice.edu/~kavraki/)'s
+Algorithmic Robotics class, OMPL has been actively developed and widely used by
+[robotics researchers](https://ompl.kavrakilab.org/integration.html) over a
+decade. Its proven reliability led it to be used from famous open-source
+projects such as [moveit](https://moveit.ros.org/).
+
+As can be seen [here](https://ompl.kavrakilab.org/gallery.html), it shows
+effectiveness across diverse robot systems including robotic arms (moveit!),
+[humanoid](https://www.youtube.com/watch?v=AZQY_QOX0Pw&t=1s), and
+[mobile robot](https://morse-simulator.github.io/).
+
+### Flexibility by abstraction
+
+When you saw OMPL in [many pages](https://ompl.kavrakilab.org/gui.html), you
+might think that OMPL has its own environmental representation such as mesh or
+distance field. But it doesn't. Whatever you saw, they are all just wrappers
+(such as [OMPL.app](https://github.com/ompl/omplapp))
+
+In OMPL, user might have to define the belows to reflect their mission setup:
+
+- [StateValidityChecker](https://github.com/ompl/ompl/blob/main/src/ompl/base/StateValidityChecker.h):
+  whether a state can be reachable when obstacles or bound are considered (there
+  might be more cases). A good example can be found
+  [here](https://github.com/ompl/ompl/blob/e65099390abf83ea289134e275235f3cbc06b7e5/demos/OptimalPlanning.cpp#L104).
+- [Propagte](https://github.com/ompl/ompl/blob/e65099390abf83ea289134e275235f3cbc06b7e5/demos/RigidBodyPlanningWithControls.cpp#L96):
+  It is used when checks whether two states
+  [can be connected](https://github.com/ompl/ompl/blob/main/src/ompl/base/MotionValidator.h)
+  during the tree expansion phase. It is related with 1) whether it is
+  control-possible (e.g., very slow car might not reach far position due to
+  control limit!), or 2) whether the connecting trajectory does not hit
+  obstacles.
+
+## 2. "Sampling-based" motion planning library
+
+### Three categories of motion planning algorithms
+
+Except for reinforcement learning (RL), most motion planning algorithms take one
+of the three approaches:
+
+- Graph-search planners such as
+  [A\* and Dijkstra algorithm](https://iopscience.iop.org/article/10.1088/1742-6596/1566/1/012061/pdf).
+  They are often used when the solution domain is predefined before computing
+  motions (e.g., all path points are expected on a grid).
+- Sampling based planners such as
+  [RRT, RRT\*, PRM](https://www.youtube.com/watch?v=gP6MRe_IHFo). This group
+  randomly samples a feasible configuration (e.g., safe positions) after
+  planning is triggered. In general, the planner tries to connect any two
+  configurations by either simple interpolation or control dynamics.
+- Optimization based planners such as
+  [CHOMP](https://ros-planning.github.io/moveit_tutorials/doc/chomp_planner/chomp_planner_tutorial.html)
+  and [LQRs](https://en.wikipedia.org/wiki/Optimal_control). They use
+  gradient-based numerical optimization to minimize costs such as integral of
+  acceleration to generate smooth motion, observing some constraints.
+
+Among these, OMPL only supports the second category.
+
+### Implementations of sampling based planners
+
+#### State space vs control space
+
+Before beginning, we should distinguish two terms: state $s$ vs control $u$.
+
+$$ s_{next} = f(s_{current}, u_{current}) $$
+
+State is the **result** of previous **control**. 
+For example, the pose of end-effector of a robotic arm can be seen as a state in OMPL, 
+while velocities of the joints as an input.
+
+#### Two types of planners
+
+As can been seen from this
+[documentation](https://ompl.kavrakilab.org/planners.html), OMPL provides two
+sub-groups:
+
+- **Geometric planners**: try to connect two sampled configurations in state space (such as interpolations).
+- **Control-based planners**: 
+try to connect two sampled configurations by [control domain](https://github.com/ompl/ompl/blob/e65099390abf83ea289134e275235f3cbc06b7e5/demos/RigidBodyPlanningWithControls.cpp#LL141C39-L141C39).
+This requires `propagate` user-implementation to let OMPL know they can reach next state with in control limits.
