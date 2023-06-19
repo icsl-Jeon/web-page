@@ -10,8 +10,8 @@ keywords: cmake, design-pattern, project-organization
 ---
 
 import Image from "next/image";
-import Frontmatter from "../components/Frontmatter";
-import Comment from "../components/Comment";
+import Frontmatter from "../../components/Frontmatter";
+import Comment from "../../components/Comment";
 
 # Packaging a mid-size (pure) CMake project
 
@@ -325,7 +325,7 @@ When building the sources into library, all the header-search should refer
 
 #### When installing `my_pacakge`
 
-[This process](https://motion-boseong.vercel.app/post7#4-install-full-include-folder)
+[This process](post7#4-install-full-include-folder)
 installed header files into `${CMAKE_INSTALL_PREFIX}/include`. So we should make
 sure that: library `my_package` should refer the folder when searching for
 headers. That is, `$<INSTALL_INTERFACE:include>` is needed.
@@ -358,3 +358,5 @@ target_include_directories(
 target_link_libraries(los_server los_keeper)
 
 ```
+
+<Comment/>

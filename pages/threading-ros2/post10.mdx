@@ -21,7 +21,7 @@ import Comment from "../../components/Comment";
 <Frontmatter />
 
 In the previous
-[article](https://motion-boseong.vercel.app/threading-ros2/post9), we discussed
+[article](post9), we discussed
 what is _Reentrant_ group and the thread scheduling behind the scene. Today, we
 will look into the other callback group: _Mutually Exclusive_ callback group. I
 assume that you have a preliminary understanding of the callback groups.
@@ -42,7 +42,7 @@ Then, some might expect that the callbacks in a same `MutuallyExclusive` group
 are working exactly the same as `SingleThreadedExecutor` processes the
 callbacks. For a delayed processing of the callbacks, this is not true.
 
-In [my previous article](<(http://localhost:3000/post8)>), callbacks in a
+In [my previous article](post8), callbacks in a
 `SingleThreadedExecutor` are processed in round robin (a.k.a., not FIFO) if the
 callbacks take more time than the speed of event happening. **But
 `MutuallyExclusive` group was not found to show this round-robin behavior.**

@@ -10,6 +10,7 @@ keywords: motion-planning, ompl, sampling-based-planner
 ---
 
 import Frontmatter from "../../components/Frontmatter";
+import Comment from "../../components/Comment"
 
 # Very Short Overview of OMPL (Open Motion Planning Library)
 
@@ -101,3 +102,5 @@ sub-groups:
 - **Control-based planners**: 
 try to connect two sampled configurations by [control domain](https://github.com/ompl/ompl/blob/e65099390abf83ea289134e275235f3cbc06b7e5/demos/RigidBodyPlanningWithControls.cpp#LL141C39-L141C39).
 This requires `propagate` user-implementation to let OMPL know they can reach next state with in control limits.
+
+<Comment/>

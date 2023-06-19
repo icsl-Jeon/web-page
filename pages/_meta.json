@@ -16,21 +16,9 @@
     "type": "page"
   },
 
-  "post1": {
-    "title": "DDS of ROS2"
-  },
-
-  "post4": {
-    "title": "Formatting for CMakeLists.txt and sources"
-  },
-
-  "post5": {
-    "title": "Adapter pattern of ROS: separation from core"
-  },
-  "post7": {
-    "title": "Packaging a mid-size (pure) CMake project"
-  },
-  "threading-ros2": "Threading of ROS2",
+  "planning-methods": "Surveys on motion planning",
   "tools": "Tools",
-  "planning-methods": "Surveys on motion planning"
+  "theory": "Theory",
+  "design-pattern": "Design pattern",
+  "threading-ros2": "Threading of ROS2"
 }

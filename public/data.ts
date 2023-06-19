@@ -45,7 +45,7 @@ export const skills = [
   },
   {
     title: "CMake",
-    link: "https://motion-boseong.vercel.app/post7",
+    link: "https://motion-boseong.vercel.app/design-pattern/post7",
     imageUrl: "/images/bio/skill-cmake.png",
   },
   {
