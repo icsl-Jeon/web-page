@@ -39,6 +39,11 @@ export const project = [
 
 export const skills = [
   {
+    title: "Design pattern",
+    link: "https://github.com/icsl-Jeon/simple-robotics-pipeline/tree/main",
+    imageUrl: "/images/bio/skill-arch.png",
+  },
+  {
     title: "ROS",
     link: "https://github.com/icsl-Jeon/dual_chaser",
     imageUrl: "/images/bio/skill-ros.png",

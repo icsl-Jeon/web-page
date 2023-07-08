@@ -20,5 +20,6 @@
   "tools": "Tools",
   "theory": "Theory",
   "design-pattern": "Design pattern",
-  "threading-ros2": "Threading of ROS2"
+  "threading-ros2": "Threading of ROS2",
+  "drone": "Hands-on UAV"
 }
