@@ -1,21 +1,260 @@
 ---
-title: Components of UAV for research
+title: Understanding Components of UAV for Research
 date: 2023-07-07
 description:
 
-thumbnail: /images/post16/main.png
+thumbnail: /images/post17/main.png
 keywords: uav, hardware
 ---
 
 import Image from "next/image";
-import Frontmatter from "../../../components/Frontmatter";
-import Comment from "../../../components/Comment";
+import Frontmatter from "../../components/Frontmatter";
+import Comment from "../../components/Comment";
+import YouTube, { YouTubeProps } from "react-youtube";
 
-# Components of UAV for research
+# Understanding Components of UAV for Research
 
 <Frontmatter />
 
+In this article, I aim to provide a comprehensive overview of the components
+used in drones while drawing from my personal experiences during my time in
+graduate school. As a student pursuing my studie, I had the opportunity to delve
+into the fascinating world of drones and explore their various applications.
+Through this article, I hope to share my knowledge and insights gained from my
+research and experiences, shedding light on the essential components that make
+up these remarkable aerial vehicles. Whether you are a hobbyist or a
+professional in the field, understanding the intricacies of drone components is
+crucial for successful operation and exploration of this exciting technology.
 
+<div className="flex flex-col items-center">
+  <Image
+    src="/images/post17/parts.png"
+    width={1000}
+    height={500}
+    className="my-3"
+  />
+  <p>**Fig.** A common parts in a drone for aerial robotics research</p>
+</div>
 
+## 1. Control system
+
+The control system of a drone is responsible for managing its flight and
+navigation. It consists of two primary components: the onboard computer and the
+flight control unit (FCU).
+
+### Onboard computer
+
+This computer is where your research algorithm is running. The onboard computer
+handles perception and planning, enabling the drone to process sensory data and
+make decisions accordingly. In many cases, the OS is linux, and many researchers
+have used the following products:
+
+- [NUC](https://www.intel.com/content/www/us/en/products/boards-kits/nuc.html)
+  (High performance)
+- [Jetson](https://www.nvidia.com/en-us/autonomous-machines/embedded-systems/)
+  (GPU / cuda)
+- [Upboard](https://www.nvidia.com/en-us/autonomous-machines/embedded-systems/)
+  (light-weight)
+
+The spec of the computer really depends on your scenario: how your testing
+algorithm is complex, and whether your algorithm requires GPU and cuda. This
+decision directly affects the payload of your drone.
+
+### Pixhawk
+
+<div className="flex flex-col items-center">
+  <Image
+    src="/images/post17/pixhawk.png"
+    width={500}
+    height={500}
+    className="my-3"
+  />
+  <p>**Fig.** Pixhawk manual</p>
+</div>
+
+The Pixhawk is a popular FCU used in many drone systems, providing stability and
+reliable flight control. The FCU is responsible for:
+
+- interfacing the onboard computer and all the hardware components such as
+  propulsion and sensors inside Pixhawk.
+- Output PWM signal to control motors.
+- Communication such MavLink and RC channels.
+- Low-level controllers and filtering algorithm in its Firmware.
+- Log and analysis using Flight review.
+- Mission planning receiving.
+- Flight mode changes.
+
+For more information, refer to [Pixhawk offical site](https://pixhawk.org/) and
+its
+[Firmware PX4](https://docs.px4.io/main/ko/flight_controller/pixhawk_series.html).
+
+## 2. Sensors & Communication
+
+<div className="flex flex-col items-center">
+  <Image
+    src="/images/post17/velodyne.png"
+    width={500}
+    height={500}
+    className="my-3"
+  />
+  <p>**Fig.** Drone with velodyne (I built myself)</p>
+</div>
+
+To operate effectively, drones rely on various sensors and communication
+devices. These components enable the drone to gather information about its
+surroundings and communicate with the operator or other devices. Key components
+include:
+
+### Pixhawk
+
+As mentioned earlier, the Pixhawk serves as both a flight control unit and a
+sensor hub, collecting data from different sensors and facilitating flight
+control. Two representative sensors of Pixhawk are
+
+- Inertial Measurement Unit (IMU): The Pixhawk 4 usually includes an IMU that
+  consists of an accelerometer, gyroscope, and magnetometer. These sensors
+  provide essential data for stabilizing the drone, measuring its orientation,
+  and compensating for external forces.
+- Barometer: A barometer sensor measures atmospheric pressure, allowing the
+  Pixhawk 4 to estimate altitude and vertical speed.
+- Default compass: A compass sensor, such as a magnetometer, is used to
+  determine the drone's heading and orientation relative to Earth's magnetic
+  field. It helps with navigation and stabilization.
+
+It's worth noting that different Pixhawk 4 configurations or variations may
+include additional or slightly different sensors. It's always recommended to
+refer to the specific product documentation or manufacturer's website for the
+precise details and specifications of the Pixhawk 4 you are using.
+
+### Vision Sensor
+
+Drones often incorporate vision sensors such as cameras or LiDAR (Light
+Detection and Ranging) systems. These sensors provide vital visual data,
+enabling tasks such as object detection, terrain mapping, and obstacle
+avoidance. Some of frequently used sensors include:
+
+- [Intel T265](https://www.intelrealsense.com/tracking-camera-t265/): for stable
+  localization.
+- [Intel D435](https://www.intelrealsense.com/depth-camera-d435/): lightweight
+  depth sensor to recognize obstacles and mapping.
+- [Velodyne](https://velodynelidar.com/): when payload is sufficient, the best
+  option for high-definition mapping.
+- [Stereo lab ZED camera](https://www.stereolabs.com/): Reliable stereo camera.
+  The driver and ROS wrapper provide extensive features for your convenience
+  (VIO, obstacle detection, ground detection). One of the disadvantages is it
+  requires an NVIDIA GPU.
+
+You might need multiple sensoers, in that case, you need reliable extrinsic
+calibration using libraries such as
+[Kalibr](https://github.com/ethz-asl/kalibr).
+
+### GPS/Compass
+
+Global Positioning System (GPS) modules provide precise positioning information,
+allowing drones to navigate accurately. Compass sensors help drones maintain
+their heading and orientation.
+
+### Telemetry
+
+Telemetry systems establish a wireless link between the drone and the ground
+station, transmitting real-time flight data, status updates, and control
+commands.
+
+### RC Receiver
+
+In cases where manual control is necessary, drones utilize a radio control (RC)
+receiver to receive commands from a remote controller.
+
+## 3. Propulsion
+
+<div className="sm:px-5 my-10">
+  <YouTube videoId="s0mc5209IiY" className="videoWrapper" />
+</div>
+
+The propulsion system of a drone is responsible for generating the necessary
+thrust to achieve and maintain flight. When selecting propulsion components,
+factors such as payload capacity and flight time must be considered. Providers
+like
+[iFlight](https://www.google.com/search?q=iflight&oq=iflight&aqs=chrome..69i57j0i512l2j46i199i465i512j0i512j69i60l2j69i61.2458j0j4&sourceid=chrome&ie=UTF-8)
+and [T motor](https://uav-en.tmotor.com/) offer bundled products comprising ESCs
+(Electronic Speed Controllers), motors, and propellers, known for their
+stability and compatibility.
+
+### ESC
+
+Electronic Speed Controllers regulate the speed and direction of the motors,
+ensuring precise control over the drone's movement. When I was in graduate
+school, I used to leverage the belows:
+
+- [DJI ESC](https://ko.aliexpress.com/item/32623834483.html)
+- [Snail](https://www.dji.com/kr/snail) (not produced anymore)
+- [4-in-1 ESCs](https://shop.iflight-rc.com/BLITZ-E80-4-IN1-Pro-ESC-G2-Pro1770)
+
+### BLDC Motor
+
+Brushless Direct Current (BLDC) motors are commonly used in drones due to their
+high efficiency, reliability, and compact design.
+
+### Propeller
+
+Propellers convert rotational motion from the motors into thrust, propelling the
+drone through the air. The choice of propeller depends on factors such as
+payload, flight characteristics, and motor specifications.
+
+### Propeller Guard
+
+Propeller guards are optional accessories that protect the propellers from
+damage during flight and provide an added layer of safety.
+
+### Lipo Battery
+
+While not explicitly mentioned in the abstract, it's worth noting that drones
+often utilize Lithium Polymer (LiPo) batteries due to their high energy density
+and lightweight properties.
+
+## 4. Body
+
+<div className="flex flex-col items-center">
+  <Image
+    src="/images/post17/solidworks.png"
+    width={1000}
+    height={500}
+    className="my-3"
+  />
+  <p>**Fig.** The parts I designed with solidworks (used for velodyne drone)</p>
+</div>
+
+The body or frame of a drone serves as its structural backbone, providing
+stability and protection to the internal components. Factors to consider when
+selecting a drone body include:
+
+### Commercial Frame
+
+Commercially available drone frames offer a reliable and tested solution. They
+come in various sizes and configurations to accommodate different payloads and
+flight requirements. Some of very famous frames include:
+
+- [F450](https://campaign.aliexpress.com/wow/gcp/tesla-pc-new/index?UTABTest=aliabtest377151_530968&src=google&src=google&albch=shopping&acnt=631-313-3945&slnk=&plac=&mtctp=&albbt=Google_7_shopping&albagn=888888&isSmbActive=false&isSmbAutoCall=false&needSmbHouyi=false&albcp=19224801818&albag=&trgt=&crea=ko1005001270714687&netw=x&device=c&albpg=&albpd=ko1005001270714687&gclid=Cj0KCQjw756lBhDMARIsAEI0AglESbejvRM_pgsHcalOzwdGlRzxFGF4PzFQw76XPIlKQw1V2Y5W22gaAtUpEALw_wcB&gclsrc=aw.ds&aff_fcid=f00a75b743244e24a203f0e9f57bd88d-1688787154152-04212-UneMJZVf&aff_fsk=UneMJZVf&aff_platform=aaf&sk=UneMJZVf&aff_trace_key=f00a75b743244e24a203f0e9f57bd88d-1688787154152-04212-UneMJZVf&terminal_id=ef435419be2f408a9b9bbe6586f9ce51&wh_weex=true&wx_navbar_hidden=true&wx_navbar_transparent=true&ignoreNavigationBar=true&wx_statusbar_hidden=true&bt_src=ppc_direct_lp&scenario=pcBridgePPC&productId=1005001270714687&OLP=1085100208_f_group2&o_s_id=1085100208)
+  (quad)
+- [S550](https://www.unmannedtechshop.co.uk/product/s550-hexacopter-frame/)
+  (hexa)
+
+### Landing Gear
+
+Landing gear plays a crucial role in protecting the drone's sensitive components
+during takeoff and landing. Choosing appropriate landing gear is essential to
+prevent vibrations that can affect flight performance.
+
+### Custom Connectors
+
+In many cases, custom connectors are required to mount and connect the various
+components introduced earlier. The design and production of these connectors
+should be considered in the overall schedule, as it may take several weeks to
+complete.
+
+## What's next?
+
+I will write how I configured software stack to operate my drone with the
+components !
 
 <Comment />
