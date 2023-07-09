@@ -176,18 +176,35 @@ visually (2d image) and predict its motion in 3d.
   [inference outputs to track 3D position of objects](https://youtu.be/Ux1_LinLegM?t=47).
 - [Yolo and pixel segmentation](https://www.youtube.com/watch?v=2BkRbw13rdo).
 
-### 3. Hardware design & system integration
+### 3. System (software & hardware) integration
 
 <div className="sm:px-5 my-10">
   <YouTube videoId="s0mc5209IiY" className="videoWrapper" />
 </div>
+While implementing the algorithms (planning, perception) into a real-world robot,
+I spent a lot of time making hardware (drones and mobile robots) and writing a manageable
+source code for releasing and maintaining.{" "}
 
-As a robotics engineer, I am used to scheduling, and performing experiments in
-any sites whether indoor, or outdoor.
+#### Hardware
 
-#### Foundations
+- I designed the whole [hardware configuration](/drone/post17) including
+  networks, sensors, actuation, and onboard computers. I considered a lot of
+  factors such as required battery life, payload, and budget.
+- I have a lot of experiences using sensors and drivers. For example, as
+  illustrated [here](/skills#hardware-skills), I have used vision sensors for my
+  experiment ranging from mono camera, stereo camera, depth camera, to Lidar.
+  Also, I am familiar with other types of sensors such as IMU, baroometer, and
+  1d distance sensor (normally with pixhawk). Of course, I am comfortable with
+  filters such as KF, UKF, and EKF.
+- I can design the
+  [whole parts](https://mysnu-my.sharepoint.com/personal/a4tiv_seoul_ac_kr/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fa4tiv%5Fseoul%5Fac%5Fkr%2FDocuments%2F2021%2Fyoutube%2FRobotics%20Tutorial%2FFrameDesign%2Epng&parent=%2Fpersonal%2Fa4tiv%5Fseoul%5Fac%5Fkr%2FDocuments%2F2021%2Fyoutube%2FRobotics%20Tutorial&ga=1)
+  using CAD program such as Solidworks. I have senses of geometric tolerance for
+  production. Also, I enjoy scheduling multiple production threads.
 
-- Design pattern
+#### Software
+
+- Clean code practice Design pattern
+- UI (Qt and React)
 - Cmake project export and directory structure
 
 <br />
