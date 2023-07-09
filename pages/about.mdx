@@ -185,7 +185,7 @@ While implementing the algorithms (planning, perception) into a real-world robot
 I spent a lot of time making hardware (drones and mobile robots) and writing a manageable
 source code for releasing and maintaining.{" "}
 
-#### Hardware
+#### Hardware integration
 
 - I designed the whole [hardware configuration](/drone/post17) including
   networks, sensors, actuation, and onboard computers. I considered a lot of
@@ -200,22 +200,43 @@ source code for releasing and maintaining.{" "}
   [whole parts](https://mysnu-my.sharepoint.com/personal/a4tiv_seoul_ac_kr/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fa4tiv%5Fseoul%5Fac%5Fkr%2FDocuments%2F2021%2Fyoutube%2FRobotics%20Tutorial%2FFrameDesign%2Epng&parent=%2Fpersonal%2Fa4tiv%5Fseoul%5Fac%5Fkr%2FDocuments%2F2021%2Fyoutube%2FRobotics%20Tutorial&ga=1)
   using CAD program such as Solidworks. I have senses of geometric tolerance for
   production. Also, I enjoy scheduling multiple production threads.
+- Basic skills for [wiring and soldering](https://youtu.be/LNai_2giwbs).
 
-#### Software
+#### Software integration
 
-- Clean code practice Design pattern
-- UI (Qt and React)
-- Cmake project export and directory structure
+On the other hand, I have researched what is the best practice to manage a large
+set of sources codes. For example, I had to manage threads & concurrency to
+combine various sensor outputs (in many cases, from ROS spinners or executors).
+I am quite sensitive (?) with the belows:
+
+- Clean code management including [design patterns](/design-pattern/post5)
+  (strategy pattern for algorithm comparison, factory pattern for extensibility)
+- UI implementations using [React](https://diverse-group-generation.vercel.app/)
+  (web) and [Qt](https://github.com/icsl-Jeon/px4_code2).
+- Cmake project [packaging](/design-pattern/post7) with a strong observation of
+  adaptor pattern (e.g., core and ROS separation).
+- Project management tools such as git, CI including
+  [git actions](https://github.com/LARR-Planning/los-keeper/actions), and JIRA
+  for TDD.
+- Needless to say, expert level of
+  [ROS](https://github.com/icsl-Jeon/dual_chaser) and ROS2.
 
 <br />
 
 ### 4. Testing and experiment management
 
-### 5. Presenation and document
+I consider testing skills in a high regard to become a true expert.
 
-#### Foundations
+#### Testing and simulation
 
--
+- Proficiency in simulation frameworks such as gazebo and
+  [airsim](https://youtu.be/izSMF3auLsY) (w/ Unreal game engine).
+- A strict
+  [practitioner](https://github.com/icsl-Jeon/simple-robotics-pipeline/blob/main/test/pipeline_test.cc)
+  in gtesting. I am comfortable designing a good test for TDD.
+
+#### Field experiment
+- Indoor or outdoor, no problem
 
 ## Past projects
 
