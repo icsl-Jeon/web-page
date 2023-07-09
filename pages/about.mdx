@@ -12,65 +12,15 @@ import { project } from "../public/data";
 />
 <br />
 
-# Hello, I am Boseong Jeon 😃
+# Hello, I am Felipe Boseong Jeon
 
 Thank you for visiting my website! I am a robotics engineer who loves building a
 robotic system and exploring the latest advancements in the field of robotics.\
 As a dedicated researcher and a developer with PhD, I have covered a wide range of
 areas from designing hardwares, object recognition, online spatial mapping, and motion
-planning & controls.\
-Through this website, I hope to share my expertise and insights with fellow
-robotics enthusiasts, students, and professionals. Here, you will find
-informative articles, tutorials, and reviews on the latest robotic technologies,
-as well as my thoughts on the future of robotics and its impact on society.
+planning & controls.
 
-## What Can I Bring ?
-
-### Real-time motion planning (major)
-
-<div className="sm:px-5 my-10">
-  <YouTube videoId="ZBFRS5TpRvI" className="videoWrapper" />
-</div>
-
-I majored in 3D real-time motion planning methods based on the 3D vision data,
-which can avoid obstacles (including dynamic ones) and chase a moving target.
-Although my main platform were drones, I can deal with mobile robots and robotic
-arms also.
-
-- Practical experiences in optimization-based planning methods such as LQR,
-  STOMP, and [CHOMP](https://github.com/icsl-Jeon/chomp_predict)
-- Hierarchical planning [methods](https://github.com/icsl-Jeon/traj_gen) which
-  can joint global path planners and local planners.
-
-### Online 3D spatial mapping and object tracking
-
-<div className="sm:px-5 my-10">
-  <YouTube videoId="Ux1_LinLegM" className="videoWrapper" />
-</div>
-
-I can efficiently process the incoming sensor data into robot-recognizable forms
-for various tasks (obstacle mapping, target tracking and prediction).
-
-- Online [distance map](https://github.com/icsl-Jeon/octomap_mapping) building
-  from octomap or voxblox
-- Object recognition, [tracking pose](https://github.com/icsl-Jeon/zed2_client),
-  and [motion prediction](https://github.com/icsl-Jeon/chasing_utils).
-- Hands-on-experiences of VIO and Lidar odometry algorithms such as LeGO-LOAM.
-
-### System integration and leading field experiments
-
-<div className="sm:px-5 my-10">
-  <YouTube videoId="s0mc5209IiY" className="videoWrapper" />
-</div>
-
-As a robotics engineer, I am used to scheduling, and performing experiments in
-any sites whether indoor, or outdoor.
-
-<br />
-
-# Experiences
-
-## Education
+### Education
 
 - Received BS in mechanical & aerospace engineering at
   [Seoul National University](https://en.snu.ac.kr/), 2013-2017
@@ -79,7 +29,7 @@ any sites whether indoor, or outdoor.
   [H. Jin Kim](https://scholar.google.com/citations?user=TLQUwIMAAAAJ&hl=ko) ) ,
   2017-2022. ( <b>5 yrs graduation 🥷</b>)
 
-## Publications
+### Publications
 
 <div className="p-2">
   <Card
@@ -127,6 +77,128 @@ any sites whether indoor, or outdoor.
     <p>Discover more publications</p>
   </a>
 </div>
+
+## What Can I Bring ?
+
+### 1. Real-time motion planning (major)
+
+<div className="sm:px-5 my-10">
+  <YouTube videoId="ZBFRS5TpRvI" className="videoWrapper" />
+</div>
+
+I majored in 3D real-time motion planning. I covered various problems including
+boundary-value-problem (BVP), minimal time goal reaching, safe trajectory
+planning against dynamic obstacles. As the
+[next section](online-3d-spatial-mapping-and-object-tracking) says, I have
+solved the problems in very practical situations such as unstructured
+environments or noisy observation. Especially, I specialized in
+[chasing (following) trajectory generation](#publications) for dynamic targets.
+
+#### Foundations
+
+- Solid understanding and hands-on practice in (non holonomic)
+  optimization-based motion planning such as LQR,
+  [CHOMP](https://github.com/icsl-Jeon/chomp_predict),
+  [TEB](https://wiki.ros.org/teb_local_planner).
+- Hierarchical planning [methods](https://github.com/icsl-Jeon/traj_gen) which
+  can joint global path planners (search or sampling based) and local planners
+  (optimal control or splines) to handle complex environments.
+- Lattice based motion planning using
+  [offline motion library](https://youtu.be/Ux1_LinLegM?t=174).
+- Fast [research skills](#publications) to cater a specific scenario (cost
+  shaping and constraint formulation).
+
+### 2. Perception for localization, mapping and recognition
+
+<div className="sm:px-5 my-10">
+  <YouTube videoId="Ux1_LinLegM" className="videoWrapper" />
+</div>
+
+To realize the motion in a real-world target, I came to have the following
+domain knowledge:
+
+#### Localization
+
+In many cases, an indoor vicon room was too small for my experiment. I had to
+test and modify the following algorithms:
+
+- ZEDfu (VIO algorithm in-house of ZED camera)
+- VINS mono (or fusion)
+- ORB slam
+
+Also, I had to use [Kalibr](https://github.com/ethz-asl/kalibr) for extrinsic
+calibration. Although I did not self developed the above algorithms, I have
+hands-on experience and sense about good-and-bad operating conditions, and
+parameter tunings in submodules such as keyframe generation, bundle adjustment,
+and binning & feature association.
+
+I can efficiently process the incoming sensor data into robot-recognizable forms
+for various tasks (obstacle mapping, target tracking and prediction).
+
+- Online [distance map](https://github.com/icsl-Jeon/octomap_mapping) building
+  from octomap or voxblox
+- Object recognition, [tracking pose](https://github.com/icsl-Jeon/zed2_client),
+  and [motion prediction](https://github.com/icsl-Jeon/chasing_utils).
+- Hands-on-experiences of VIO and Lidar odometry algorithms such as LeGO-LOAM.
+
+#### Volumetric mapping
+
+In order to measure safety or visibility, I almost always manipulate mapping
+frameworks which makes (signed) distance field from point cloud. Sometimes, I
+have to make pointcloud [on my own](https://github.com/icsl-Jeon/zed2_client)
+from depth images using pin-hole model.
+
+I have many experiences on the below framework:
+
+- In the simplest,
+  [costmap](https://github.com/LARR-Planning/atypical_driving_snu/blob/master/launch/occupancy2d/costmap_3d.launch)
+  of navigation stack
+- Octomap and dynamicEDT
+  ([my fork](https://github.com/icsl-Jeon/octomap_mapping))
+- Voxblox
+- [3D mesh generation & rendering](https://github.com/icsl-Jeon/see_with_you)
+  from open3d. I have
+  [an experience](https://github.com/icsl-Jeon/see_with_you/blob/b4accdc022332e80a1f3ace435dcd82d9c0ae5e3/src/SceneInterpreter.cpp#L31)
+  using cuda in open3d.
+
+#### Object perception
+
+When I implemented my chasing modules, I had to detect and track the target
+visually (2d image) and predict its motion in 3d.
+
+- I collaborated with my friend to
+  [test learning-based detection modules](https://ieeexplore.ieee.org/abstract/document/9341368).
+- I have [hands-on experience](https://www.youtube.com/watch?v=lFY6S0VNIUE) on
+  comparing visual trackers.
+- Code experiences with
+  [3D bounding box detection and skeletons](https://youtu.be/Ux1_LinLegM?t=205)
+- Combining different
+  [inference outputs to track 3D position of objects](https://youtu.be/Ux1_LinLegM?t=47).
+- [Yolo and pixel segmentation](https://www.youtube.com/watch?v=2BkRbw13rdo).
+
+### 3. Hardware design & system integration
+
+<div className="sm:px-5 my-10">
+  <YouTube videoId="s0mc5209IiY" className="videoWrapper" />
+</div>
+
+As a robotics engineer, I am used to scheduling, and performing experiments in
+any sites whether indoor, or outdoor.
+
+#### Foundations
+
+- Design pattern
+- Cmake project export and directory structure
+
+<br />
+
+### 4. Testing and experiment management
+
+### 5. Presenation and document
+
+#### Foundations
+
+-
 
 ## Past projects
 
