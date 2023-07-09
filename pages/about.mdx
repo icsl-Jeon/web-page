@@ -89,14 +89,14 @@ planning & controls.
 I majored in 3D real-time motion planning. I covered various problems including
 boundary-value-problem (BVP), minimal time goal reaching, safe trajectory
 planning against dynamic obstacles. As the
-[next section](online-3d-spatial-mapping-and-object-tracking) says, I have
-solved the problems in very practical situations such as unstructured
+[next section](#2-perception-for-localization-mapping-and-recognition) says, I
+have solved the problems in very practical situations such as unstructured
 environments or noisy observation. Especially, I specialized in
 [chasing (following) trajectory generation](#publications) for dynamic targets.
 
 #### Foundations
 
-- Solid understanding and hands-on practice in (non holonomic)
+- Solid understanding and hands-on experience in (non holonomic)
   optimization-based motion planning such as LQR,
   [CHOMP](https://github.com/icsl-Jeon/chomp_predict),
   [TEB](https://wiki.ros.org/teb_local_planner).
@@ -120,35 +120,26 @@ domain knowledge:
 #### Localization
 
 In many cases, an indoor vicon room was too small for my experiment. I had to
-test and modify the following algorithms:
+test and tune the following algorithms:
 
 - ZEDfu (VIO algorithm in-house of ZED camera)
 - VINS mono (or fusion)
 - ORB slam
+- (Lego-)Loam
 
 Also, I had to use [Kalibr](https://github.com/ethz-asl/kalibr) for extrinsic
-calibration. Although I did not self developed the above algorithms, I have
+calibration. Although I did not self-developed the above algorithms, I have
 hands-on experience and sense about good-and-bad operating conditions, and
 parameter tunings in submodules such as keyframe generation, bundle adjustment,
-and binning & feature association.
-
-I can efficiently process the incoming sensor data into robot-recognizable forms
-for various tasks (obstacle mapping, target tracking and prediction).
-
-- Online [distance map](https://github.com/icsl-Jeon/octomap_mapping) building
-  from octomap or voxblox
-- Object recognition, [tracking pose](https://github.com/icsl-Jeon/zed2_client),
-  and [motion prediction](https://github.com/icsl-Jeon/chasing_utils).
-- Hands-on-experiences of VIO and Lidar odometry algorithms such as LeGO-LOAM.
+and binning & feature association of SLAM algorithms.
 
 #### Volumetric mapping
 
-In order to measure safety or visibility, I almost always manipulate mapping
-frameworks which makes (signed) distance field from point cloud. Sometimes, I
-have to make pointcloud [on my own](https://github.com/icsl-Jeon/zed2_client)
-from depth images using pin-hole model.
-
-I have many experiences on the below framework:
+In order to measure safety or visibility (or for just visualization), I am
+proficient at mapping frameworks which make (signed) distance field (ESDF) from
+point cloud. Sometimes, I have to make pointcloud
+[on my own](https://github.com/icsl-Jeon/zed2_client) from depth images using
+pin-hole model. I have many experiences on the below framework:
 
 - In the simplest,
   [costmap](https://github.com/LARR-Planning/atypical_driving_snu/blob/master/launch/occupancy2d/costmap_3d.launch)
@@ -189,7 +180,7 @@ source code for releasing and maintaining.{" "}
 
 - I designed the whole [hardware configuration](/drone/post17) including
   networks, sensors, actuation, and onboard computers. I considered a lot of
-  factors such as required battery life, payload, and budget.
+  factors such as required battery life, payload, and even budget.
 - I have a lot of experiences using sensors and drivers. For example, as
   illustrated [here](/skills#hardware-skills), I have used vision sensors for my
   experiment ranging from mono camera, stereo camera, depth camera, to Lidar.
@@ -225,7 +216,15 @@ I am quite sensitive (?) with the belows:
 
 ### 4. Testing and experiment management
 
-I consider testing skills in a high regard to become a true expert.
+<Image
+  src={"/images/bio/forest.png"}
+  width={600}
+  height={500}
+  className="m-5"
+/>
+
+I consider testing skills in a high regard, as one of the must-met
+qualifications.
 
 #### Testing and simulation
 
@@ -233,10 +232,25 @@ I consider testing skills in a high regard to become a true expert.
   [airsim](https://youtu.be/izSMF3auLsY) (w/ Unreal game engine).
 - A strict
   [practitioner](https://github.com/icsl-Jeon/simple-robotics-pipeline/blob/main/test/pipeline_test.cc)
-  in gtesting. I am comfortable designing a good test for TDD.
+  in gtesting. I am comfortable with designing a good test for TDD.
 
 #### Field experiment
-- Indoor or outdoor, no problem
+
+- I am really used to get my hands dirty. At the same time, I always thoroughly
+  design a sequence of hardware tests. For example, when building a real drone,
+  I test the belows one by one:
+
+  1. All the wiring works?
+  2. Whether the rotational direction
+     [matches](https://youtu.be/s0mc5209IiY?t=377) the airframe preset?
+  3. The speeds of each motor follow the control logic? (If RC gives a command
+     forward flight, then the latter two motors should
+     [rotate faster](https://youtu.be/s0mc5209IiY?t=462))
+  4. etc..
+
+- I plan how to record the experiment scene. For example, where to set cameras
+  to record videos, or which data to log (e.g., ROS bag or
+  [flight review](https://docs.px4.io/main/en/log/flight_review.html)).
 
 ## Past projects
 
