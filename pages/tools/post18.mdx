@@ -1,0 +1,80 @@
+import Image from "next/image";
+
+## Docker: Concepts
+
+### [Docker](https://docker-curriculum.com/)
+
+- Tools providing functions very similar to `chroot` (having different users for
+  ubuntu).
+- Packaging and deploying an application with all of its dependencies into a
+  standardized unit (sandbox).
+- Low overhead compared to other VMs.
+
+### Docker image and containers
+
+- Image: distributable and read-only template defined by Dockerfile
+- Container: runnable instance derived from image
+- [Docker hub](https://hub.docker.com/search?q=&type=image): public registry for
+  docker images
+
+## Setting up with WSL2 (windows)
+
+- Installing
+  [Docker Desktop](https://desktop.docker.com/win/main/amd64/Docker%20Desktop%20Installer.exe?_gl=1*1edbzco*_ga*NjMxOTU5MTcwLjE2ODkxNjI2NTM.*_ga_XJWPQMJYHQ*MTY4OTUwMjIxNi40LjEuMTY4OTUwMjMyMy40OC4wLjA.)
+- Run and modify settings
+  <div className="">
+    <Image
+      src="/images/post18/docker-setting.png"
+      width={500}
+      height={500}
+      className="my-3"
+    />
+  </div>
+- Go to WSL terminal and type `docker`.
+
+## Commands
+
+- Checking
+
+  ```
+  docker ps
+  docker images
+  ```
+
+- Pull existing image and run
+
+  ```
+  docker pull osrf/ros:humble-desktop
+  docker run -it osrf/ros:humble-desktop
+  docker run --name <container-name> -it <your-image>
+  ```
+
+- Build `Dockerfile`
+
+  ```
+  docker build -t <name-of-local-image> .
+  docker tag <name-of-local-image> bfjeon/<hub-repo-name>
+  ```
+
+- Commit
+
+  - Run a container from an image (terminal A)
+
+    ```
+    docker run --name <container-name> -it <your-image>
+    root@53b8f7a9215e sudo apt-get install vim #example
+    ```
+
+  - Commit and push the current container into an new image (terminal B)
+
+    ```
+    docker commit <container-image> <your-image>
+    docker push <your-image>
+
+    ```
+
+- Push
+  ```
+  docker login -u bfjeon
+  docker push bfjeon/<hub-repo-name>
+  ```
