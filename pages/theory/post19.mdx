@@ -291,10 +291,92 @@ must-know concept to implement your A\* algorithms.
 This process is a crucial and distinctive aspect that significantly impacts the
 final result.
 
-## Analysis
+#### Best node can achieve the most optimistic path ? That is the solution!
 
-### Optimality
+In our heuristic-guided approach, we employ a greedy search method, prioritizing
+the best candidate in the queue. Actually, **we achieve an optimal solution if
+we can connect this best candidate directly to the goal without any
+collisions**. The best candidate exhibits the most optimistic behavior, making
+it an ideal choice.
 
-### Performance
+For instance, in the A\* search algorithm, if we can connect the last popped
+node to the goal using a non-colliding straight line, we have found the
+solution. Unfortunately, due to the possibility of collisions, we avoid
+attempting this during the search process.
 
-## Future application
+#### Try the most optimistic shot !
+
+In Hybrid A\*, we take the opportunity to explore this direct shot-to-goal
+approach when it seems promising. During the search, we attempt to connect the
+best candidate pose to the goal pose using a Dubins path (or Reeds-Shepp path,
+considering reverse motions). If this shot succeeds without any collisions, the
+search is terminated, as we have found an optimal solution. This technique is
+referred to as "analytic expansion" in the original paper.
+
+The success of these shots significantly contributes to the real-time efficiency
+of the Hybrid A\* search. In practical scenarios with obstacle-free regions, the
+hybrid search often completes in just a few iterations. **Essentially, this
+becomes equivalent to solving a Dubins path from the starting position directly
+to the goal pose.**
+
+#### In works in sparse region, but not in dense spots.
+
+However, in obstacle-dense regions, many shots may fail. In such cases, the
+search relies on obstacle heuristics to guide the exploration. When a free space
+is encountered, the search can swiftly terminate by utilizing successful shots.
+
+<div className="flex flex-col items-center">
+  <Image
+    src={"/images/post19/dubins-shot.png"}
+    width={700}
+    height={300}
+    className="mx-auto my-5"
+  />
+  <b>Based on the [video](https://www.youtube.com/watch?v=1WZEQtg8ZZ4)</b>
+</div>
+
+In the figure provided, the search process suddenly concludes while expanding
+the tree, and this is attributed to the successful shot connecting the best
+candidate to the goal pose without any collisions.
+
+### 5. Analysis
+
+#### Optimality for your real robot
+
+**Hybrid A\*:** A globally optimal pathfinding algorithm that has gained
+popularity, but it does have limitations preventing it from being truly globally
+optimal for the following reasons:
+
+##### Control discretization
+
+Our car's control mechanism is not based on three (or six) steering modes like
+in the Dubins path. Unlike the assumptions made in Dubins paths, our robot does
+not follow specific pre-defined rotational arcs. Instead, it has the flexibility
+to change its rotational arc continuously. This means that the inputs for our
+car's movements are considered discrete rather than strictly adhering to the
+Dubins path assumptions.
+
+##### Node Pruning
+
+In Hybrid A\*, nodes in certain cells can be pruned based solely on their
+"cost-so-far," as indicated in
+[this link](https://github.com/ros-planning/navigation2/blob/96673e216705fe837e5c53ce6a8469f204da5262/nav2_smac_planner/src/a_star.cpp#L331).
+However, the nodes that are pruned during this process might have potentially
+led to a better trajectory. This form of myopic pruning, based solely on the
+cost-so-far, may lead to suboptimal results. To overcome this limitation, it
+would be beneficial to consider heuristic information during the pruning
+process, which could help improve the overall optimality of the generated paths.
+
+In conclusion, while Hybrid A\* is a powerful pathfinding algorithm, its true
+global optimality is hindered by the discreteness of our car's control inputs
+and the myopic pruning of nodes based solely on their cost-so-far. Addressing
+these limitations through more advanced control mechanisms and
+heuristic-informed pruning strategies could lead to further improvements in the
+algorithm's optimality.
+
+#### Performance
+
+It is perfectly okay when applying this algorithm to real-time application,
+showing order of msecs computing time in reasonable complex environments. For
+more information, recommend to read this result in
+[nav2 implementation](https://github.com/ros-planning/navigation2/tree/main/nav2_smac_planner#metrics).
