@@ -1,3 +1,9 @@
 {
-  "cSpell.enableFiletypes": ["mdx"]
+  "cSpell.enableFiletypes": ["mdx"],
+  "grammarly.selectors": [
+    {
+      "language": "mdx",
+      "scheme": "file"
+    }
+  ]
 }

@@ -1,12 +1,20 @@
+---
+title: Gentle introduction to Hybrid A star in minutes
+date: 2023-07-23
+description:
+
+thumbnail: /images/post19/main.png
+keywords: autonomous-driving, path-planning
+---
+
 import YouTube, { YouTubeProps } from "react-youtube";
 import Image from "next/image";
+import Frontmatter from "../../components/Frontmatter";
+import Comment from "../../components/Comment";
 
 # Gentle introduction to Hybrid A\* in minutes
 
-<div className="sm:px-5 my-10 flex flex-col">
-  <YouTube videoId="qXZt-B7iUyw" className="videoWrapper" />
-  <b>Hybrid A* algorithm video</b>
-</div>
+<Frontmatter />
 
 [Hybrid A\*](https://journals.sagepub.com/doi/abs/10.1177/0278364909359210) is
 considered one of the most popular path planning algorithms for car-like robots.
@@ -27,29 +35,33 @@ When I initially read this paper, it was not that easy to follow, as I had to
 expand from grid domains. This article was written to help you understand the
 principles and properties.
 
-By the way, source implementations can be found from various platform such as
+By the way, code implementations can be found from various platforms such as
 
 - [KTH thesis (ROS1)](https://github.com/karlkurzer/path_planner) (I personally
-  digged into this version).
-
+  dug into this version).
 - [nav2 (ROS2)](https://navigation.ros.org/configuration/packages/configuring-smac-planner.html)
-
 - [Unity](https://github.com/Habrador/Self-driving-vehicle)
 - [Python](https://github.com/zhm-real/MotionPlanning)
+- [MATLAB](https://kr.mathworks.com/help/nav/ref/plannerhybridastar.html)
+
+<div className="sm:px-5 my-10 flex flex-col">
+  <YouTube videoId="qXZt-B7iUyw" className="videoWrapper" />
+  <b>Hybrid A* algorithm video</b>
+</div>
 
 ## First of all, Djkstra and A\*
 
-In order to understand Hybrid*, you first recap the serach algorithms
+In order to understand Hybrid*, you first recap the search algorithms
 [Djikstra algorithm](https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm) and
 [A* algorithm](https://en.wikipedia.org/wiki/A*_search_algorithm).
 
 ### 1. Djikstra
 
-The correct way to understand Djikstra algorithm is seeing it as "propagating"
+The correct way to understand Djikstra algorithm is to see it as "propagating"
 computation to find the
 [shortest path tree](https://en.wikipedia.org/wiki/Shortest-path_tree). The
-purpose of the algorithm is not to find a shortest path to a single goal! It
-find for all of the possible nodes.
+purpose of the algorithm is not to find the shortest path to a single goal! It
+finds it for all of the possible nodes.
 
 <div className="flex flex-col items-center">
   <Image
@@ -66,11 +78,11 @@ from the start(blue dot) to the cell (a.k.a., node). The reason why it looks
 like a path finding is that, the implementation terminated the propagation when
 it hits the goal.
 
-Thus, the search does nothing to do with the single goal.
+Thus, the search does nothing to do with a single goal.
 
 ### 2. A\*
 
-What the most robot researchers do for all days to find a route to a "single"
+What most robot researchers do for all days is to find a route to a "single"
 goal (although the goal can be changed). To this end, the
 [robot researchers](https://en.wikipedia.org/wiki/Shakey_the_robot) tried to
 modify the Djikstra algorithm to make it propagate toward a single goal.
@@ -85,25 +97,25 @@ modify the Djikstra algorithm to make it propagate toward a single goal.
   <b>Borrowed from [zhm-real](https://github.com/zhm-real/PathPlanning) </b>
 </div>
 
-To guide the search, we propagate towards the node that is "expected" to be the
+To guide the search, we propagate toward the node that is "expected" to be the
 best direction based on two terms:
 
 - **Cost-so-far (already determined)**: Has this cell accumulated a lower cost
   until it reached this point from the start?
-- **Cost-to-goal (we do know know exactly)**: How optimistic is the estimation
-  of this cell's goodness towards reaching the goal?
+- **Cost-to-goal (we do not know exactly)**: How optimistic is the estimation of
+  this cell's goodness towards reaching the goal?
 
 The first term is often denoted as $g(x)$ and the latter as $h(x)$. We call the
 latter as a _heuristic_. We search the next $x_{next}$ in a greedy manner: the
 lowest $g(x_{next}) + h(x_{next})$ inside the search queue.
 
-#### Admissibility of heuristic function
+#### Admissibility of a heuristic function
 
 Since we perform a guided search relying on $h(x)$, this function must be
 thoughtfully designed. For you to find the global optimal, an essential
 condition for the heuristic is that: **it should output the expected cost to
 goal as optimistically as possible**. In the case of using A\* in a grid, this
-function is typically chosen as the Euclidean distance from \(x\) to the goal.
+function is typically chosen as the Euclidean distance from $x$ to the goal.
 
 The reason for this choice is to ensure that we do not miss the opportunity to
 discover the best possible solution, that is, the global optimum. If this
@@ -112,11 +124,11 @@ function does not promise this condition, there is no guarantee that A* is *
 
 ### 3. Reflecting kinematics: Hybrid A\*
 
-A\* algorithm works well in grid domain with many applications including
+A\* algorithm works well in a grid domain with many applications including
 [computer games](https://www.youtube.com/watch?v=uiUQ14C1O9Q). But this guided
-search on a grid has limitation when we try to apply for
+search on a grid has a limitation when we try to apply for
 [non holonomic systems](https://en.wikipedia.org/wiki/Nonholonomic_system) such
-as car. Although the output of A\* can be globally optimal in the grid,
+as a car. Although the output of A\* can be globally optimal in the grid, a
 resultant path can be inefficient when it was actually tracked by the dynamics.
 
 <div className="flex flex-col items-center">
@@ -133,11 +145,11 @@ resultant path can be inefficient when it was actually tracked by the dynamics.
 </div>
 
 In the above example, even though the blue straight line is the global optimal
-to reach $x_{g}$, the path cannot be tracked exactly due to initial heading of
-the car. That is, the output of A\* might not be useful.
+to reach $x_{g}$, the path cannot be tracked exactly due to the initial heading
+of the car. That is, the output of A\* might not be useful.
 [The original paper](https://journals.sagepub.com/doi/abs/10.1177/0278364909359210)
-tried to tacked this: **how can we consider kinematics of the car while guiding
-the path search like A\*?**
+tried to tackle this: **How can we consider the kinematics of the car while
+guiding the path search like A\*?**
 
 ## Hybrid A\* explained
 
@@ -155,7 +167,7 @@ minimizing the travel length. Thus, our domain for searched elements is $SE(2)$.
 
 #### Kinematic models
 
-In the paper, the model is assumed to be car-like moving as the below:
+In the paper, the model is assumed to be car-like moving as below:
 
 <div className="flex flex-col items-center">
   <Image
@@ -165,12 +177,13 @@ In the paper, the model is assumed to be car-like moving as the below:
     className="mx-auto"
   />
 </div>
-In the paper, the expansion to the next step $n+1$ follow one of the three: two maximum
-curvatures (left / right) and straight line. Thus, the shortest movement between
-any two states $s_a$ and $s_b$ can be analytically computed with [Dubins path](https://en.wikipedia.org/wiki/Dubins_path).
+In the paper, the expansion to the next step $n+1$ follows one of the three: two
+maximum curvatures (left / right) and a straight line. Thus, the shortest movement
+between any two states $s_a$ and $s_b$ can be analytically computed with [Dubins
+path](https://en.wikipedia.org/wiki/Dubins_path).
 
 This model can be extended to have reverse motions, giving us six possible
-expansions. In this case, any two states can be connected with shortest path
+expansions. In this case, any two states can be connected with the shortest path
 following
 [Reeds Shepp](https://atsushisakai.github.io/PythonRobotics/modules/path_planning/reeds_shepp_path/reeds_shepp_path.html).
 
@@ -181,7 +194,7 @@ Of course, you can extend the expansion model to suit your scenario such as
 
 When a state $x_n \in R^2$ is propagated in A* grid field, we opened the
 neighboring cells, which is equal to moving along the grid. Also, the states
-corresponds to the center of each cell. These become different in hybrid A*.
+correspond to the center of each cell. These become different in hybrid A*.
 
 #### Opening cells
 
@@ -210,8 +223,8 @@ reverse movement will also incur a higher penalty.
 
 #### Pruning
 
-At this point, you will be confused: what if more than two states share a same
-cell? What is the meaning of cells then? Here pruning comes in.
+At this point, you will be confused: what if more than two states share the same
+cell with the same angular bin? Here pruning comes in.
 
 <div className="flex flex-col items-center">
   <Image
@@ -222,10 +235,12 @@ cell? What is the meaning of cells then? Here pruning comes in.
   />
 </div>
 
-For the performance reasons, we remove the states if another state in the same
-cell has attained a less cost-so-far. In the above picture, assuming turning
-movement will penalized more, the red circle will be pruned as it went through
-two turning movements.
+For performance reasons, we remove the states if another state in the same
+discretization (same 2d cell and angle bin) has attained a less cost-so-far. In
+the above picture, assuming a turning movement will be penalized more, the red
+circle will be pruned as it went through two turning movements. Of course, this
+pruning will not take place if the angles are treated differently by angle
+discretization.
 
 ### 3. Heuristic $h(s)$
 
@@ -240,11 +255,10 @@ be best optimistic to be admissible. The concept of heuristic is similar to grid
 A\*: **the expected shortest path to goal**. But here of course, the goal is in
 $SE(2)$ not a positional domain.
 
-As I told [here](#kinematic-models), arriving to a pose from a pose with the
+As I told [here](#kinematic-models), arriving a pose from another pose with the
 kinematic can be achieved by Dubins path or Reeds Shepp path. Can we use this
-then? Although it is admissible, we can be more accurately estimate the
-remaining distance by considering obstacles. Take a look at the wonderful
-picture by
+then? Although it is admissible, we can more accurately estimate the remaining
+distance by considering obstacles. Take a look at the wonderful picture by
 [Karl](https://kth.diva-portal.org/smash/record.jsf?pid=diva2%3A1057261&dswid=-5165).
 
 <div className="flex flex-col items-center">
@@ -256,15 +270,15 @@ picture by
   />
 </div>
 In the (c) of the picture, we can overestimate the future cost. This can waste our
-propagation into a wrong direction (in this case, toward the deep in the wall..).
-We can help this by computing the shortest path in positional domain as (d) shows.
+propagation in the wrong direction (in this case, toward the deep in the wall..).
+We can help this by computing the shortest path in the positional domain as (d) shows.
 
 #### Holonomic heuristic considering obstacles
 
 How can we know the shortest path in a grid manner then? The original authors do
-not talk much details except a kind of _dynamic programming_. I found this part
-diverged depending on the implementation. From example, Smac planner of nav2
-used dynamic programming similar to dijkstra. But it propagate shortest distance
+not talk about details except a kind of _dynamic programming_. I found this part
+diverged depending on the implementation. For example, Smac planner of nav2 used
+dynamic programming similar to dijkstra. But it propagates the shortest distance
 starting from the goal not from the start. See more details
 [here](https://github.com/ros-planning/navigation2/blob/96673e216705fe837e5c53ce6a8469f204da5262/nav2_smac_planner/src/node_hybrid.cpp#L433).
 Karl's
@@ -279,11 +293,11 @@ seems unavoidable to reduce computation.
 #### Heuristic of hybrid A\*
 
 We take the maximum of the two heuristics as our final heuristic $h(s)$. We
-choose the best state $s_{next}$ with minimum value of $g(s) + h(s)$ for the
+choose the best state $s_{next}$ with a minimum value of $g(s) + h(s)$ for the
 next [expansion](#2-expansion-opening). Choosing the best is automatically
 handled by popping
 [priority queue](https://en.wikipedia.org/wiki/Priority_queue) If you are not
-familiar with this data structure, I highly recommend to study it. This is a
+familiar with this data structure, I highly recommend studying it. This is a
 must-know concept to implement your A\* algorithms.
 
 ### 4. Analytical expansion (a.k.a., shot to goal)
@@ -291,7 +305,7 @@ must-know concept to implement your A\* algorithms.
 This process is a crucial and distinctive aspect that significantly impacts the
 final result.
 
-#### Best node can achieve the most optimistic path ? That is the solution!
+#### Best node can achieve the most optimistic path? That is the solution!
 
 In our heuristic-guided approach, we employ a greedy search method, prioritizing
 the best candidate in the queue. Actually, **we achieve an optimal solution if
@@ -304,7 +318,7 @@ node to the goal using a non-colliding straight line, we have found the
 solution. Unfortunately, due to the possibility of collisions, we avoid
 attempting this during the search process.
 
-#### Try the most optimistic shot !
+#### Try the most optimistic shot!
 
 In Hybrid A\*, we take the opportunity to explore this direct shot-to-goal
 approach when it seems promising. During the search, we attempt to connect the
@@ -319,10 +333,10 @@ hybrid search often completes in just a few iterations. **Essentially, this
 becomes equivalent to solving a Dubins path from the starting position directly
 to the goal pose.**
 
-#### In works in sparse region, but not in dense spots.
+#### In works in sparse regions, but not in dense spots.
 
 However, in obstacle-dense regions, many shots may fail. In such cases, the
-search relies on obstacle heuristics to guide the exploration. When a free space
+search relies on obstacle heuristics to guide the exploration. When free space
 is encountered, the search can swiftly terminate by utilizing successful shots.
 
 <div className="flex flex-col items-center">
@@ -367,7 +381,7 @@ cost-so-far, may lead to suboptimal results. To overcome this limitation, it
 would be beneficial to consider heuristic information during the pruning
 process, which could help improve the overall optimality of the generated paths.
 
-In conclusion, while Hybrid A\* is a powerful pathfinding algorithm, its true
+In conclusion, while Hybrid A\* is a powerful path-finding algorithm, its true
 global optimality is hindered by the discreteness of our car's control inputs
 and the myopic pruning of nodes based solely on their cost-so-far. Addressing
 these limitations through more advanced control mechanisms and
@@ -376,7 +390,9 @@ algorithm's optimality.
 
 #### Performance
 
-It is perfectly okay when applying this algorithm to real-time application,
+It is perfectly okay when applying this algorithm to real-time applications,
 showing order of msecs computing time in reasonable complex environments. For
-more information, recommend to read this result in
+more information, recommend reading this result in
 [nav2 implementation](https://github.com/ros-planning/navigation2/tree/main/nav2_smac_planner#metrics).
+
+<Comment />
