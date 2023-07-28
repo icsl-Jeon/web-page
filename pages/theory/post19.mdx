@@ -138,16 +138,13 @@ resultant path can be inefficient when it was actually tracked by the dynamics.
     height={300}
     className="mx-auto"
   />
-  <b>
-    Borrowed from [Karl's master
-    thesis](https://kth.diva-portal.org/smash/get/diva2:1057261/FULLTEXT01.pdf){" "}
-  </b>
+  <b>Borrowed from [2]</b>
 </div>
 
 In the above example, even though the blue straight line is the global optimal
 to reach $x_{g}$, the path cannot be tracked exactly due to the initial heading
 of the car. That is, the output of A\* might not be useful.
-[The original paper](https://journals.sagepub.com/doi/abs/10.1177/0278364909359210)
+[The original paper [1] ](https://journals.sagepub.com/doi/abs/10.1177/0278364909359210)
 tried to tackle this: **How can we consider the kinematics of the car while
 guiding the path search like A\*?**
 
@@ -258,8 +255,7 @@ $SE(2)$ not a positional domain.
 As I told [here](#kinematic-models), arriving a pose from another pose with the
 kinematic can be achieved by Dubins path or Reeds Shepp path. Can we use this
 then? Although it is admissible, we can more accurately estimate the remaining
-distance by considering obstacles. Take a look at the wonderful picture by
-[Karl](https://kth.diva-portal.org/smash/record.jsf?pid=diva2%3A1057261&dswid=-5165).
+distance by considering obstacles. Take a look at the wonderful picture by [2].
 
 <div className="flex flex-col items-center">
   <Image
@@ -281,7 +277,7 @@ diverged depending on the implementation. For example, Smac planner of nav2 used
 dynamic programming similar to dijkstra. But it propagates the shortest distance
 starting from the goal not from the start. See more details
 [here](https://github.com/ros-planning/navigation2/blob/96673e216705fe837e5c53ce6a8469f204da5262/nav2_smac_planner/src/node_hybrid.cpp#L433).
-Karl's
+Karl Kurzer's
 [implementation](https://github.com/karlkurzer/path_planner/blob/887996746c275e2c8335ae77ea096969079e688f/src/algorithm.cpp#L442)
 runs A star until the goal position.
 
@@ -394,5 +390,16 @@ It is perfectly okay when applying this algorithm to real-time applications,
 showing order of msecs computing time in reasonable complex environments. For
 more information, recommend reading this result in
 [nav2 implementation](https://github.com/ros-planning/navigation2/tree/main/nav2_smac_planner#metrics).
+
+## Reference
+
+[1] Dolgov, Dmitri, et al. "Path planning for autonomous vehicles in unknown
+semi-structured environments." The international journal of robotics research
+29.5 (2010): 485-501.
+
+[2] Kurzer, Karl. "Path planning in unstructured environments: A real-time
+hybrid a\* implementation for fast and deterministic path generation for the kth
+research concept vehicle." (2016).
+([pdf](https://kth.diva-portal.org/smash/record.jsf?pid=diva2%3A1057261&dswid=4964))
 
 <Comment />
