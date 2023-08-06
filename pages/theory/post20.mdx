@@ -1,0 +1,373 @@
+import Image from "next/image";
+
+# Types of Motion Planners at a Glance
+
+## Objective
+
+This short article is to provide you with a comprehensive glance into the five
+big categories and general concepts of planning methods, accompanied by valuable
+GitHub references. Some representative methods for each group are introduced and
+pros & cons are discussed. We also examine their applications in robotic
+scenarios.
+
+## Type 1: Roadmap Construction and Planning
+
+Roadmap construction is a commonly used technique to create a structured
+representation and identify topology. Initially, this method was not solely
+intended for path planning; however, we can use the structure to find a path
+between two nodes.
+
+Despite yielding a coarse output, the path planning process results in a
+reliable geometric skeleton. This skeleton aids in efficiently navigating
+through the environment while avoiding obstacles.
+
+### Methods
+
+{" "}
+
+<div className="flex flex-col align-center max-w-full p-3">
+  <div className="flex flex-col xl:flex-row">
+    <Image
+      src="/images/post20/visibility-graph.png"
+      width={500}
+      height={500}
+      className="m-2 "
+    />
+    <Image
+      src="/images/post20/voronoi.png"
+      width={500}
+      height={500}
+      className="m-2 "
+    />
+  </div>
+  <div className="mx-auto">
+    Left: Visibility graph and shortest path between points [1]. Right:
+    Partition based on the points and voronoi diagram [2]
+  </div>
+</div>
+
+### Visibility Graph
+
+The visibility graph is created by connecting visibility lines between
+significant points in the environment. These points may represent obstacles,
+robot poses, or other critical locations.
+
+### Voronoi Diagram
+
+The Voronoi diagram is a spatial partitioning method used to divide a given
+space into regions based on the proximity to a set of input points, also known
+as "seeds" or "sites." Each region corresponds to a seed, and all points within
+that region are closer to that seed than to any other seed.
+
+### Features
+
+#### Strengths
+
+- Generates a geometric path for navigating very narrow passages.
+- Provides a good geometric topology, making it suitable as a search start point
+  (e.g., RAPTOR, TEB) to find a global optimum.
+- If the environment is not changing and multiple shortest path queries
+  expected, this group is very useful (it will work as your car navigation).
+
+#### Weaknesses
+
+- In many cases, considering kinematics is almost impossible, which means there
+  is no guarantee that your robot can follow the path.
+- For the visibility graph, it often requires a well-defined geometric
+  representation of the environment, which might not be feasible in real-time
+  sensing scenarios.
+
+## Type 2: Search-based planners
+
+In algorithmic terms, "search" refers to the process of exploring neighbors in a
+guided manner. We can employ algorithms such as Dijkstra or A\* algorithm to
+search from a starting state until a goal is reached. The variations lie in how
+we define the neighbors (e.g., kinematic expansion or neighbor cells in a grid)
+or [heuristic](<https://en.wikipedia.org/wiki/Heuristic_(computer_science)>) to
+guide the search process effectively.
+
+You can find a well-implemented version of this class in the "nav2" [3] or
+"SBPL" [4] repositories.
+
+### Methods
+
+<div className="flex flex-col align-center max-w-full p-3">
+  <div className="flex flex-col xl:flex-row">
+    <Image
+      src="/images/post20/state-lattice.png"
+      width={400}
+      height={400}
+      className="m-2"
+    />
+    <Image
+      src="/images/post20/theta.png"
+      width={400}
+      height={400}
+      className="m-2"
+    />
+  </div>
+  <div className="mx-auto mx-2">
+    Left: We search over a possible propagation based on a kinematics [5].
+    Right: theta* algorithm (similar to A*) used for gaming [6].
+  </div>
+</div>
+
+#### Discrete planning over gridmap
+
+One of the classic yet still widely used approaches for solving a sequence of
+cells for the shortest geometric path. This method serves as an excellent
+baseline for 2-dimensional path-finding in a grid-based environment.
+
+#### Hybrid A\* & State lattice planning
+
+Building upon the grid-searching approach mentioned earlier, we can extend it to
+kinematic searching. Search space becomes the set of reachable states when the
+robot is assumed to steer with a discrete set of inputs. The search process
+remains similar to that of grid searching.
+
+### Feature
+
+#### Strength
+
+- Resolution completeness: The search solution is optimal within the given
+  discretization.
+
+#### Weakness
+
+- Search time is not scalable for high dimensions.
+- In very dense scenarios, the use of only predefined discretization may lead to
+  an inability to find a solution.
+
+## Type 3: Sampling based planners
+
+Sampling-based motion planning algorithms use random sampling to explore the
+search space and build a tree or roadmap connecting feasible states. These
+algorithms start with an initial configuration and iteratively sample new
+states, connecting them to the tree if they satisfy certain criteria.
+
+The variations may lie in whether optimality is included (e.g., RRT [12] →
+RRT\*[7]), how to bias sampling in an informed way [9]. The extensive
+implementation of these algorithms from OMPL [8]. For the python version, this
+repository [10] might be useful
+
+### Methods
+
+<div className="flex flex-col align-center max-w-full p-3">
+  <div className="flex flex-col xl:flex-row">
+    <Image
+      src="/images/post20/rrt.gif"
+      width={400}
+      height={300}
+      className="m-2"
+    />
+    <Image
+      src="/images/post20/prm.gif"
+      width={400}
+      height={400}
+      className="m-2"
+    />
+  </div>
+  <div className="mx-auto mx-2">
+    Left: Animation of RRT tree growing [10]. Right: RPM randomly generates
+    roadmap [11].
+  </div>
+</div>
+
+#### RRT
+
+The main objective of RRT is to efficiently explore the search space to find
+feasible paths from the start state to the goal state. RRT is particularly
+well-suited for problems with high-dimensional configuration spaces and complex
+obstacle environments. While RRT does not guarantee an optimal solution, it can
+quickly discover feasible paths and is often used in real-time applications.
+
+#### PRM
+
+The primary objective of PRM is to construct a roadmap of the search space by
+sampling random configurations and connecting them to build a network of
+feasible states. The roadmap serves as a global representation of the
+environment, and once constructed, it can be used for efficient query-based
+planning to find optimal paths between any start and goal configuration.
+
+### Feature
+
+#### Strength
+
+- Comparison with search-based planning in terms of high dimensionality:
+  Sampling-based PRM algorithms, including PRM*, RRT*, and RRT\*, demonstrate
+  significant advantages in solving high-dimensional motion planning problems.
+
+#### Weakness
+
+- Realtimeness might not be guaranteed for the optimality version
+- Unpredictability is expected compared to search-based planners due to the
+  random sampling.
+
+## Type 4: Optimization based method
+
+The preceding three groups employ algorithmic approaches to solve pathfinding in
+a discrete domain. In contrast, optimization-based methods leverage the gradient
+descent technique to tackle numerical optimization problems. These methods
+operate in the continuous domain, providing a more rigorous reflection of
+dynamics.
+
+### Methods
+
+<div className="flex flex-col align-center max-w-full p-3">
+  <div className="flex flex-col xl:flex-row">
+    <Image
+      src="/images/post20/dubins.png"
+      width={400}
+      height={200}
+      className="m-2"
+    />
+    <Image
+      src="/images/post20/spline.png"
+      width={300}
+      height={300}
+      className="m-2"
+    />
+  </div>
+  <div className="mx-auto mx-2">
+    Left: Dubins and reed shepp trajectory is derived by solving optimal control
+    problem [16]. Right: Seven piecewise polynomials are representing a flight
+    curve of a quadrotor [15].
+  </div>
+</div>
+
+#### Optimal control
+
+Optimal control involves optimizing the trajectory of control inputs (e.g., a
+sequence of 100 linear and angular velocities for differential drive systems) to
+minimize a given cost function based on the state. When dealing with relatively
+simple systems, the Linear Quadratic Regulator (LQR) [13] is a common method in
+this category. For solving such optimization problems, cvxgen [14] is widely
+used and popular.
+
+#### Spline based method
+
+The above-mentioned methods typically use state variables at each time step as
+optimization variables, which may not be scalable for long-range planning. To
+address this, we parameterize the trajectory of states or inputs using
+polynomials, reducing the optimization dimension by optimizing the coefficients.
+This approach is widely utilized for generating trajectory planning of
+quadrotors [15]. You can find the implementation of this method here [16].
+
+### Feature
+
+#### Strength
+
+- Kinematics and dynamics are fully considered in the optimization process.
+- Continuous space can be employed to compute optimal trajectories.
+
+#### Weakness
+
+- Convergence may be limited to local minima, particularly when the initial
+  guess is far from the global optimum.
+- In environments with dense and complex obstacles, convergence of the
+  optimization process may degrade.
+- The effectiveness of the method depends on the shape of the cost and
+  constraint functions.
+
+### Motion primitive library
+
+Among the introduced groups, the considered horizon is the shortest. This method
+involves predefining possible movements over a short horizon and selecting the
+best motion online. It is particularly useful in scenarios where there is a
+reliable topological reference (e.g., autonomous driving on structured roads).
+You can find an implmentation from here [19]
+
+### Methods
+
+<div className="flex flex-col align-center max-w-full p-3">
+  <div className="flex flex-col xl:flex-row">
+    <Image
+      src="/images/post20/primitive-1.png"
+      width={400}
+      height={400}
+      className="m-2"
+    />
+    <Image
+      src="/images/post20/primitive-2.png"
+      width={400}
+      height={400}
+      className="m-2"
+    />
+  </div>
+  <div className="mx-auto mx-2">
+    The final motion over a short horizon is chosen from a set of motion
+    primitive (library) that best suites the purposes [17], [18]
+  </div>
+</div>
+
+Before commencing the mission, a library predefines a set of dynamically
+feasible motion primitives (e.g., polynomials). When the robot is at a specific
+pose, the motions are transformed, and their feasibility is evaluated for
+safety. After computing motion scores for trajectories, the final motion is
+selected.
+
+### Feature
+
+#### Strength
+
+- Easy to implement and use.
+- The motion choices remain within the library, and thus intuitive.
+
+#### Weakness
+
+- For relatively longer horizons, the selected motion candidates might be unable
+  to reach the desired destination.
+- As the set of motions is predefined, the method cannot adapt to new motions
+  that are not present in the library.
+
+## What’s next?
+
+Up to this point, we have explored five categories of motion planning and their
+respective characteristics. However, navigating through complex environments
+often requires sophisticated combinations of these methods. In the following
+article, we delve into the combinations found in the most recent research papers
+and well-known packages.
+
+## Reference
+
+[1]
+https://aerial-robotics-iitk.gitbook.io/wiki/concepts/path-planning/visibility-graph-analysis
+
+[2] https://en.wikipedia.org/wiki/Voronoi_diagram
+
+[3] https://navigation.ros.org/
+
+[4] https://wiki.ros.org/sbpl
+
+[5]
+[Differentially constrained mobile robot motion planning in state lattices. Journal of Field Robotics (JFR), 26(3), 308-333](https://www.researchgate.net/publication/220648255_Differentially_constrained_mobile_robot_motion_planning_in_state_lattices_Journal_of_Field_Robotics_JFR_263_308-333)
+
+[6] http://www.jcomputers.us/vol13/jcp1305-05.pdf
+
+[7] https://arxiv.org/abs/1105.1186
+
+[8] https://ompl.kavrakilab.org/
+
+[9] https://arxiv.org/abs/1404.2334
+
+[10] https://github.com/zhm-real/PathPlanning
+
+[11]
+https://motion.cs.illinois.edu/RoboticSystems/MotionPlanningHigherDimensions.html
+
+[12] https://msl.cs.illinois.edu/~lavalle/papers/Lav98c.pdf
+
+[13] https://www.cds.caltech.edu/~murray/courses/cds110/wi06/lqr.pdf
+
+[14] https://cvxgen.com/docs/mpc.html
+
+[15] https://ieeexplore.ieee.org/document/5980409
+
+[16] https://link.springer.com/article/10.1007/s40435-022-01111-3
+
+[17] https://www.science.org/doi/full/10.1126/scirobotics.adf0970
+
+[18] https://frc.ri.cmu.edu/~zhangji/publications/IROS_2019.pdf
+
+[19]
+https://github.com/HongbiaoZ/autonomous_exploration_development_environment/tree/noetic/src/local_planner

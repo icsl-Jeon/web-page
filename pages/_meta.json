@@ -16,10 +16,10 @@
     "type": "page"
   },
 
-  "planning-methods": "Surveys on motion planning",
+  "planning-methods": "Surveys on Motion Planning",
   "tools": "Tools",
   "theory": "Theory",
-  "design-pattern": "Design pattern",
+  "design-pattern": "Design Pattern",
   "threading-ros2": "Threading of ROS2",
-  "drone": "Aerial robotics"
+  "drone": "Aerial Robotics"
 }
