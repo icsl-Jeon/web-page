@@ -1,3 +1,4 @@
+import Comment from "components/Comment";
 import Image from "next/image";
 import { Callout } from "nextra-theme-docs";
 
@@ -17,10 +18,11 @@ Imagine a scenario where a robot needs to disseminate information to multiple
 recipients, similar to broadcasting on a TV network. In ROS, this is achieved
 using the concept of a "topic.”
 
-- Publisher (sender of message stream): transmits data on a specific topic
-  without concerning itself with whether the data is received by the intended
-  recipients.
-- Subscribers (receivers of message stream): registers interest in a particular
+- Publisher (sender of message stream): transmits data on a specific topic. By
+  default, it does not attempt to confirm whether the data is received by the
+  intended recipients. But publishers can be configured to guarantee the
+  reception.
+- Subscribers (receivers of message stream): register interest in a particular
   topic. Whenever data arrives on the network associated with a subscribed
   topic, a predefined _subscribe callback_ function is triggered, allowing the
   subscribers to process the data.
@@ -139,6 +141,8 @@ The two executables instantiated two nodes named `/teleop_turtle` and
   Names of nodes and executables are different. `turtlesim_node` was the name of
   the executable. `/turtlesim` is a name decided in the associated code of
   `turtlesim_node`. The name can also be decided when running the executable.
+  For example, `ros2 run turtlesim turtlesim_node --ros-args -r
+  __node:=crazy_turtle` will run another node with name `/crazy_turtle`.
 </Callout>
 
 ### Examining Nodes
@@ -211,3 +215,5 @@ arrows having `*/_action/*`.)
 Congratulation🎶! You fast learned very essential concepts and run ROS
 applications by your hands. In the following section, we discuss more details on
 each communication type and its characteristics.
+
+<Comment />

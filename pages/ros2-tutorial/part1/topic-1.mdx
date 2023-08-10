@@ -1,0 +1,171 @@
+import Comment from "components/Comment";
+import Image from "next/image";
+import YouTube, { YouTubeProps } from "react-youtube";
+
+# Understanding Topic Communication - Part 1
+
+In this section, we learn more about topic communication with tangible examples.
+Before starting, run the previously used two ROS nodes following
+[here](key-concepts#running-ros-applications-executable).
+
+## Topic Interface
+
+### Examining Messages Being Published
+
+A publisher of a topic sends message stream in a defined way. For example, a
+publisher of sensor data periodically sends out the messages. In our example,
+`/turtlesim` keeps sending messages for `/turtle1/pose`. This can be checked by:
+
+```sh filename="Printing out topic"
+rosmarry@rosmarry:~$ ros2 topic echo /turtle1/pose # ros topic echo <topic_name>
+x: 5.544444561004639
+y: 5.544444561004639
+theta: 0.0
+linear_velocity: 0.0
+angular_velocity: 0.0
+---
+x: 5.544444561004639
+y: 5.544444561004639
+theta: 0.0
+linear_velocity: 0.0
+angular_velocity: 0.0
+---
+...
+```
+
+Try the below command to get periodicity:
+
+```sh filename="Checking Hz"
+rosmarry@rosmarry:~$ ros2 topic hz /turtle1/pose # ros topic hz <topic_name>
+average rate: 62.545 # being published at around 60Hz
+       min: 0.015s max: 0.017s std dev: 0.00046s window: 64
+average rate: 62.480
+       min: 0.015s max: 0.017s std dev: 0.00045s window: 127
+```
+
+This periodical publishing is not always the case. The below command prints
+nothing.
+
+```
+ros2 topic echo /turtle1/cmd_vel
+```
+
+If you press the upper-arrow key on the keyboard after focusing the terminal
+where `/teleop_turtle` is running, now a print appears.
+
+```sh filename="Terminal echo output"
+rosmarry@rosmarry:~$ ros2 topic echo /turtle1/cmd_vel
+linear:
+  x: 2.0
+  y: 0.0
+  z: 0.0
+angular:
+  x: 0.0
+  y: 0.0
+  z: 0.0
+---
+```
+
+The topic `/turtle1/cmd_vel` seems to be printed only when keyboard event is
+received. You will note that the turtle in the GUI has moved. You may try
+sending more messages with keyboard and observe the turtle's movement. 😊
+
+### Message Types
+
+In ROS 2, message structures are described using _interfaces_. The interfaces
+are defined in packages. These interfaces are composed of multiple fields, where
+each field's data type can be derived from primitive types like integers,
+floats, strings, and
+[more](https://docs.ros.org/en/foxy/Concepts/About-ROS-Interfaces.html#field-types).
+This allows developers to reuse or define the structure of the data being
+communicated between nodes.
+
+To get the type name of a topic, we first use the following command:
+
+```sh
+rosmarry@rosmarry:~$ ros2 topic info /turtle1/pose # ros2 topic info <topic_name>
+Type: turtlesim/msg/Pose
+Publisher count: 1
+Subscription count: 0
+```
+
+The message associated with `/turtle1/pose` has the interface
+`turtlesim/msg/Pose`, which consists of the below field:
+
+```sh
+rosmarry@rosmarry:~$ ros2 interface show turtlesim/msg/Pose  # ros2 interface show <type_name>
+float32 x
+float32 y
+float32 theta
+
+float32 linear_velocity
+float32 angular_velocity
+```
+
+This is why printing `/turtle1/pose` gives us
+[this output](#examining-messages). Type name `turtlesim/msg/Pose` implies that
+package `turtlesim` holds the interface definition. This package has several
+interfaces as this command shows:
+
+```sh filename="list of interfaces of turtlesim"
+rosmarry@rosmarry:~$ ros2 interface package turtlesim # ros2 interface package <package_name>
+turtlesim/action/RotateAbsolute
+turtlesim/msg/Color
+turtlesim/srv/SetPen
+turtlesim/srv/Spawn
+turtlesim/srv/TeleportRelative
+turtlesim/srv/TeleportAbsolute
+turtlesim/srv/Kill
+turtlesim/msg/Pose
+```
+
+## Publishing Topic
+
+In the previous section, we observed that the turtle can be moved by your
+keyboard input, as `/turtlesim` is subscribing topic `/turtle1/cmd_vel`
+published from `/teleop_turtle`. This means the turtle will move even if another
+node is publishing messages on the same topic ✌️
+
+Open another terminal and run the command:
+
+```sh
+rosmarry@rosmarry:~$ ros2 topic pub /turtle1/cmd_vel -r 10 geometry_msgs/msg/Twist "{linear: {x: 1.0, y: 0, z: 0}, angular: {x: 0, y: 0, z: 1}}" --print 0
+publisher: beginning loop
+```
+
+The command breaks down as:
+
+- `ros2 topic pub /turtle1/cmd_vel`: publishing on the topic `/turtle1/cmd_vel`,
+- `-r 10`: at rate 10 Hz,
+- `geometry_msgs/msg/Twist`: the interface is this type,
+- `"{linear: {x: 1.0, y: 0, z: 0}, angular: {x: 0, y: 0, z: 1}}"`: and the
+  message contents be like this.
+- `--print 0`: do not fill the terminal.
+
+This will move the turtle as below:
+
+<Image
+  src="/images/part1/turtle-circle.gif"
+  width={300}
+  height={300}
+  className="my-3 mx-auto"
+/>
+
+### Using GUI tools
+
+Although tab completion helps you, it might not be handy to type those commands
+every time. In contrast to [CLI](https://github.com/ros2/ros2cli) (commands in
+terminal), [rqt_gui](https://wiki.ros.org/rqt_gui) provides graphical UIs.
+Running the commands will open a qt window.
+
+```
+ros2 run rqt_gui rqt_gui
+```
+
+In the GUI, follow the below video.
+
+<div className="sm:px-5 my-10">
+  <YouTube videoId="v8NPUW_6aR4" className="videoWrapper" />
+</div>
+
+<Comment />
