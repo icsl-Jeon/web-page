@@ -1,0 +1,143 @@
+import Comment from "components/Comment";
+import Image from "next/image";
+import YouTube, { YouTubeProps } from "react-youtube";
+
+# Understanding Topic Communication - Part 2
+
+Before getting started with this chapter, run `turtlesim_node` and
+`turtle_teleop_key` as
+[this page](key-concepts#running-ros-applications-executable).
+
+## One-to-many communications
+
+In contrast to [service communication](key-concepts#service-communication),
+topic communication is one-to-many. Multiple subscribers can listen to a given
+topic. Let us examine this by running another node:
+
+```sh copy
+ros2 run turtlesim turtlesim_node --ros-args -r __node:=crazy_turtle
+```
+
+This will run `turtlesim_node` executable and name the node `crazy_turtle`, as
+the command shows:
+
+```sh filename="" {2}
+rosmarry@rosmarry:~$ ros2 node list
+/crazy_turtle # our new node here
+/teleop_turtle
+/turtlesim
+```
+
+Our new node is also subscribing `/turtle1/cmd_vel`:
+
+```sh filename="" {5}
+rosmarry@rosmarry:~$ ros2 node info /crazy_turtle
+/crazy_turtle
+  Subscribers:
+    /parameter_events: rcl_interfaces/msg/ParameterEvent
+    /turtle1/cmd_vel: geometry_msgs/msg/Twist
+```
+
+Using your keyboard on `/teleop_turtle` will move two turtles at the same times.
+
+<Image
+  src="/images/part1/two-turtle.gif"
+  width={600}
+  height={300}
+  className="my-3 mx-auto"
+/>
+This example illustrates one-to-many communication property of topic communications.{" "}
+
+## QoS: Policy for Communication (Advanced)
+
+Previously, there was [a mention](key-concepts#topic-communication) that a
+publisher can configure the _guarantee_ of message delivery. This configuration
+belongs to Quality of Service (QoS). In ROS2, you can
+[configure the policies](https://docs.ros.org/en/rolling/Concepts/Intermediate/About-Quality-of-Service-Settings.html#qos-policies)
+for communication. A Publisher and a subscriber can communicate only when they
+have compatible policies.
+
+### Example: Reliability
+
+#### Case 1: Allowable Loss
+
+As one of the policies, you can configure the _reliability_ of a communication.
+For example, there might be a case where a loss can be allowable in sensor data
+streaming. This can be true when only the most recent data matters. In this
+case, `best effort` configuration is enough, and the publisher will not be
+concerned whether the data is received successfully.
+
+#### Case 2: Guaranteed Delivery
+
+There might be a contrary case, where the publisher or subscriber should ensure
+the delivery. An example can include subscribing to diagnosis, and not missing a
+defect can be crucial in this case. `reliable` configuration can work here.
+Here, the publisher uses feedback from ROS network and will retry to send a
+message several times.
+
+### Profile
+
+As this page shows, there are many policies and associated options. ROS provides
+several presets
+([profiles](https://docs.ros.org/en/rolling/Concepts/Intermediate/About-Quality-of-Service-Settings.html#qos-profiles))
+for common cases. For example, the profile `Sensor Data` is recommended for the
+first case.
+
+### Practice
+
+In our example, `/turtlesim` subscribes `/turtle1/cmd_vel` in `reliable`
+configuration. To observe this, terminate `/teleop_turtle` for the moment, and
+try the below command:
+
+```sh filename="" {14}
+rosmarry@rosmarry:~$ ros2 topic info /turtle1/cmd_vel -v # Put verbose flag -v
+Type: geometry_msgs/msg/Twist
+
+Publisher count: 0
+
+Subscription count: 1
+
+Node name: turtlesim
+Node namespace: /
+Topic type: geometry_msgs/msg/Twist
+Endpoint type: SUBSCRIPTION
+GID: 01.0f.8d.3c.04.04.e9.37.01.00.00.00.00.00.1b.04.00.00.00.00.00.00.00.00
+QoS profile:
+  Reliability: RELIABLE
+  History (Depth): UNKNOWN
+  Durability: VOLATILE
+  Lifespan: Infinite
+  Deadline: Infinite
+  Liveliness: AUTOMATIC
+  Liveliness lease duration: Infinite
+```
+
+As summarized in
+[this table](https://docs.ros.org/en/rolling/Concepts/Intermediate/About-Quality-of-Service-Settings.html#qos-compatibilities),
+only reliable publishers can communicate with the subscription. To examine this,
+the argument regarding QoS is added to the
+[publish command](topic-1#publishing-topic).
+
+```sh copy
+ros2 topic pub /turtle1/cmd_vel -r 10 geometry_msgs/msg/Twist "{linear: {x: 1.0, y: 0, z: 0}, angular: {x: 0, y: 0, z: 1}}" --qos-profile=sensor_data --print 0 --qos-profile=sensor_data
+```
+
+You can observe that the communication is not established as the output says:
+
+```sh
+shpublisher: beginning loop
+[WARN] [1691756541.068217364] [_ros2cli_1380]: New subscription discovered on topic '/turtle1/cmd_vel', requesting incompatible QoS. No messages will be sent to it. Last incompatible policy: RELIABILITY
+```
+
+## Summary
+
+Over the two chapters, we learned the topic communication for streaming
+messages. The below items were discussed:
+
+- Interface (type) of topic communication.
+- Publishing messages for a topic from a terminal or the GUI tool.
+- Communication property of one-to-many
+- QoS policy.
+
+In the next chapter, we investigate service communication and understand the the
+difference with topic communications.

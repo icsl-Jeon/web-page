@@ -21,7 +21,8 @@ using the concept of a "topic.”
 - Publisher (sender of message stream): transmits data on a specific topic. By
   default, it does not attempt to confirm whether the data is received by the
   intended recipients. But publishers can be configured to guarantee the
-  reception.
+  reception. We will discuss this setup
+  [later](topic-2#qos-policy-for-subscribers).
 - Subscribers (receivers of message stream): register interest in a particular
   topic. Whenever data arrives on the network associated with a subscribed
   topic, a predefined _subscribe callback_ function is triggered, allowing the
@@ -116,7 +117,7 @@ This will open a GUI as the below figure:
 
 On another terminal (Termainl B)
 
-```none filename="Terminal B"
+```sh filename="Terminal B"
 rosmarry@rosmarry:~$ ros2 run turtlesim turtle_teleop_key
 Reading from keyboard
 ---------------------------
