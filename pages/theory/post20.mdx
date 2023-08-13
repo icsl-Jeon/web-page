@@ -43,23 +43,23 @@ _voronoi diagram_.
 {" "}
 
 <div className="flex flex-col align-center max-w-full p-3">
-  <div className="flex flex-col xl:flex-row">
+  <div className="flex flex-col xl:flex-row mx-auto">
     <Image
       src="/images/post20/visibility-graph.png"
-      width={500}
+      width={300}
       height={500}
-      className="m-2 "
+      className="mr-5"
     />
     <Image
       src="/images/post20/voronoi.png"
-      width={500}
+      width={300}
       height={500}
-      className="m-2 "
+      className=""
     />
   </div>
   <div className="mx-auto">
     Left: Visibility graph and shortest path between points [1]. Right:
-    Partition based on the points (black) and the resulting voronoi diagram [2]
+    Partition based on the points (black) and the resulting voronoi diagram [2].
   </div>
 </div>
 
@@ -235,7 +235,7 @@ of dynamics.
 
 ### Methods
 
-<div className="flex flex-col align-center max-w-full p-3">
+<div className="flex flex-col items-center mx-auto p-3">
   <div className="flex flex-col xl:flex-row">
     <Image
       src="/images/post20/dubins.png"
@@ -273,10 +273,12 @@ In contrast to the optimal control, we might just want to optimize the
 trajectory of _states_. Optimizers such as
 [CHOMP](https://moveit.picknik.ai/main/doc/how_to_guides/chomp_planner/chomp_planner_tutorial.html?highlight=chomp),
 [STOMP](https://moveit.picknik.ai/main/doc/how_to_guides/stomp_planner/stomp_planner.html?highlight=stomp)
-are widely used, and implmented in Moveit.
+are widely used, and implemented in Moveit. The below figure shows the proposed
+optimization planner in [22]. The planner uses gradients from the obstacle cost
+to compute a safe trajectory.
 
 <Image
-  src="/images/post20/optim.png"
+  src="/images/post20/optim.PNG"
   width={500}
   height={500}
   className="m-2 mx-auto"
