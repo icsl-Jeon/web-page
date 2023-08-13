@@ -37,6 +37,9 @@ through the environment while avoiding obstacles.
 
 ### Methods
 
+There are two common approaches to build the roadmap: _visibility graph_ and
+_voronoi diagram_.
+
 {" "}
 
 <div className="flex flex-col align-center max-w-full p-3">
@@ -56,17 +59,17 @@ through the environment while avoiding obstacles.
   </div>
   <div className="mx-auto">
     Left: Visibility graph and shortest path between points [1]. Right:
-    Partition based on the points and voronoi diagram [2]
+    Partition based on the points (black) and the resulting voronoi diagram [2]
   </div>
 </div>
 
-### Visibility Graph
+#### Visibility Graph
 
 The visibility graph is created by connecting visibility lines between
 significant points in the environment. These points may represent obstacles,
 robot poses, or other critical locations.
 
-### Voronoi Diagram
+#### Voronoi Diagram
 
 The Voronoi diagram is a spatial partitioning method used to divide a given
 space into regions based on the proximity to a set of input points, also known
@@ -79,19 +82,19 @@ that region are closer to that seed than to any other seed.
 
 - Generates a geometric path for navigating very narrow passages.
 - Provides a good geometric topology, making it suitable as a search start point
-  (e.g., RAPTOR, TEB) to find a global optimum.
+  to find a global optimum.
 - If the environment is not changing and multiple shortest path queries
-  expected, this group is very useful (it will work as your car navigation).
+  expected, this group is very useful.
 
 #### Weaknesses
 
 - In many cases, considering kinematics is almost impossible, which means there
-  is no guarantee that your robot can follow the path.
+  is no guarantee that your robot can exactly follow the path.
 - For the visibility graph, it often requires a well-defined geometric
-  representation of the environment, which might not be feasible in real-time
-  sensing scenarios.
+  representation of the environment (e.g., polygons), which might not be
+  feasible in real-time sensing scenarios.
 
-## Type 2: Search-based planners
+## Type 2: Search-based Planners
 
 In algorithmic terms, "search" refers to the process of exploring neighbors in a
 guided manner. We can employ algorithms such as Dijkstra or A\* algorithm to
@@ -126,18 +129,22 @@ You can find a well-implemented version of this class in the "nav2" [3] or
   </div>
 </div>
 
-#### Discrete planning over gridmap
+#### Discrete Planning over Gridmap
 
 One of the classic yet still widely used approaches for solving a sequence of
 cells for the shortest geometric path. This method serves as an excellent
-baseline for 2-dimensional path-finding in a grid-based environment.
+baseline for 2-dimensional path-finding in a grid-based environment. We can
+apply A\* algorithm here, but more recent and advanced method includes Jump
+Point Search (JPS) [21].
 
-#### Hybrid A\* & State lattice planning
+#### State Lattice Planning
 
 Building upon the grid-searching approach mentioned earlier, we can extend it to
 kinematic searching. Search space becomes the set of reachable states when the
 robot is assumed to steer with a discrete set of inputs. The search process
-remains similar to that of grid searching.
+remains similar to that of grid searching. One of the famous approaches is
+Hybrid A\* [20]. You can find a good implementation from
+[Nav2 Smac Planner](https://navigation.ros.org/configuration/packages/configuring-smac-planner.html).
 
 ### Feature
 
@@ -152,7 +159,7 @@ remains similar to that of grid searching.
 - In very dense scenarios, the use of only predefined discretization may lead to
   an inability to find a solution.
 
-## Type 3: Sampling based planners
+## Type 3: Sampling-based Planners
 
 Sampling-based motion planning algorithms use random sampling to explore the
 search space and build a tree or roadmap connecting feasible states. These
@@ -162,7 +169,7 @@ states, connecting them to the tree if they satisfy certain criteria.
 The variations may lie in whether optimality is included (e.g., RRT [12] →
 RRT\*[7]), how to bias sampling in an informed way [9]. The extensive
 implementation of these algorithms from OMPL [8]. For the python version, this
-repository [10] might be useful
+repository [10] might be useful.
 
 ### Methods
 
@@ -187,7 +194,7 @@ repository [10] might be useful
   </div>
 </div>
 
-#### RRT
+#### RRT (Rapidly-Exploring Random Tree)
 
 The main objective of RRT is to efficiently explore the search space to find
 feasible paths from the start state to the goal state. RRT is particularly
@@ -195,13 +202,14 @@ well-suited for problems with high-dimensional configuration spaces and complex
 obstacle environments. While RRT does not guarantee an optimal solution, it can
 quickly discover feasible paths and is often used in real-time applications.
 
-#### PRM
+#### PRM (Probabilistic Roadmap)
 
-The primary objective of PRM is to construct a roadmap of the search space by
+The primary objective of PRM is to construct a roadmap for a search space by
 sampling random configurations and connecting them to build a network of
-feasible states. The roadmap serves as a global representation of the
-environment, and once constructed, it can be used for efficient query-based
-planning to find optimal paths between any start and goal configuration.
+feasible states and connections. The roadmap serves as a global representation
+of the environment, and once constructed, it can be used for efficient
+query-based planning to find optimal paths between any start and goal
+configuration.
 
 ### Feature
 
@@ -217,13 +225,13 @@ planning to find optimal paths between any start and goal configuration.
 - Unpredictability is expected compared to search-based planners due to the
   random sampling.
 
-## Type 4: Optimization based method
+## Type 4: Optimization-based Method
 
-The preceding three groups employ algorithmic approaches to solve pathfinding in
-a discrete domain. In contrast, optimization-based methods leverage the gradient
-descent technique to tackle numerical optimization problems. These methods
-operate in the continuous domain, providing a more rigorous reflection of
-dynamics.
+The preceding three groups employ algorithmic approaches to solve path-finding
+in a discrete domain. In contrast, optimization-based methods leverage the
+gradient descent technique to tackle numerical optimization problems. These
+methods operate in the continuous domain, providing a more rigorous reflection
+of dynamics.
 
 ### Methods
 
@@ -249,29 +257,46 @@ dynamics.
   </div>
 </div>
 
-#### Optimal control
+#### Optimization over Control (a.k.a., Optimal Control)
 
-Optimal control involves optimizing the trajectory of control inputs (e.g., a
+Optimal control involves optimizing the trajectory of _control inputs_ (e.g., a
 sequence of 100 linear and angular velocities for differential drive systems) to
-minimize a given cost function based on the state. When dealing with relatively
-simple systems, the Linear Quadratic Regulator (LQR) [13] is a common method in
-this category. For solving such optimization problems, cvxgen [14] is widely
-used and popular.
+minimize a given cost function based on the state. This method is often used
+when we have to rigorously consider the dynamics of a system. When dealing with
+relatively simple systems, the Linear Quadratic Regulator (LQR) [13] is a common
+method in this category. For solving such optimization problems, cvxgen [14] is
+widely used and popular.
 
-#### Spline based method
+#### Optimization over State
+
+In contrast to the optimal control, we might just want to optimize the
+trajectory of _states_. Optimizers such as
+[CHOMP](https://moveit.picknik.ai/main/doc/how_to_guides/chomp_planner/chomp_planner_tutorial.html?highlight=chomp),
+[STOMP](https://moveit.picknik.ai/main/doc/how_to_guides/stomp_planner/stomp_planner.html?highlight=stomp)
+are widely used, and implmented in Moveit.
+
+<Image
+  src="/images/post20/optim.png"
+  width={500}
+  height={500}
+  className="m-2 mx-auto"
+/>
+
+#### Spline-based Method
 
 The above-mentioned methods typically use state variables at each time step as
 optimization variables, which may not be scalable for long-range planning. To
 address this, we parameterize the trajectory of states or inputs using
-polynomials, reducing the optimization dimension by optimizing the coefficients.
-This approach is widely utilized for generating trajectory planning of
-quadrotors [15]. You can find the implementation of this method here [16].
+polynomials, reducing the optimization dimension by optimizing the coefficients
+of piecewise polynomials. This approach is widely utilized for generating
+trajectory planning of quadrotors [15]. You can find the implementation of this
+method here [16].
 
 ### Feature
 
 #### Strength
 
-- Kinematics and dynamics are fully considered in the optimization process.
+- Kinematics and dynamics can be considered in the optimization process.
 - Continuous space can be employed to compute optimal trajectories.
 
 #### Weakness
@@ -283,13 +308,14 @@ quadrotors [15]. You can find the implementation of this method here [16].
 - The effectiveness of the method depends on the shape of the cost and
   constraint functions.
 
-## Type 5: Motion primitive library
+## Type 5: Motion Primitive Library
 
 Among the introduced groups, the considered horizon is the shortest. This method
 involves predefining possible movements over a short horizon and selecting the
-best motion online. It is particularly useful in scenarios where there is a
-reliable topological reference (e.g., autonomous driving on structured roads).
-You can find an implmentation from here [19]
+best motion online. The candidates also should be checked for feasibility (e.g.,
+collision). It is particularly useful in scenarios where there is a reliable
+topological reference (e.g., autonomous driving on structured roads). You can
+find an implmentation from here [19]
 
 ### Methods
 
@@ -324,8 +350,9 @@ selected.
 
 #### Strength
 
-- Easy to implement and use.
+- Easy to implement.
 - The motion choices remain within the library, and thus intuitive.
+- Does not require gradient computation for the cost and constraints.
 
 #### Weakness
 
@@ -385,5 +412,15 @@ https://motion.cs.illinois.edu/RoboticSystems/MotionPlanningHigherDimensions.htm
 
 [19]
 https://github.com/HongbiaoZ/autonomous_exploration_development_environment/tree/noetic/src/local_planner
+
+[20] Dolgov, Dmitri, et al. "Path planning for autonomous vehicles in unknown
+semi-structured environments." The international journal of robotics research
+29.5 (2010): 485-501.
+
+[21] https://en.wikipedia.org/wiki/Jump_point_search
+
+[22] Oleynikova, Helen, et al. "Continuous-time trajectory optimization for
+online uav replanning." 2016 IEEE/RSJ international conference on intelligent
+robots and systems (IROS). IEEE, 2016.
 
 <Comment />
