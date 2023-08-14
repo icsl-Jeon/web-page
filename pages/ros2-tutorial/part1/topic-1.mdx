@@ -12,9 +12,32 @@ Before starting, run the previously used two ROS nodes following
 
 ### Examining Messages Being Published
 
-A publisher of a topic sends message stream in a defined way. For example, a
+A publisher of a topic sends the message stream in a defined way. For example, a
 publisher of sensor data periodically sends out the messages. In our example,
 `/turtlesim` keeps sending messages for `/turtle1/pose`. This can be checked by:
+
+```sh filename="Communication registrations of /turtlesim" {3,6,10}
+rosmarry@rosmarry:~$ ros2 node info /turtlesim # ros2 node info <node_name>
+/turtlesim
+  Subscribers:
+    /parameter_events: rcl_interfaces/msg/ParameterEvent
+    /turtle1/cmd_vel: geometry_msgs/msg/Twist
+  Publishers:
+    /parameter_events: rcl_interfaces/msg/ParameterEvent
+    /rosout: rcl_interfaces/msg/Log
+    /turtle1/color_sensor: turtlesim/msg/Color
+    /turtle1/pose: turtlesim/msg/Pose
+  Service Servers:
+    ...
+  Service Clients:
+
+  Action Servers:
+    ...
+  Action Clients:
+```
+
+From the registrations, we focus on the topic publishing `/turtle1/pose` and
+print the message stream being published:
 
 ```sh filename="Printing out topic"
 rosmarry@rosmarry:~$ ros2 topic echo /turtle1/pose # ros topic echo <topic_name>
