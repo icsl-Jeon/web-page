@@ -121,7 +121,8 @@ Thus, pressing keyboard inputs does not move anymore the turtle in the namespace
 What we resolve this by either of the two:
 
 1. **Topic remapping**: make `/teleop_turtle` publish topic
-   `/my_namespace1/turtle1/cmd_vel`
+   `/my_namespace1/turtle1/cmd_vel` (we learned this
+   [already](topic-2#remapping-topic))
 2. **Same namespace**: make a new node `teleop_turtle` in the namespace
    `/my_namespace1`.
 
@@ -135,7 +136,7 @@ ros2 run turtlesim turtle_teleop_key --ros-args -r /turtle1/cmd_vel:=/my_namespa
 
 This will move the turtle by feeding the topic that `/my_namespace1/turtlesim`
 wants. This is a viable solution, but what if you have to deal with multiple
-topics? Say you have 10 more topics to be remapped. It will be a hassle to
+topics? Say you have 10 more topics to be remapped. It will be quite a hassle to
 locate all the topics to be remapped and perform the remapping.
 
 #### Option 2: Running in the same namespace

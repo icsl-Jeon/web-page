@@ -12,7 +12,7 @@ Before getting started with this chapter, run `turtlesim_node` and
 
 In contrast to [service communication](key-concepts#service-communication),
 topic communication is one-to-many. Multiple subscribers can listen to a given
-topic. Let us examine this by running another node:
+topic. Let us examine this by running another node named `/crazy_turtle`:
 
 ```sh copy
 ros2 run turtlesim turtlesim_node --ros-args -r __node:=crazy_turtle
@@ -28,7 +28,10 @@ rosmarry@rosmarry:~$ ros2 node list
 /turtlesim
 ```
 
-Our new node is also subscribing `/turtle1/cmd_vel`:
+This is called _remapping_. We remapped the default name to a new name
+`/crazy_turtle`
+
+Our new node is also subscribing to `/turtle1/cmd_vel`:
 
 ```sh filename="" {5}
 rosmarry@rosmarry:~$ ros2 node info /crazy_turtle
@@ -47,6 +50,39 @@ Using your keyboard on `/teleop_turtle` will move two turtles at the same times.
   className="my-3 mx-auto"
 />
 This example illustrates one-to-many communication property of topic communications.{" "}
+
+## Remapping Topic
+
+As we remapped the name of node, we can remap the names of topics. Turn off the
+`/crazy_turtle` and run the command:
+
+```sh filename="Run a node with remapping topic"
+ros2 run turtlesim turtlesim_node --ros-args -r __node:=crazy_turtle -r turtle1/cmd_vel:=/crazy_cmd_vel
+```
+
+Now, your node `/crazy_turtle` subscribes to `/crazy_turtle` as below output
+shows:
+
+```sh {4}
+jbs@jbs:~$ ros2 node info /crazy_turtle
+/crazy_turtle
+  Subscribers:
+    /crazy_cmd_vel: geometry_msgs/msg/Twist
+    /parameter_events: rcl_interfaces/msg/ParameterEvent
+  Publishers:
+    /parameter_events: rcl_interfaces/msg/ParameterEvent
+    /rosout: rcl_interfaces/msg/Log
+  ...
+```
+
+Running `turtle_teleop_key` executable cannot operate the turtle out-of-box. It
+also needs a remapping so that it can publish `/crazy_cmd_vel`.
+
+```
+ros2 run turtlesim turtle_teleop_key --ros-args -r turtle1/cmd_vel:=/crazy_cmd_vel
+```
+
+Now key-pressing will move the turtle.
 
 ## QoS: Policy for Communication (Advanced)
 
