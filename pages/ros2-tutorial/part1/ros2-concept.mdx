@@ -13,31 +13,30 @@ which are specifically designed for robotics applications.
 
 ## 1. Easy-to-use Wrapper for Communications
 
-Regardless of ROS development, there existed a well-established communication
-protocol known as [DDS](https://design.ros2.org/articles/ros_on_dds.html). ROS2
-serves as a C++/Python wrapper for this middleware, offering a straightforward
+Regardless of ROS development, there already existed a well-established
+communication protocol known as
+[DDS](https://design.ros2.org/articles/ros_on_dds.html). ROS2 serves as a
+C++/Python wrapper for this middleware, offering a straightforward
 implementation for robotic applications.
 
 ### Communications provided by ROS
 
-The communications available include the below:
+The communications available in ROS2 include the below:
 
-- **Topic publish-subscribe:** The publish-subscribe mechanism enables different
-  nodes (components) in the system to communicate by sending and receiving
-  messages through topics. It facilitates seamless data exchange between various
-  parts of the robot or across multiple robots.
+- **Topic publish-subscribe:** The publish-subscribe mechanism works like
+  data-streaming to multiple receivers. Examples include the continuous reading
+  of sensor inputs.
 
-- **Service communication:** ROS allows nodes to offer services and request
-  services from others, enabling remote procedure calls and synchronous
-  communication patterns.
+- **Service communication:** This type of communication works as a one-to-one
+  transaction between two parties.
 
 Although there is another type of communication called _action_, this will not
-be covered here.
+be covered at this moment.
 
 ### Easy-to-use Wrapper
 
-Using ROS allows you to perform the above communications in your programs, as in
-the below example.
+Using ROS allows you to perform the above two communications in your programs
+with a minimum amount of code lines, as in the below example.
 
 ```cpp
 #include <rclcpp/rclcpp.hpp>
