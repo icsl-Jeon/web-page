@@ -5,5 +5,7 @@
   "topic-1": "Topic - Part 1",
   "topic-2": "Topic - Part 2",
   "service": "Service",
-  "namespace": "Namespace"
+  "namespace": "Namespace",
+  "parameter": "Parameter",
+  "launch": "Launch"
 }
