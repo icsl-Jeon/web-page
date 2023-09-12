@@ -6,18 +6,33 @@ import Comment from "components/Comment";
 First of all, ROS, short for Robot Operating System, is not an operating system
 (OS) like Linux or Mac. The simple and correct way to understand ROS is:
 
-1. an easy-to-use wrapper for communications
-2. an ecosystem
+1. Easy-to-use wrapper for communications
+2. Ecosystem (collection of packages and tools)
 
 which are specifically designed for robotics applications.
 
 ## 1. Easy-to-use Wrapper for Communications
 
-Regardless of ROS development, there already existed a well-established
+<Image
+  src="/images/part1/ros-concept3.png"
+  width={1000}
+  height={800}
+  className="mx-auto my-6"
+/>
+
+
+Regardless of ROS development, there already exists a well-established
 communication protocol known as
-[DDS](https://design.ros2.org/articles/ros_on_dds.html). ROS2 serves as a
-C++/Python wrapper for this middleware, offering a straightforward
-implementation for robotic applications.
+[DDS](https://design.ros2.org/articles/ros_on_dds.html) (a kind of protocol) 
+and its [vendors](https://www.dds-foundation.org/vendors/). 
+This has shown great technical credibility from various applications
+such as financial and military sectors.
+
+ROS2 serves as a wrapper for this middleware, offering a straightforward
+implementation for robotic applications
+ and convenient utilities and APIs. End-users like us only need to write codes with our familiar languages, C++ and Python
+with a few functions and classes provided by ROS
+
 
 ### Communications provided by ROS
 
@@ -33,7 +48,7 @@ The communications available in ROS2 include the below:
 Although there is another type of communication called _action_, this will not
 be covered at this moment.
 
-### Easy-to-use Wrapper
+### Minimal Source code (No Need to Understand)
 
 Using ROS allows you to perform the above two communications in your programs
 with a minimum amount of code lines, as in the below example.
@@ -79,7 +94,7 @@ int main(int argc, char** argv)
 
 ```
 
-Once you provide end-user source codes, ROS will handle all subroutines for DDS
+Once you provide the source codes, ROS will handle all subroutines for DDS
 communications, including message transport, callback scheduling, and interface
 generation for C++/Python.
 
