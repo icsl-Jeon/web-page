@@ -8,17 +8,13 @@ const config: DocsThemeConfig = {
   },
   primaryHue: 23,
   logo: (
-    <img
-      src="/images/fox.png"
-      alt="brand logo"
-      className="object-contain h-10 hover:scale-105 transition-transform duration-300"
-    />
+    <p className="hover:scale-105">🔲</p>
   ),
   useNextSeoProps() {
     const { asPath } = useRouter();
     if (true) {
       return {
-        titleTemplate: "%s – Boseong Jeon",
+        titleTemplate: "%s – Felipe Jeon",
       };
     }
   },
@@ -31,9 +27,6 @@ const config: DocsThemeConfig = {
   sidebar: {
     toggleButton: true,
     defaultMenuCollapseLevel: 1
-  },
-  project: {
-    link: "https://github.com/icsl-Jeon",
   },
   chat: {
     link: "https://medium.com/@junbs95",
@@ -61,26 +54,9 @@ const config: DocsThemeConfig = {
       );
     },
   },
-  docsRepositoryBase: "https://github.com/shuding/nextra-docs-template",
   footer: {
     text: (
-      <div className="flex align-center mx-auto">
-        <a
-          href="https://scholar.google.com/citations?user=ssYQ2w4AAAAJ&hl=ko"
-          className="mx-3"
-        >
-          Google Scholar 📖
-        </a>
-        <a
-          href="https://www.youtube.com/channel/UCPeLtCD0ouhFdLO60V7pjlw"
-          className="mx-3"
-        >
-          Youtube Channel 📺
-        </a>
-        <a href="https://medium.com/@junbs95" className="mx-3">
-          {" "}
-          Medium ✏️
-        </a>
+      <div >
       </div>
     ),
   },

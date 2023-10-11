@@ -1,18 +1,20 @@
 {
   "index": {
     "title": "Welcome to my website🌟",
+    "type": "article",
+    "hidden": true,
     "theme": {
-      "typesetting": "article"
+      "sidebar": false,
+      "toc": false,
+      "footer": true,
+      "pagination": false,
+      "breadcrumb": false,
+      "timestamp": false
     }
   },
 
   "about": {
-    "title": "📓Bio",
-    "type": "page"
-  },
-
-  "skills": {
-    "title": "⚔️Skills",
+    "title": "Bio",
     "type": "page"
   },
 
