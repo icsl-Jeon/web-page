@@ -12,16 +12,12 @@
       "timestamp": false
     }
   },
-
   "about": {
     "title": "Bio",
     "type": "page"
   },
-
-  "planning-methods": "Surveys on Motion Planning",
-  "tools": "Tools",
-  "theory": "Theory",
-  "design-pattern": "Design Pattern",
-  "threading-ros2": "Threading of ROS2",
-  "drone": "Aerial Robotics"
+  "blog": {
+    "title": "Blog",
+    "type": "page"
+  }
 }
