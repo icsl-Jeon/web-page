@@ -1,8 +1,7 @@
 {
   "index": {
     "title": "Welcome to my website🌟",
-    "type": "article",
-    "hidden": true,
+    "type": "doc",
     "theme": {
       "sidebar": false,
       "toc": false,
@@ -18,6 +17,14 @@
   },
   "blog": {
     "title": "Blog",
-    "type": "page"
+    "type": "page",
+    "theme": {
+      "sidebar": false,
+      "toc": false,
+      "footer": true,
+      "pagination": false,
+      "breadcrumb": false,
+      "timestamp": false
+    }
   }
 }

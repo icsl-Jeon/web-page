@@ -1,0 +1,47 @@
+[
+  {
+    "title": "Open Source composition and validation library for Apollo Federation",
+    "description": "Introducing MIT licensed drop-in replacement for Apollo Federation composition library.",
+    "tags": ["graphql"],
+    "authors": ["kamil"],
+    "link": "/blog/open-source-apollo-federation",
+    "image": "/blog-assets/open-source-apollo-federation/cover.png",
+    "date": "2023-10-05"
+  },
+  {
+    "title": "GraphQLConf 2023 Recap",
+    "description": "Explore the highlights of GraphQLConf 2023. Learn about the latest trends in GraphQL, from gateway solutions to composite schemas and innovative projects.",
+    "tags": ["graphql"],
+    "authors": ["laurin", "uri"],
+    "link": "/blog/graphqlconf-2023-recap",
+    "image": "/blog-assets/graphqlconf-2023-recap/cover.png",
+    "date": "2023-09-25"
+  },
+  {
+    "title": "State of GraphQL Gateways in 2023",
+    "description": "A six-month journey of researching, benchmarking, exploring and comparing GraphQL gateways and the Federation spec in 2023.",
+    "tags": ["graphql", "gateway", "benchmark", "performance", "report"],
+    "authors": ["dotan"],
+    "link": "/blog/state-of-graphql-gateways-in-2023",
+    "image": "/blog-assets/state-of-graphql-gateways-in-2023/cover.png",
+    "date": "2023-09-14"
+  },
+  {
+    "title": "Hive Summer Update 2023",
+    "description": "Learn what is new on GraphQL Hive, we have shipped a lot of new exciting features and improvements.",
+    "tags": ["graphql", "graphql-hive"],
+    "authors": ["laurin", "kamil", "dimitri", "dotan"],
+    "link": "/blog/hive-summer-update-2023",
+    "image": "/blog-assets/hive-summer-update-2023/cover.png",
+    "date": "2023-07-20"
+  },
+  {
+    "title": "The complete GraphQL Scalar Guide",
+    "description": "Knowing how native and custom GraphQL Scalar works enables building flexible and extendable GraphQL schema.",
+    "tags": ["graphql", "scalars", "codegen", "node", "server", "typescript"],
+    "authors": ["eddeee888"],
+    "link": "/blog/the-complete-graphql-scalar-guide",
+    "image": "/blog-assets/the-complete-graphql-scalar-guide/cover.png",
+    "date": "2023-06-27"
+  }
+]
