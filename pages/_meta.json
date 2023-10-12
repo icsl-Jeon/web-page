@@ -13,7 +13,15 @@
   },
   "about": {
     "title": "Bio",
-    "type": "page"
+    "type": "page",
+    "theme": {
+      "sidebar": false,
+      "toc": false,
+      "footer": true,
+      "pagination": false,
+      "breadcrumb": false,
+      "timestamp": false
+    }
   },
   "blog": {
     "title": "Blog",
