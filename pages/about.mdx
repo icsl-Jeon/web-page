@@ -3,7 +3,7 @@ import YouTube, { YouTubeProps } from "react-youtube";
 import ImageGrid from "@/components/ImageGrid";
 import { Card } from "@/components/PostSummary";
 import Accordion from "@/components/Accordian";
-
+import { targets, skills, hardware } from "../public/data";
 
 <div>
 <Image
@@ -59,25 +59,130 @@ import Accordion from "@/components/Accordian";
 
 
 
-<Accordion title="Capabilities" isInitialOpen={true}>
-### Planning (major) 
-### Control  
-### Perception
-### Control
-### Reasoning 
-### Integration 
+<Accordion title="📦 Deliverables" isInitialOpen={false}>
+<div className="p-3">
+### 1. Motion
 
+<div className="sm:px-5 my-10">
+  <YouTube videoId="ZBFRS5TpRvI" className="videoWrapper" />
+</div>
+
+
+#### Tasks
+I focused on generating optimal motions for the below tasks:
+- Visible motion to chase moving targets (Ph. D research topic, [git](https://github.com/icsl-Jeon/dual_chaser))
+- Safe travel from A to B 
+- Distributed motion and task allocation 
+- Exploration in unknown environments   
+- Inverse kinematics of manipulators
+
+#### Hardware Targets
+The motions were targeted and tested to the below robot types:
+<div className="p-2">
+  <ImageGrid col1 = {5} col2={5} data={targets} linkOn={false}></ImageGrid>
+</div>
+
+#### Backgrounds
+- Search / sampling-based planning
+- Spline motion primitives such as B-spline, Bezier, piecewise polynomials. ([git](https://github.com/icsl-Jeon/traj_gen))
+- Non-holonomic curves (Dubins, Reeds-Shepp, Continuous curvature)
+- Optimization-based planning (iLQR, iLQG, DDP, CHOMP)
+- Reinforcement Learning (DDPG, PPO) 
+
+
+### 2. Perception
+To implement the motion autonomy in the real-world, I had multiple hands-on experiences in perception algorithms for traversability and localization.  
+<div className="sm:px-5 my-10">
+  <YouTube videoId="Ux1_LinLegM" className="videoWrapper" />
+</div>
+
+#### Volumetric Mapping 
+Comfortable with optimization and tuning for the below algorithms to make occupancy from from 3D sensing.
+- Octomap and distance field for 3D environments ([git](https://github.com/icsl-Jeon/octomap_mapping/tree/kinetic-devel))
+- Voxblox (TSDF, EDSF)
+- 3D mesh generation and opengl render from pointcloud ([git](https://github.com/icsl-Jeon/see_with_you))
+
+#### SLAM  
+- VIO (vins-mono, ZEDfu) 
+- Graph-based SLAM (RTAB-Map) or Lidar SLAM (LOAM)
+- Intrinsic or extrinsic calibration (Kalibr)
+
+### 3. Reasoning 
+### 4. Design & Integration 
+
+<div className="sm:px-5 my-10">
+  <YouTube videoId="s0mc5209IiY" className="videoWrapper" />
+</div>
+
+</div>
 </Accordion>
 
-<Accordion title="Skills" isInitialOpen={false}>
-### Planning (major) 
-### Control  
-### Perception
-### Control
-### Reasoning 
-### Integration 
+<Accordion title="⚔️ Skills" isInitialOpen={false}>
+<div>
+✅You can click the links on images for relevant experiences.
+<div className="p-2">
+<ImageGrid data={skills} linkOn={true} border={true} ></ImageGrid>
+</div>
 
+### 1. Fundamentals
+- **Mathematics**: linear algebra, lie algebra, numerical methods and optimizations (SQP, MIQP).
+- **Robotics**: representation (SE(3), exponential coordinate), kinematics (velocity, adjoint matrix, Jacobian), dynamics (wrench).
+- **Machine learning**: reinforcement learning (DQN, PPO, DDPG), vision learning (CNN, ViT).
+- **Algorithms**: graph & tree search, dynamic programming
+
+### 2. Software
+- **Project Management**: git, docker, jira, notion, cmake
+- **Robotics**: C++(14-20), eigen, ros 1/2, qpOASES, unreal engine
+- **Machine Vision**: opencv, open3d, PIL, opengl, meshlab
+- **Machine Learning**: pytorch, stable-baseline, einops
+- **Web**: typescript, react, nextjs, django, vercel, SQL
+- **Etc**: adobe software, solidworks. 
+
+### 3. Hardware 
+❤️The below images show some of drones I made myself. 
+<ImageGrid data={hardware} border></ImageGrid>
+
+- **Sensor**: ZED 1/2, Bluefox, d435, d455, T265, Velodyne, Auster, IMU, ublox GPS
+- **Actuator & ESC**: [T-motor](https://uav-en.tmotor.com/), [DJI](https://www-v1.dji.com/e310.html), [xing motor](https://shop.iflight.com/xing2-2207-4s-6s-fpv-motor-unibell-pro1464) 
+- **Control**: Pixhawk
+
+</div>
 </Accordion>
+
+<Accordion title="🎓 Experiences" isInitialOpen={false}>
+<div className="p-2">
+### 1. Education & Company
+- **2013-2015**: Architectural Engineering @ [Seoul National University](https://en.snu.ac.kr/)
+- **2015-2017**: Received BS in mechanical & aerospace engineering @ Seoul National University
+- **2017-2022**: Received PhD in Robotics at Lab for Autonomous Robotics Research
+  ([LARR](https://larr.snu.ac.kr/), advisor:
+  [H. Jin Kim](https://scholar.google.com/citations?user=TLQUwIMAAAAJ&hl=ko)) 
+  ( <b>5 yrs graduation </b>)
+- **2022-Current**: Staff engineer @ Samsung Research, Robot Intelligence Team.
+
+### 2. Projects 
+
+#### Graduate School
+- Autonomous driving in unstructured environments @ Korea Electronics Technology Institute (KETI)
+- Multi-fleet exploration for rescue robots @ Korea Institute of Robotics and Technology Convergence (KIRO)
+
+#### Personal
+- Diverse group generation using genetic algorithm ([link](https://diverse-group-generation.vercel.app/)) 
+- Polynomial trajectory generation with constraints ([link](https://github.com/icsl-Jeon/traj_gen))
+
+</div>
+</Accordion>
+
+<Accordion title="😀 Personality & Thoughts" isInitialOpen={false}>
+<div className="p-2">
+- I love people and enjoy mingling ❤️
+- [MBTI](https://www.16personalities.com/personality-types) is **ESTJ**. Love organizing and planning to solve meaningful problems.   
+- Respect nerds and geeks obsessed with coding, but I am not that kind, and I do not even want to be like them. 
+- **Focus more on why and what**. Sick and tired of purposeless work, studying and research. (e.g., writing a paper for making a paper, studying coding for a higher leet code score)
+- I think Ph D. guys can be worse than a cleaning worker or a chef, unless their techs could reach and help others in the world.  
+</div>
+</Accordion>
+
 
 
 

@@ -1,3 +1,37 @@
+
+export const targets = [
+  {
+    title: "Drone",
+    link: "https://github.com/icsl-Jeon/px4_code2",
+    imageUrl: "/images/bio/px4-code2.png",
+    hoverImageUrl: "/images/bio/px4-code2-hover.png",
+  },
+  {
+    title: "Car",
+    link: "/posts/not_prepared",
+    imageUrl: "/images/bio/autonomous-driving.JPG",
+    hoverImageUrl: "/images/bio/autonomous-driving-hover.png",
+  },
+  {
+    title: "AMR",
+    link: "/posts/not_prepared",
+    imageUrl: "/images/bio/samsungbot.png",
+    hoverImageUrl: "/images/bio/disaster-robots-hover.png",
+  },
+  {
+    title: "Robotic Cleaner",
+    link: "https://github.com/icsl-Jeon/infer_object_interest",
+    imageUrl: "/images/bio/cleaner.png",
+    hoverImageUrl: "/images/bio/see-with-you-hover.png",
+  },
+  {
+    title: "Arm",
+    link: "https://github.com/icsl-Jeon/infer_object_interest",
+    imageUrl: "/images/bio/arm.png",
+    hoverImageUrl: "/images/bio/see-with-you-hover.png",
+  }
+];
+
 export const project = [
   {
     title: "💻Controller GUI for offboard ROS operation of multi-drone ",
@@ -143,31 +177,6 @@ export const skills = [
 
 export const hardware = [
   {
-    title: "L515",
-    link: "",
-    imageUrl: "/images/bio/sensor-l515.png",
-  },
-  {
-    title: "D435",
-    link: "",
-    imageUrl: "/images/bio/sensor-d435.png",
-  },
-  {
-    title: "Velodyne",
-    link: "",
-    imageUrl: "/images/bio/sensor-velodyne.png",
-  },
-  {
-    title: "Zed",
-    link: "",
-    imageUrl: "/images/bio/sensor-zed.png",
-  },
-  {
-    title: "BLDC Motor",
-    link: "",
-    imageUrl: "/images/bio/motor.png",
-  },
-  {
     title: "Indoor drone with T265",
     link: "",
     imageUrl: "/images/bio/drone-A.png",
@@ -191,15 +200,5 @@ export const hardware = [
     title: "Outdoor co-axial hexarotors ",
     link: "",
     imageUrl: "/images/bio/drone-D.png",
-  },
-  {
-    title: "Pioneer",
-    link: "",
-    imageUrl: "/images/bio/pioneer.png",
-  },
-  {
-    title: "Turtlebot",
-    link: "",
-    imageUrl: "/images/bio/turtlebot.png",
-  },
+  }
 ];

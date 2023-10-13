@@ -17,7 +17,7 @@
     "theme": {
       "sidebar": false,
       "toc": false,
-      "footer": true,
+      "footer": false,
       "pagination": false,
       "breadcrumb": false,
       "timestamp": false

@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 
 interface Props {
+
   border?: boolean;
   linkOn?: boolean;
   data: Array<{
@@ -11,9 +12,10 @@ interface Props {
 }
 
 const ImageGrid: React.FC<Props> = ({ border, data, linkOn }) => {
+
   return (
     <div className="relative">
-      <div className="grid grid-cols-3 gap-1 sm:grid-cols-4 ">
+      <div className={`grid grid-cols-4 gap-1 sm:grid-cols-6`}>
         {data.map((item) => (
           <div className="relative">
             <a

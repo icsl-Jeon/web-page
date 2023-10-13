@@ -6,7 +6,7 @@ const config: DocsThemeConfig = {
   feedback: {
     content: "",
   },
-  primaryHue: 23,
+  primaryHue: 215,
   logo: (
     <p className="hover:scale-105">🔲</p>
   ),
