@@ -27,6 +27,7 @@
     "title": "Blog",
     "type": "page",
     "theme": {
+      "layout": "full",
       "sidebar": false,
       "toc": false,
       "footer": true,

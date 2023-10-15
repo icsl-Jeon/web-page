@@ -1,0 +1,213 @@
+import Comment from "components/Comment";
+import Image from "next/image";
+
+# Parameter
+
+Almost all ROS programs require parameters. One of the advantages of using ROS
+is that the parameters can be _managed_ by ROS, which means:
+
+- Listing (get) parameters registered to the nodes in real-time.
+- Loading parameters from a file without coding
+  [these things](https://github.com/jbeder/yaml-cpp/wiki/Tutorial) on your own.
+- Dynamically setting parameters on node startup.
+
+## Examine Parameters of Running Nodes
+
+### List of Parameters
+
+Before we start, let's run `turtlesim_node` by
+
+```sh copy
+ ros2 run turtlesim turtlesim_node
+```
+
+We will identify the associated parameters by:
+
+```sh filename="Getting the list of parameters of /turtlesim" copy
+rosmarry@rosmarry:~$ ros2 param list /turtlesim # ros2 param list <node_name>
+  background_b
+  background_g
+  background_r
+  use_sim_time
+```
+
+We also run another executable `turtle_teleop_key` by
+
+```sh
+ros2 run turtlesim turtle_teleop_key
+```
+
+We now have two nodes `/turtlesim` and `/teleop_turtle`. This time, we will get
+the whole list of parameters of running nodes:
+
+```sh filename="Getting whole list of parameters"
+rosmarry@rosmarry:~$ ros2 param list
+/teleop_turtle:
+  scale_angular
+  scale_linear
+  use_sim_time
+/turtlesim:
+  background_b
+  background_g
+  background_r
+  use_sim_time
+```
+
+### Getting Value of Parameters
+
+Okay, we found total 6 parameters. Let us get the value of
+`/turtlesim/background_r` by:
+
+```sh copy filename="Getting the value of a parameter"
+rosmarry@rosmarry:~$ ros2 param get /turtlesim background_r # ros2 param get <node_name> <parameter_name>
+Integer value is: 69
+```
+
+We can get this value by calling the service `/turtlesim/get_parameters` as:
+
+```sh filename="Getting the value of a parameter from service call" {6}
+rosmarry@rosmarry:~$ ros2 service call /turtlesim/get_parameters rcl_interfaces/srv/GetParameters "{names: [background_r]}"
+waiting for service to become available...
+requester: making request: rcl_interfaces.srv.GetParameters_Request(names=['background_r'])
+
+response:
+rcl_interfaces.srv.GetParameters_Response(values=[rcl_interfaces.msg.ParameterValue(type=2, bool_value=False, integer_value=69, double_value=0.0, string_value='', byte_array_value=[], bool_array_value=[], integer_array_value=[], double_array_value=[], string_array_value=[])])
+```
+
+## Loading Parameters
+
+We identified what parameters the node `/turtlesim` has from
+`ros2 param list /turtlesim`, and their default values. The values of the
+parameters can be set when startup.
+
+### Setting Parameters by CLI
+
+We can use `--ros-args` to set the parameters.
+
+```sh copy filename="Setting parameter when ros2 run"
+ros2 run turtlesim turtlesim_node --ros-args -p background_r:=200
+```
+
+This will change the color of the GUI, as we changed the red color channel.
+
+<Image
+  src="/images/part1/magenta-turtle.png"
+  width={500}
+  height={500}
+  className="my-3 mx-auto"
+/>
+
+### Setting Parameters from a File (yaml)
+
+Assume that we have a bunch of parameters to be set. If then, having a file
+containing parameter values will be more convenient than manually writing all
+the parameters.
+
+Let us write a file `your_param.yaml` setting the values:
+
+```yaml filename="Parameter description"
+turtlesim:
+  ros__parameters: # parameters
+    background_r: 200
+    background_g: 200
+```
+
+Run the node by loading this file
+
+```sh filename="Running node with parameter file"
+ros2 run turtlesim turtlesim_node --ros-args --params-file your_param.yaml
+```
+
+This would set a different background color (sky) for the GUI.
+
+### Namespace
+
+We learned the namespace of a node in
+[the previous chapter](namespace#run-node-in-namespace).
+
+What if we run the node in a namespace `my_namespace`?
+
+```sh copy
+ros2 run turtlesim turtlesim_node --ros-args --params-file your_param.yaml -r __ns:=/my_namespace
+```
+
+This does not apply parameter values. The background color is the default.
+Putting the namespace nested even your parameters as `ros2 param list` shows:
+
+```sh
+rosmarry@rosmarry:~$ ros2 param list
+/my_namespace/turtlesim:
+  background_b
+  background_g
+  background_r
+  use_sim_time
+```
+
+The contents of `your_param.yaml` should be wrapped inside the namespace:
+
+```yaml filename="Parameter file reflecting namespace"
+my_namespace:
+  turtlesim:
+    ros__parameters:
+      background_r: 150
+      background_g: 200
+```
+
+Now, running the below command will open a sky background:
+
+```sh copy
+ros2 run turtlesim turtlesim_node --ros-args --params-file your_param.yaml -r __ns:=/my_namespace
+```
+
+import { Callout } from "nextra-theme-docs";
+
+<Callout type="info" emoji="ℹ️">
+  **A homework**. How should we write `your_param.yaml` if we run the
+  turtlesim_node in a different name as `ros2 run turtlesim turtlesim_node
+  --ros-args -r __node:=crazy_turtle`?
+</Callout>
+
+## Dynamically Setting Parameters of Running Nodes
+
+One of the most powerful features of ROS parameters is that we can change the
+parameter values on-the-fly. This is very useful in the case such as the tuning
+of control gains. Turn off everything and rerun `turtlesim_node` by
+
+```sh copy
+ ros2 run turtlesim turtlesim_node
+```
+
+This will open the blue-background GUI. We can change the red channel by
+
+```sh filename="Changing parameter by param set"
+rosmarry@rosmarry:~$ ros2 param set /turtlesim background_r 200
+Set parameter successful
+```
+
+### Service for Parameter Changing
+
+We can set the parameter by calling a service of the type
+[]`rcl_interfaces/srv/SetParameters`](https://docs.ros2.org/foxy/api/rcl_interfaces/srv/SetParameters.html).
+This approach has the following two advantages:
+
+- A node can change the parameters of another node by having a service client
+  for `SetParameters`.
+- We can change multiple parameters simultaneously.
+
+This can be done by the below long command:
+
+```sh copy filename="Changing two parameters at the same time"
+ros2 service call /turtlesim/set_parameters rcl_interfaces/srv/SetParameters "{parameters: [{name: "background_r", value: {type: 2, integer_value: 200}}, {name: "background_g", value: {type: 2, integer_value: 200}}]}"
+```
+
+The result is as follows:
+
+```sh
+rosmarry@rosmarry:~$ ros2 service call /turtlesim/set_parameters rcl_interfaces/srv/SetParameters "{parameters: [{name: "background_r", value: {type: 2, integer_value: 200}}, {name: "background_g", value: {type: 2, integer_value: 200}}]}"
+waiting for service to become available...
+requester: making request: rcl_interfaces.srv.SetParameters_Request(parameters=[rcl_interfaces.msg.Parameter(name='background_r', value=rcl_interfaces.msg.ParameterValue(type=2, bool_value=False, integer_value=200, double_value=0.0, string_value='', byte_array_value=[], bool_array_value=[], integer_array_value=[], double_array_value=[], string_array_value=[]))])
+
+response:
+rcl_interfaces.srv.SetParameters_Response(results=[rcl_interfaces.msg.SetParametersResult(successful=True, reason='')])
+
+```

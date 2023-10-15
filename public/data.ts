@@ -170,7 +170,7 @@ export const skills = [
 
   {
     title: "SolidWorks",
-    link: "https://mysnu-my.sharepoint.com/:i:/g/personal/a4tiv_seoul_ac_kr/EUacwG2uf9dBttv8f34xpLABhCVt_DdPYCa3x1G_PShKjg?e=Qs3dtu",
+    link: "https://drive.google.com/file/d/1AZcatZrFxSqTmmSoW5S2rwYxjKdrG2O0/view?usp=drive_link",
     imageUrl: "/images/bio/skill-solidworks.png",
   },
 ];

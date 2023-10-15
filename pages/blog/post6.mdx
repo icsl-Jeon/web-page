@@ -1,0 +1,116 @@
+---
+title: Setup vscode for ROS code completion and debugging
+date: 2023-05-05
+description:
+  This article describes setup vscode for ROS code completion and debugging. We
+  will use ROS extension of vscode to accomplish the two.
+thumbnail: /images/post6/main.png
+keywords: ros, vscode
+---
+
+import Image from "next/image";
+import Frontmatter from "../../components/Frontmatter";
+import Comment from "../../components/Comment";
+
+# ROS extension: code completion and debugging in vscode
+
+<Frontmatter />
+
+## Code completion
+
+In general, vscode can perform code completion for C++ code in one three ways:
+
+1. [CMake extension](post3)
+2. [`compile_commands.json`](https://clang.llvm.org/docs/JSONCompilationDatabase.html)
+   from c/c++ extension
+3. `c_cpp_properties.json` from c/c++ extension w/ ROS extension
+
+### 1. CMake extension (skip if busy)
+
+For a pure cmake project, definitely go to the the first method as I described
+in [this post](post3). But this becomes very
+tough when you are in ROS2 project as it involved `ament_cmake`. I still could
+not find a way to a clear way to do this using CMake extension.
+
+### 2. compile_commands.json
+
+The second method is well suited to ROS2 project, as `colcon build` can generate
+[`compile_commands.json`](https://colcon.readthedocs.io/en/released/user/how-to.html#cmake-packages-generating-compile-commands-json).
+Actually, this method is officially chosen method for
+[CLion](https://www.jetbrains.com/help/clion/ros2-tutorial.html#prepare-ros).
+
+- Build with `colcon build --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON`.
+- This will create `~/ros2_ws/build/compile_commands.json`.
+- Use this file inside `c_cpp_properties.json` as below:
+  ```json
+  {
+    "configurations": [
+      {
+        "browse": {
+          "databaseFilename": "${default}",
+          "limitSymbolsToIncludedHeaders": false
+        },
+        "includePath": [],
+        "compileCommands": "/home/jbs/ros2_ws/build/compile_commands.json",
+        "name": "ROS",
+        "intelliSenseMode": "gcc-x64",
+        "compilerPath": "/usr/bin/gcc",
+        "cStandard": "gnu11",
+        "cppStandard": "c++17"
+      }
+    ],
+    "version": 4
+  }
+  ```
+- See? Without any `c_cpp_properties.json` file, code completion will work.
+
+  <div className="flex flex-col items-center">
+    <Image
+      src="/images/post6/compile_commands.gif"
+      width={700}
+      height={700}
+      className="my-3"
+    />
+    <b>compile_commands.json code completion</b>
+  </div>
+
+### 3. c_cpp_properties.json
+
+- Install
+  [ROS extension](https://marketplace.visualstudio.com/items?itemName=ms-iot.vscode-ros)
+- Open control pallette (`ctrl + shftt + p`) and `ROS: Update C++ Properties`.
+  {" "}
+  <div className="flex flex-col items-center">
+    <Image
+      src="/images/post6/c_cpp_properties.gif"
+      width={700}
+      height={700}
+      className="my-3"
+    />
+    <b>compile_commands.json code completion</b>
+  </div>
+
+## Debugging for running node (gdb attaching)
+
+- Run `sudo sysctl -w kernel.yama.ptrace_scope=0` to have authority for gdb
+  attaching to a running process.
+- Follow the below video to add debug setting for `ros` type. {" "}
+  <div className="flex flex-col items-center">
+    <Image
+      src="/images/post6/debug.gif"
+      width={700}
+      height={700}
+      className="my-3"
+    />
+  </div>
+- Attach debugging and hit breakpoint. {" "} {" "}
+  <div className="flex flex-col items-center">
+    <Image
+      src="/images/post6/attach.gif"
+      width={700}
+      height={700}
+      className="my-3"
+    />
+  </div>
+
+<Comment />

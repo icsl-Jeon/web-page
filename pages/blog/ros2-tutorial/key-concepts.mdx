@@ -1,0 +1,221 @@
+import Comment from "components/Comment";
+import Image from "next/image";
+import { Callout } from "nextra-theme-docs";
+
+# Key Concepts
+On this page, we will look into two fundamental concepts of ROS: communication
+types and nodes.
+
+## Essentials
+
+### Communication types
+
+ROS employs two primary communication paradigms: _topic_ and _service_
+communication. (the other type _action_ will not be covered here).
+
+#### Topic communication
+
+Imagine a scenario where a robot needs to disseminate information to multiple
+recipients, similar to broadcasting on a TV network. In ROS, this is achieved
+using the concept of a "topic.”
+
+- Publisher (sender of message stream): transmits data on a specific topic. By
+  default, it does not attempt to confirm whether the data is received by the
+  intended recipients. But publishers can be configured to guarantee the
+  reception. We will discuss this setup
+  [later](topic-2#qos-policy-for-subscribers).
+- Subscribers (receivers of message stream): register interest in a particular
+  topic. Whenever data arrives on the network associated with a subscribed
+  topic, a predefined _subscribe callback_ function is triggered, allowing the
+  subscribers to process the data.
+
+#### Service communication
+
+Contrastingly, service-based communication in ROS follows a one-to-one
+transaction model. This mechanism involves a pair of interactions: a request and
+a corresponding response.
+
+- Client (sender of request): serves as the initiator of requests.
+- Server (sender of response): Upon receiving a request from the client, the
+  server processes the provided information and carries out the requested task.
+  Once the task is completed, the server constructs a response and send it back
+  to the client, closing the transaction loop.
+
+### Node
+
+A node is a distinct unit within a ROS network that registers communication
+objects, such as publishers, subscribers, clients, and servers. A node performs
+the related tasks for the registered communications. It is instantiated
+following the codes similar to the below snippet, and let us call the built
+executables as _ROS application_.
+
+````cpp
+```cpp
+#include "rclcpp/rclcpp.hpp"
+
+int main(int argc, char *argv[]) {
+    rclcpp::init(argc, argv);
+    auto node = rclcpp::Node::make_shared("name_of_your_node");
+
+		// Communication registrations
+		auto publisher = node->create_publihser(...)
+		auto subsciber = node->create_publihser(...)
+		...
+
+    rclcpp::executors::SingleThreadedExecutor executor; // Executor handles operations for nodes
+    executor.add_node(node); // Add your node to the executor. You can add multiples
+    executor.spin(); // Start spinning the nodes (ROS communication starts)
+
+    rclcpp::shutdown(); // Shutdown ROS when done
+    return 0;
+}
+````
+
+While not precisely identical, each ROS application is constructed similarly.
+Note that an executable can run multiple nodes.
+
+## Practice
+
+Now, we'll practice the basic concepts of ROS 2 using the
+[Turtlesim](https://www.youtube.com/watch?v=yqOMRchvTTY) _package_. A ROS
+package corresponds to a
+[project in cmake](https://github.com/ros/ros_tutorials/blob/ba29c3f376197e3736f497639299f855cbf73390/turtlesim/CMakeLists.txt#L2)
+and contains a set of executables and libraries. To check the runnable
+executables of a package, you can use the following command:
+
+```sh
+rosmarry@rosmarry:~$ ros2 pkg executables turtlesim # ros2 pkg executables <package_name>
+turtlesim_draw_square # names of executables
+turtlesim mimic
+turtlesim turtle_teleop_key
+turtlesim turtlesim_node
+```
+
+In the case of the Turtlesim package, there are four executables. You can find
+the binary files in `/opt/ros/humble/lib/turtlesim`. What the command
+`ros2 pkg executables turtlesim` did was reading this directory and show the
+contents.
+
+### Running ROS applications (executable)
+
+You can run specific executables within a package. For example, let's run two
+executables: `turtlesim_node` and `turtlesim_teleop` by the following commands:
+
+In a terminal (call it Terminal A)
+
+```sh filename="Terminal A"
+ros2 run turtlesim turtlesim_node # ros2 run <package_name> <executable_name>
+```
+
+This will open a GUI as the below figure:
+
+<Image
+  src="/images/part1/turtleapp.png"
+  width={300}
+  height={300}
+  className="my-3 mx-auto"
+/>
+
+On another terminal (Termainl B)
+
+```sh filename="Terminal B"
+rosmarry@rosmarry:~$ ros2 run turtlesim turtle_teleop_key
+Reading from keyboard
+---------------------------
+Use arrow keys to move the turtle.
+Use G|B|V|C|D|E|R|T keys to rotate to absolute orientations. 'F' to cancel a rotation.
+'Q' to quit.
+```
+
+Running a ROS executable can initiate a set of nodes. To see the running nodes,
+use the following command:
+
+```sh
+rosmarry@rosmarry:~$ ros2 node list
+/teleop_turtle # list of <node_name> (Note: it is different with <executable_name>
+/turtlesim
+```
+
+The two executables instantiated two nodes named `/teleop_turtle` and
+`/turtlesim`.
+
+<Callout type="warning">
+  Names of nodes and executables are different. `turtlesim_node` was the name of
+  the executable. `/turtlesim` is a name decided in the associated code of
+  `turtlesim_node`. The name can also be decided when running the executable.
+  For example, `ros2 run turtlesim turtlesim_node --ros-args -r
+  __node:=crazy_turtle` will run another node with name `/crazy_turtle`.
+</Callout>
+
+### Examining Nodes
+
+A node can have multiple communication registrations. To get information about
+the communication objects associated with a node, you can use the following
+commands:
+
+```bash filename="node info output"
+rosmarry@rosmarry:~$ ros2 node info /turtlesim # ros2 node info <node_name>
+/turtlesim
+  Subscribers:
+    /parameter_events: rcl_interfaces/msg/ParameterEvent
+    /turtle1/cmd_vel: geometry_msgs/msg/Twist
+  Publishers:
+    /parameter_events: rcl_interfaces/msg/ParameterEvent
+    /rosout: rcl_interfaces/msg/Log
+    /turtle1/color_sensor: turtlesim/msg/Color
+    /turtle1/pose: turtlesim/msg/Pose
+  Service Servers:
+    /clear: std_srvs/srv/Empty
+    /kill: turtlesim/srv/Kill
+    /reset: std_srvs/srv/Empty
+    /spawn: turtlesim/srv/Spawn
+    /turtle1/set_pen: turtlesim/srv/SetPen
+    /turtle1/teleport_absolute: turtlesim/srv/TeleportAbsolute
+    /turtle1/teleport_relative: turtlesim/srv/TeleportRelative
+    /turtlesim/describe_parameters: rcl_interfaces/srv/DescribeParameters
+    /turtlesim/get_parameter_types: rcl_interfaces/srv/GetParameterTypes
+    /turtlesim/get_parameters: rcl_interfaces/srv/GetParameters
+    /turtlesim/list_parameters: rcl_interfaces/srv/ListParameters
+    /turtlesim/set_parameters: rcl_interfaces/srv/SetParameters
+    /turtlesim/set_parameters_atomically: rcl_interfaces/srv/SetParametersAtomically
+  Service Clients:
+
+  Action Servers: # For the moment,
+    /turtle1/rotate_absolute: turtlesim/action/RotateAbsolute
+  Action Clients:
+```
+
+As we have learned, a node contains publishers, subscriber, server, client. Each
+line consists of the name of the target communications and
+[interface type](https://docs.ros.org/en/foxy/Concepts/About-ROS-Interfaces.html?highlight=interface).
+(for the interface, we will discuss from the following sections.) Try yourself
+for node `/teleop_turtle` to list up the communications.
+
+To visually understand the communication between nodes, you can use the
+`rqt_graph` tool. This tool generates a graphical representation of the
+communication graph:
+
+```
+ros2 run rqt_graph rqt_graph
+```
+
+This will open a window displaying the communication connections between nodes.
+
+<Image
+  src="/images/part1/rqt.png"
+  width={600}
+  height={300}
+  className="my-3 mx-auto"
+/>
+
+You can see that topic `/turtle1/cmd_vel` is shared, meaning that messages sent
+from `/teleop_turtle` will be delivered to the node `/turtlesim`. (Please ignore
+arrows having `*/_action/*`.)
+
+## Summary
+
+Congratulation🎶! You fast learned very essential concepts and run ROS
+applications by your hands. In the following section, we discuss more details on
+each communication type and its characteristics.
+
+<Comment />

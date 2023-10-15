@@ -19,6 +19,7 @@ import { targets, skills, hardware } from "../public/data";
 <br />
 
 <div className="mx-auto flex flex-row items-center justify-center mb-6">
+  <a href="https://drive.google.com/file/d/1MVzmoGdF_g8l-1qdM9iFvNLW1su9z4O8/view?usp=sharing" target="_blank">
   <button
     className={
       "shadow  bg-slate-200 hover:bg-slate-300 text-center text-black p-1 rounded-lg mx-1 px-4"
@@ -26,6 +27,7 @@ import { targets, skills, hardware } from "../public/data";
   >
     cv
   </button>
+  </a>
   <a href="https://github.com/icsl-Jeon" target="_blank">
   <button
   className={
@@ -61,65 +63,98 @@ import { targets, skills, hardware } from "../public/data";
 
 <Accordion title="📦 Deliverables" isInitialOpen={false}>
 <div className="p-3">
-### 1. Motion
+### 1. Motion (major) 🤸 
+
 
 <div className="sm:px-5 my-10">
   <YouTube videoId="ZBFRS5TpRvI" className="videoWrapper" />
 </div>
 
 
-#### Tasks
+#### A. Tasks
 I focused on generating optimal motions for the below tasks:
-- Visible motion to chase moving targets (Ph. D research topic, [git](https://github.com/icsl-Jeon/dual_chaser))
+- Visible motion to chase moving targets (Ph. D research topic, [git](https://github.com/icsl-Jeon/dual_chaser), [paper](https://ieeexplore.ieee.org/abstract/document/9196703))
+- Motion for enhancing color detectability ([paper](https://ieeexplore.ieee.org/abstract/document/9341368/))
 - Safe travel from A to B 
 - Distributed motion and task allocation 
 - Exploration in unknown environments   
-- Inverse kinematics of manipulators
+- Inverse kinematics of manipulators ([paper](https://ieeexplore.ieee.org/abstract/document/8287457))
 
-#### Hardware Targets
+#### B. Hardware Targets
 The motions were targeted and tested to the below robot types:
 <div className="p-2">
   <ImageGrid col1 = {5} col2={5} data={targets} linkOn={false}></ImageGrid>
 </div>
 
-#### Backgrounds
+#### C. Backgrounds
 - Search / sampling-based planning
 - Spline motion primitives such as B-spline, Bezier, piecewise polynomials. ([git](https://github.com/icsl-Jeon/traj_gen))
-- Non-holonomic curves (Dubins, Reeds-Shepp, Continuous curvature)
+- Non-holonomic curves (Dubins, Reeds-Shepp, continuous curvature)
 - Optimization-based planning (iLQR, iLQG, DDP, CHOMP)
 - Reinforcement Learning (DDPG, PPO) 
 
 
-### 2. Perception
+### 2. Perception 👀
 To implement the motion autonomy in the real-world, I had multiple hands-on experiences in perception algorithms for traversability and localization.  
 <div className="sm:px-5 my-10">
   <YouTube videoId="Ux1_LinLegM" className="videoWrapper" />
 </div>
 
-#### Volumetric Mapping 
+#### A. Volumetric Mapping 
 Comfortable with optimization and tuning for the below algorithms to make occupancy from from 3D sensing.
 - Octomap and distance field for 3D environments ([git](https://github.com/icsl-Jeon/octomap_mapping/tree/kinetic-devel))
 - Voxblox (TSDF, EDSF)
 - 3D mesh generation and opengl render from pointcloud ([git](https://github.com/icsl-Jeon/see_with_you))
 
-#### SLAM  
-- VIO (vins-mono, ZEDfu) 
+#### B. SLAM  
+- VIO (vins-mono, ZEDfu) ([git](https://github.com/icsl-Jeon/vo_comparison))
 - Graph-based SLAM (RTAB-Map) or Lidar SLAM (LOAM)
 - Intrinsic or extrinsic calibration (Kalibr)
 
-### 3. Reasoning 
-### 4. Design & Integration 
+### 3. Reasoning 🧠  
+In addition to perception (occupancy, ego-localization), [reasoning about targets of interest](https://youtu.be/ZBFRS5TpRvI?t=284) is a must for the aerial chasing system.
+For real-world experiments, most of the reasoning methods were tested on the Jetson onboard computer.
+
+#### A. Detection
+
+Hands-on code integration to detect targets from the vision of flying drones. The below algorithms were performed: 
+- [2D / 3D bounding box from image streams](https://youtu.be/RE6pJ6QvqsA?t=77)
+- [Human skeleton detection](https://youtu.be/Ux1_LinLegM?t=207)
+
+
+#### B. Segmentation
+
+Given RGB and depth streams, I have used pixel segmentation in RGB and extracted 3D points from depth information.
 
 <div className="sm:px-5 my-10">
-  <YouTube videoId="s0mc5209IiY" className="videoWrapper" />
+  <YouTube videoId="2BkRbw13rdo" className="videoWrapper" />
 </div>
+
+  
+
+#### C. 3D position tracking and prediction
+Beyond detection in a single frame, 3D positions of the targets are tracked and predicted to plan the chasing motion of drones. 
+- **[3D Tracking](https://youtu.be/Ux1_LinLegM?t=154)**: combining classical approaches (color, kalman filtering), [I fine-tuned](https://youtu.be/Ux1_LinLegM?t=641) to stably identify the same object even against occlusion and deformation.
+- **Prediction**: based on the tracking algorithm, performed [3d position prediction](https://youtu.be/Ux1_LinLegM?t=182) reflecting obstacles.
+
+
+### 4. Design & Integration 
+
+#### A. Mechanical Design
+- **Part selection**: multiple experiences in [making multiple drones myself](https://youtu.be/s0mc5209IiY?t=141), where I deliberated on the selection of battery, actuator, control & computing board, etc.
+- **Parts design and building**: Solidworks [design](https://drive.google.com/file/d/1AZcatZrFxSqTmmSoW5S2rwYxjKdrG2O0/view?usp=drive_link) and simulation. Getting my hands dirty with soldering and other hardware stuffs.
+
+#### B. Software Integration
+- **Project**: Design pattern, cmake structuring for large projects ([example template](https://github.com/icsl-Jeon/simple-cmake-package))
+- **Packaging and deployment**: Qt for [experiment gui](https://youtu.be/9tbOiXRAKQ8?t=67), Web frontend ([link](https://diverse-group-generation.vercel.app/)) 
+- **Simulation**: testing ROS / cmake project in *unreal engine* using blueprint ([my tutorial video](https://www.youtube.com/watch?v=izSMF3auLsY))
 
 </div>
 </Accordion>
 
 <Accordion title="⚔️ Skills" isInitialOpen={false}>
 <div>
-✅You can click the links on images for relevant experiences.
+✅You can click the links on images for relevant codes or media.
 <div className="p-2">
 <ImageGrid data={skills} linkOn={true} border={true} ></ImageGrid>
 </div>
@@ -152,12 +187,11 @@ Comfortable with optimization and tuning for the below algorithms to make occupa
 <Accordion title="🎓 Experiences" isInitialOpen={false}>
 <div className="p-2">
 ### 1. Education & Company
-- **2013-2015**: Architectural Engineering @ [Seoul National University](https://en.snu.ac.kr/)
-- **2015-2017**: Received BS in mechanical & aerospace engineering @ Seoul National University
-- **2017-2022**: Received PhD in Robotics at Lab for Autonomous Robotics Research
-  ([LARR](https://larr.snu.ac.kr/), advisor:
-  [H. Jin Kim](https://scholar.google.com/citations?user=TLQUwIMAAAAJ&hl=ko)) 
-  ( <b>5 yrs graduation </b>)
+- **2013-2015**: Started from architecture and architectural engineering @ [Seoul National University](https://en.snu.ac.kr/).  
+- **2015-2017**: BS in mechanical & aerospace engineering @ Seoul National University
+- **2017-2022**: PhD in Robotics in [Lab for Autonomous Robotics Research](https://larr.snu.ac.kr/), advisor:
+  [H. Jin Kim](https://scholar.google.com/citations?user=TLQUwIMAAAAJ&hl=ko).
+  <b>5 yrs graduation </b>
 - **2022-Current**: Staff engineer @ Samsung Research, Robot Intelligence Team.
 
 ### 2. Projects 
@@ -169,13 +203,14 @@ Comfortable with optimization and tuning for the below algorithms to make occupa
 #### Personal
 - Diverse group generation using genetic algorithm ([link](https://diverse-group-generation.vercel.app/)) 
 - Polynomial trajectory generation with constraints ([link](https://github.com/icsl-Jeon/traj_gen))
+- Inferring attention of a human toward ambient objects using body skeleton and head pose ([youtube](https://www.youtube.com/watch?v=2BkRbw13rdo)). 
 
 </div>
 </Accordion>
 
 <Accordion title="😀 Personality & Thoughts" isInitialOpen={false}>
 <div className="p-2">
-- I love people and enjoy mingling ❤️
+- I love people and enjoy mingling ❤️ (in general)
 - [MBTI](https://www.16personalities.com/personality-types) is **ESTJ**. Love organizing and planning to solve meaningful problems.   
 - Respect nerds and geeks obsessed with coding, but I am not that kind, and I do not even want to be like them. 
 - **Focus more on why and what**. Sick and tired of purposeless work, studying and research. (e.g., writing a paper for making a paper, studying coding for a higher leet code score)

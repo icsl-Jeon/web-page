@@ -62,8 +62,11 @@ export const BlogCardList = ({
           <Heading size="md" className="line-clamp-3 [hyphens:auto]">
               {article.title}
             </Heading>
-            <div className="mt-auto text-xs">
-              <span className="dark:text-gray-500">
+            <p>
+                {article.description}
+              </p>
+            <div className="mt-auto text-xs mt-3">
+              <span className="text-gray-400 dark:text-gray-300">
                 <span className="select-none"> • </span>
                 {format(new Date(article.date), 'LLL do y')}
               </span>

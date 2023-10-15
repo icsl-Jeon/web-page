@@ -22,12 +22,7 @@ export function extractRelevantTags(articles) {
   const sorted = Object.entries(map)
     .sort((a, b) => b[1] - a[1])
     .slice(0, 10)
-  if (sorted.every(([tagName]) => tagName !== 'codegen')) {
-    sorted.unshift(['codegen', 0])
-  }
-  if (sorted.every(([tagName]) => tagName !== 'envelop')) {
-    sorted.unshift(['envelop', 0])
-  }
+
   return sorted.slice(0, 10)
 }
 

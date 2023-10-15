@@ -1,0 +1,183 @@
+import Comment from "components/Comment";
+import YouTube, { YouTubeProps } from "react-youtube";
+import { Callout } from "nextra-theme-docs";
+
+# Getting Started ROS2
+
+We will proceed with
+[Humble ROS release](https://docs.ros.org/en/humble/Releases.html) as it is the
+most stable and recent LTS. This page explains the installation.
+
+In summary:
+
+- Option 1: For the best learning and development experience, it is highly
+  recommended to install Ubuntu 22.04. Ubuntu 20.04 is also okay. But you might
+  have difficulties during the last part of this tutorial.
+- Option 2: If you need to learn ROS on Windows, opt for WSL (Windows Subsystem
+  for Linux) and install Ubuntu version instead of the
+  [Windows native version](https://docs.ros.org/en/humble/Installation/Windows-Install-Binary.html).
+- Option 3: For those who don't have either of the above options, I have created
+  a Docker image.
+
+## Installation options
+
+### Option 1: Ubuntu 22.04 (best case)
+
+If you can use Ubuntu 22.04, it caters
+[Humble ROS release](https://docs.ros.org/en/humble/Releases.html) in its source
+list. You can install ROS locally. All you need is just to follow
+[the instructions](https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debians.html)
+by copy-and-paste. Install full desktop packages by
+`sudo apt install ros-humble-desktop`. It can take a couple of minutes.
+
+#### For Ubuntu 20.04 users
+
+You cannot install locally Humble version in this case. Instead, you have to use
+the earlier version Foxy. Although as of now July 2023, choosing Humble your
+target distribution is the best option, Foxy is enough for learning the basics
+of ROS2. Visit
+[here](https://docs.ros.org/en/foxy/Installation/Ubuntu-Install-Debians.html)
+and follow the instructions one by one.
+
+### Option 2: WSL2 (Windows users)
+
+To learn ROS2 on a Windows machine, setting up a Linux environment can
+significantly enhance the learning experience, rather than following Windows
+native installation of ROS. One efficient way to achieve this is by utilizing
+Windows Subsystem for Linux (WSL2).
+
+#### Bring Ubuntu to Windows
+
+Firstly, you need to install
+[WSL2](https://learn.microsoft.com/en-us/windows/wsl/install) on your Windows
+system to have a virtual environment for Ubuntu 22.04.
+
+Follow the steps in
+[this video tutorial](https://www.youtube.com/watch?v=NXPBpmeURS4&t=1s) to get
+WSL2 up and running. After opening ubuntu terminal, please make sure
+`lsb_release -a` outputs 22.04 version.
+
+```
+user_name@user:~$ lsb_release -a
+No LSB modules are available.
+Distributor ID: Ubuntu
+Description:    Ubuntu 22.04.2 LTS
+Release:        22.04
+Codename:       jammy
+```
+
+If your default Ubuntu distribution is not 22.04 (e.g., 20.04), visit the
+Microsoft Store and install Ubuntu
+[22.04](https://apps.microsoft.com/store/detail/ubuntu-22042-lts/9PN20MSR04DW?hl=ko-kr&gl=kr&rtc=1)
+instead.
+
+<Callout type="info" emoji="ℹ️">
+  You should `sudo apt-get update` before installing ROS2. Ubuntu installation
+  on WSL has little installations of essential libraries compared to native
+  Ubuntu installation.
+</Callout>
+
+#### Enable GUIs (Only for Windows 10 Users)
+
+If you are a Windows 11 user, you can access the GUIs running on Ubuntu
+terminal, out-of-box. Run `xmessage --center hello` and a small window will
+popup. However, if you are running Ubuntu on WSL 2 of Windows 10, you have to do
+additional setup. Follow
+[the tutorial video](https://www.youtube.com/watch?v=uL8nnuvybL8) for this
+process:
+
+#### Same Process with Ubuntu on WSL
+
+Now you can use Ubuntu on Windows. Overall, the remainder is the same as what
+[this page](ubuntu) explains.
+
+### Option 3. Docker
+
+1. First of all, if you have not installed docker, follow the installation guide
+   [here](https://docs.docker.com/engine/install/ubuntu/). Windows users can
+   install Docker by following
+   [this link](https://docs.docker.com/desktop/install/windows-install/).
+2. Pull the prepared
+   [image](https://hub.docker.com/repository/docker/bfjeon/ros2-humble/general)
+   by
+   ```
+   docker pull bfjeon/ros2-humble
+   ```
+   This image is Ubuntu 22.04 and contained basic features like
+   `bash-completion` to resemble a clean Ubuntu installation as best as
+   possible.
+
+## Starting a Simple ROS program
+
+We run a demo program in the package
+[turtlesim](https://www.google.com/search?q=turtlesi&oq=turtlesi&aqs=chrome..69i57j69i59l3j0i20i263i512j69i60l3.1627j0j4&sourceid=chrome&ie=UTF-8).
+During part1, this package will help us to understand the basics of ROS2.
+
+### To be checked
+
+#### Installation directory `/opt/ros/humble`
+
+The installations of core and shipped packages are installed in
+`/opt/ros/humble` (if you installed foxy, `/opt/ros/foxy`). later if you want to
+remove ROS2, delete the directory.
+
+#### Sourcing `setup.bash`
+
+To utilize the convenient commands provided by ROS in terminals, we need to
+configure the opened terminal to recognize the set of ROS commands by sourcing
+the file `/opt/ros/humble/setup.bash` into your terminal. Open `~/.bashrc` and
+make sure the line `source /opt/ros/humble/setup.bash` is written.
+
+```bash filename="~/.bashrc" {9}
+if ! shopt -oq posix; then
+  if [ -f /usr/share/bash-completion/bash_completion ]; then
+    . /usr/share/bash-completion/bash_completion
+  elif [ -f /etc/bash_completion ]; then
+    . /etc/bash_completion
+  fi
+fi
+
+source /opt/ros/humble/setup.bash
+```
+
+After completing these steps, you will be able to utilize tab-completion. When
+you type ros2 and press the tab button on a terminal, the following options will
+appear:
+
+```
+rosmarry@rosmarry:~$ ros2 // press tab will show the belows:
+--use-python-default-buffering  doctor                          lifecycle                       run
+action                          extension_points                multicast                       security
+bag                             extensions                      node                            service
+component                       interface                       param                           topic
+daemon                          launch                          pkg                             wtf
+```
+
+#### Install demo package if not installed
+
+Run `sudo apt-get install ros-humble-turtlesim` in case it's not installed.
+
+### Run demo program `turtlesim_node`
+
+Open a terminal (calling Terming A) and run the command:
+
+```none filename="Terminal A"
+ros2 run turtlesim turtlesim_node
+```
+
+This will open a GUI window. In the center, you will find a turtle.
+
+In another terminal (Terminal B)
+
+```none filename="Terminal B"
+ros2 run turtlesim turtle_teleop_key
+```
+
+And in Terminal B, try pressing arrow-keys to move the turtle.
+
+## What's next?
+
+Congratulation 👍 You're all set. From the next page, we will have a fun while
+learning the fundamentals of ROS with the adorable turtle and your terminal.
+
+<Comment />

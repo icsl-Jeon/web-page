@@ -1,0 +1,183 @@
+---
+title: ROS Node as Adapter of Core Logic
+date: 2023-04-27
+description:
+  When collaborating with others on a software project, it's important to ensure
+  that the codebase is consistent and well-formatted. This can be achieved
+  through the use of code formatting tools such as cmake-format and
+  clang-format. cmake-format is a tool that helps to format CMake files in a
+  consistent and readable manner. clang-format, on the other hand, is a tool
+  that can be used to format C++, Java, JavaScript, and other code in a
+  consistent style. By using these tools, developers can ensure that the
+  codebase is consistent and easy to read, which can make it easier for other
+  developers to understand and work with the code. This can be especially
+  important when working on large projects with many contributors, where
+  inconsistent formatting can lead to confusion and errors.
+thumbnail: /images/post5/main.png
+keywords: ros, cmake, design-pattern
+---
+
+import Image from "next/image";
+import Frontmatter from "../../components/Frontmatter";
+import Comment from "../../components/Comment";
+
+# ROS Node as Adapter of Core Logic
+
+<Frontmatter />
+
+Look at some of famous projects including ROS interface:
+[octomap](https://github.com/OctoMap/octomap_ros),
+[voxblox](https://github.com/ethz-asl/voxblox),
+[cartographer](https://github.com/orgs/cartographer-project/repositories), and
+[zed](https://github.com/stereolabs). Can you guess what is shared between them?
+**They tried to separate their core logic from ROS either by separating the
+repository or directories.**
+
+## ROS as adapter, not entangler
+
+Before discussing separation, I want to introduce a perspective that **ROS can
+be seen as an _adapter_**. Understanding this concept will help you clearcut ROS
+from your core logic.
+
+### Recap on adapter pattern
+
+[Adapter](https://refactoring.guru/design-patterns/adapter) is a very famous
+design pattern, which can be understood with the following words: wrapper,
+interface, bridge,or interpreter. Let us see the following three code snippets.
+
+```cpp filename="AdapterForGameEditor.hpp" {1,2,7}
+#include "my_core_logic.hpp"
+#include "GameAsset.hpp"
+class AdapterForGameEditor: public GameAsset { // GameAsset = interfacing with Game.cpp
+  public:
+    void run() override;
+  ...
+  private:
+    CoreLogic core_logic_;
+  ...
+}
+```
+
+```cpp filename="AdapterForGameEditor.cpp"
+#include "AdapterForGameEditor.hpp"
+
+void AdapterForGameEditor::run() {
+  core_logic_.run();
+}
+```
+
+```cpp filename="Game.cpp"
+#include "AdapterForGameEditor.hpp"
+GameAsset* asset_with_core_logic = new AdapterForGameEditor();
+asset_with_core_logic->run();
+```
+
+Here, `Game.cpp` can be seen as a client code, which knows only `GameAsset`
+class. To perform some `my_core_logic` encapsulated inside `GameAsset`, we can
+adopt the above adapter pattern for `GameAsset` by defining
+`AdapterForGameEditor` which understands the interface `GameAsset` while
+including core logic.
+
+### ROS node can be also an adapter
+
+In a very similar manner, we can easily
+[find](https://github.com/stereolabs/zed-ros2-wrapper/blob/master/zed_components/src/zed_camera/include/zed_camera_component.hpp)
+the below _adapter-pattern_ code.
+
+```cpp {1,2,10}
+#include <rclcpp>
+#include <sl/Camera.hpp> // core
+class ZedCamera : public rclcpp::Node{ // Node = base class having ROS interfacing
+  ...
+  //
+  image_transport::CameraPublisher mPubRgb; // some publishers
+  clickedPtSub mClickedPtSub; // some subscriber
+
+  ...
+  sl::Camera mZed; // core class from
+}
+```
+
+As you can see, some core header is included as a member of ROS node, while the
+ros node has interface derived from `Node`. More generally, this kind of code
+can be expressed with the below pseudo code (although I expressed in ROS2 code,
+):
+
+```cpp filename="YourRosNodeClass.hpp (adapter pattern)"
+#include <rclcpp>
+#include <your_core_logic.hpp>
+
+class YourRosNode : public rclcpp::Node{
+  ...
+  // set of publishers
+  rclcpp::Publisher<T>::SharedPtr publisher_;
+  // set of subscribers
+  rclcpp::Subscriber<T>::SharedPtr subscriber_;
+
+  // core logic class
+  YourCodeLogicClass core_class_;
+}
+
+```
+
+As you can see from the above, your ROS node `YourRosNode` can be made from 1)
+inheriting interface `Node` class and including core logic `YourCoreClass`.
+
+<div className="flex flex-col items-center">
+  <Image
+    src="/images/post5/separation.png"
+    width={600}
+    height={1000}
+    className="my-3"
+  />
+  <b>Fig. Adapter pattern of ROS Node</b>
+</div>
+
+## Organization
+
+### ROS and core logic on same file? Only if you are 100% sure that ROS is the only outlet!
+
+Let us assume that we have a core logic and it should be shipped to various
+platforms. This is the case for [ZED](https://github.com/stereolabs) SDK which
+should be delivered to [Unity](https://github.com/stereolabs/zed-unity),
+[Unreal](https://github.com/stereolabs/zed-UE5),
+[H-hub](https://github.com/stereolabs/zed-hub-examples), and
+[ROS 2](https://github.com/stereolabs/zed-ros2-wrapper),... If you are in a
+similar situation, it is insane if you entangle ROS code and pure logic which
+should be reused across different outlets. Of course, ZED did not go that way.
+See this picture:
+
+<div className="flex flex-col items-center">
+  <Image
+    src="/images/post5/adapter.png"
+    width={700}
+    height={700}
+    className="my-3"
+  />
+  <b>Fig. Library structure of ZED SDK and outlets</b>
+</div>
+
+### So, what is the direction?
+
+Simple: **YOUR CORE LOGIC SHOULD RUN AND TESTED WITHOUT ROS**. Your aim is to
+make your logics reusable across many outlets. Calling a core package as `core`
+and a ros wrapping package as `ros-wrapper`, this can be achieved by:
+
+- Your `core` should be a _pure CMake package_ for easy reusability, not
+  [catkin](https://wiki.ros.org/catkin) or
+  [ament](https://design.ros2.org/articles/ament.html) package. You can create
+  pure cmake package by `ros2 pkg create --build-type core` in ROS2.
+- You have two different directories or repositories for storing 1) `core`
+  and 2) `ros-wrapper`.
+- `ros wrapper` only finds and uses `core` in `CMakeLists.txt`. Also,
+  `ros wrapper` should not contain complex logics. It just sets incoming data
+  for `core` and gets the computation result from `core`.
+- For your development convenience, it would be good if `core` and `ros-wrapper`
+  are built with a single build command (`colcon build` or `catkin_make`) on a
+  workspace (e.g., `ros2_ws` or `catkin_ws`).
+- Testing `core` should be possible without `ros-wrapper`.
+
+**If you want to know how we can write `CMakeLists.txt` and design file
+structure, read the [next article](post7) 😁.**
+
+<Comment/>

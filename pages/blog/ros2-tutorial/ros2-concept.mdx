@@ -1,0 +1,173 @@
+import Image from "next/image";
+import Comment from "components/Comment";
+
+# Understanding ROS: Framework and Ecosystem for Robotic Applications
+
+First of all, ROS, short for Robot Operating System, is not an operating system
+(OS) like Linux or Mac. The simple and correct way to understand ROS is:
+
+1. Easy-to-use wrapper for communications
+2. Ecosystem (collection of packages and tools)
+
+which are specifically designed for robotics applications.
+
+## 1. Easy-to-use Wrapper for Communications
+
+<Image
+  src="/images/part1/ros-concept3.png"
+  width={1000}
+  height={800}
+  className="mx-auto my-6"
+/>
+
+
+Regardless of ROS development, there already exists a well-established
+communication protocol known as
+[DDS](https://design.ros2.org/articles/ros_on_dds.html) (a kind of protocol) 
+and its [vendors](https://www.dds-foundation.org/vendors/). 
+This has shown great technical credibility from various applications
+such as financial and military sectors.
+
+ROS2 serves as a wrapper for this middleware, offering a straightforward
+implementation for robotic applications
+ and convenient utilities and APIs. End-users like us only need to write codes with our familiar languages, C++ and Python
+with a few functions and classes provided by ROS
+
+
+### Communications provided by ROS
+
+The communications available in ROS2 include the below:
+
+- **Topic publish-subscribe:** The publish-subscribe mechanism works like
+  data-streaming to multiple receivers. Examples include the continuous reading
+  of sensor inputs.
+
+- **Service communication:** This type of communication works as a one-to-one
+  transaction between two parties.
+
+Although there is another type of communication called _action_, this will not
+be covered at this moment.
+
+### Minimal Source code (No Need to Understand)
+
+Using ROS allows you to perform the above two communications in your programs
+with a minimum amount of code lines, as in the below example.
+
+```cpp
+#include <rclcpp/rclcpp.hpp>
+#include <std_msgs/msg/string.hpp>
+
+class MinimalPublisher : public rclcpp::Node
+{
+public:
+  MinimalPublisher()
+    : Node("minimal_publisher")
+  {
+    publisher_ = this->create_publisher<std_msgs::msg::String>("topic", 10);
+    timer_ = this->create_wall_timer(
+      std::chrono::milliseconds(500),
+      std::bind(&MinimalPublisher::publish_message, this));
+  }
+
+private:
+  void publish_message()
+  {
+    auto message = std_msgs::msg::String();
+    message.data = "Hello, ROS2!";
+    publisher_->publish(message);
+  }
+
+  rclcpp::Publisher<std_msgs::msg::String>::SharedPtr publisher_;
+  rclcpp::TimerBase::SharedPtr timer_;
+};
+
+int main(int argc, char** argv)
+{
+  rclcpp::init(argc, argv);
+
+  auto publisher = std::make_shared<MinimalPublisher>();
+
+  rclcpp::spin(publisher);
+  rclcpp::shutdown();
+  return 0;
+}
+
+```
+
+Once you provide the source codes, ROS will handle all subroutines for DDS
+communications, including message transport, callback scheduling, and interface
+generation for C++/Python.
+
+## 2. Ecosystem
+
+<div className="flex flex-col align-center max-w-full p-3">
+  <div className="flex flex-col xl:flex-row">
+    <Image
+      src="/images/part1/gazebo.png"
+      width={400}
+      height={200}
+      className="m-2"
+    />
+    <Image
+      src="/images/part1/ros-realsense.jpg"
+      width={400}
+      height={400}
+      className="m-2"
+    />
+  </div>
+  <div className="mx-auto mx-2">
+    (Left) Physics and sensor simulation from
+    [gazebo](https://gazebosim.org/home). (Right) Realsense provides [ROS
+    wrapper](https://github.com/IntelRealSense/realsense-ros). Most of widely
+    used sensors and robots do the same.
+  </div>
+</div>
+
+Either indirectly or directly, ROS offers a vast ecosystem of packages that
+extend its capabilities, enabling developers to build sophisticated robotic
+applications. Some key components of this ecosystem include:
+
+### Project management
+
+- **Package managing and workspace (colcon / ament_cmake):** ROS offers a build
+  system with workspace functionality and user-friendly dependency management to
+  facilitate the seamless management of multiple packages in an organized
+  manner.
+
+- **Common Protocol Types and easy generation of custom types (rosidl):** ROS
+  provides a set of common message types, such as strings, integers, and
+  custom-defined messages, which facilitate standardized data exchange.
+
+### Utilities
+
+- **Visualization (rviz):** The ROS Visualization (rviz) tool enables developers
+  to visualize robot states, sensor data, and other important information in a
+  3D environment, aiding in debugging and monitoring.
+
+- **Record and Play (rosbag):** ROS provides tools for recording data during
+  robot operation and playing it back for analysis and debugging, allowing
+  developers to reproduce scenarios for testing purposes.
+
+- **Coordinate Transform Management (tf):** ROS includes a coordinate transform
+  management packages (tf) to handle complex coordinate transformations,
+  critical in multi-sensor and multi-robot systems.
+
+### Simulation & Hardware
+
+- **Physics Simulation by Plugin (gazebo_ros):** ROS integrates with physics
+  simulation environments through plugins, allowing developers to test robot
+  behavior in realistic virtual environments.
+
+- **Hardware Support and ROS Wrappers:** Many well-known hardware manufacturers
+  offer ROS wrappers, allowing users to easily integrate and test their hardware
+  with ROS. This compatibility promotes seamless hardware testing and
+  development within the ROS framework.
+
+### And More
+
+The ROS ecosystem continues to grow, with numerous additional packages available
+for various functionalities, such as perception, navigation, manipulation, and
+human-robot interaction. You can visit [here](https://index.ros.org/) to look up
+the available repository in the ecosystem.
+
+<Comment />

@@ -1,0 +1,127 @@
+---
+title:
+  Very short guide to use Ubuntu in Windows 11 with vscode (WSL2 with GUI
+  support out-of-box)
+date: 2023-02-21
+description:
+  Very short guide to use Ubuntu in Windows 11 with vscode (WSL2 with GUI
+  support out-of-box)
+thumbnail: /images/post2/main.png
+keywords: vscode, ubuntu
+---
+
+import Image from "next/image";
+import Frontmatter from "../../components/Frontmatter";
+import Comment from "../../components/Comment";
+
+# Guide to Sse Ubuntu in Windows 11 with vscode (WSL2 with GUI support out-of-box)
+
+<Frontmatter />
+
+## Why I am revisiting WSL after Windows 11 installation: out-of-box GUI support
+
+If you too busy, just skip to next section 😝
+
+### How can we use Linux on Windows machine?
+
+Linux can be used on a Windows-installed computer in several ways. One way is
+through the use of a virtual machine (VM) software such as VirtualBox or VMware,
+which allows users to install and run Linux alongside Windows in a separate
+virtual environment. Another way is to set up a dual-boot configuration, where
+users can choose to boot into either Windows or Linux when starting up their
+computer. Finally, the Windows Subsystem for Linux (WSL) allows users to run
+Linux directly on Windows without the need for a separate virtual environment or
+dual-boot configuration.
+
+### WSL-option was not that attractive before
+
+The best advantage of WSL is its integration with the Windows file system, which
+allows Linux applications to access and manipulate files stored in the Windows
+file system. This means that users can easily share files and data between their
+Windows and Linux environments.
+
+However, one of the main disadvantages of the Windows Subsystem for Linux (WSL)
+is that, before Windows 11, it does not provide out-of-the-box support for
+graphical user interfaces (GUIs). This means that users cannot run Linux desktop
+applications on Windows using WSL alone. While it is possible to install a
+separate X server and configure WSL to use it using XMing, this process can be
+complex and requires some technical expertise.
+
+### What, Window 11? Out-of-box GUI support for WSL?
+
+<br />
+<img src="https://miro.medium.com/v2/resize:fit:750/1*1WlKhWy9xXOWJbFihDsgOw.gif" />
+
+Windows 11 has brought about a revolutionary change in the world of software
+development, particularly with the integration of Windows Subsystem for Linux
+(WSL). With a slew of improvements in performance, compatibility, and
+integration, Windows 11 has made WSL more efficient and user-friendly than ever
+before.
+
+Some of the key improvements in Windows 11 include better memory management,
+faster boot times, native support for Linux GUI applications, and improved
+compatibility with popular Linux applications like Docker, Python, Node.js, and
+Ruby. Most importantly, Windows 11 includes a built-in package manager that
+allows users to easily install and manage Linux distributions within WSL. Thus,
+you do not need xming anymore!
+
+These changes have made it easier for developers to work with both Windows and
+Linux tools together seamlessly, without having to switch between operating
+systems. The overall result is a faster, more efficient, and more productive
+development experience for users.
+
+## Vscode users: here is one-shot guide to setup everything
+
+### Step 1. Install WSL from Powershell
+
+- Open Powershell as an administrator
+
+  {" "}
+
+  <img src="https://miro.medium.com/v2/resize:fit:720/format:webp/1*1JPWHSHtB6HJKmQev0xhsw.png" />
+
+- Install WSL on your windows 11 by typing the command wsl —update (two dashes).
+  This will also install Ubuntu. But let me assume you want a specific version.
+
+  {" "}
+
+  <img src="https://miro.medium.com/v2/resize:fit:750/1*80lZ_YqL2lonGw_DQY9npw.gif" />
+
+- **Reboot and take a short rest.**
+
+### Step 2. Install Ubuntu of specific version from Microsoft Store
+
+- Let me assume I want Ubuntu 20.04. Install this version from Microsoft store.
+  If you finished installation, the below terminal will open automatically.
+
+  {" "}
+
+  <img src="https://miro.medium.com/v2/resize:fit:828/format:webp/1*ChaM7-2EGh5s7FbF_xafww.png" />
+
+- After installing, set your login information, and try typing ls / to look
+  around the files in root directory.
+  <img src="https://miro.medium.com/v2/resize:fit:750/1*oerFBugHBT0wTEKgy61I1A.gif" />
+
+### Step 3. Setup vscode for WSL
+
+- I assume you installed vscode Windows version. You should install WSL
+  extension.
+
+  {" "}
+
+  <img src="https://miro.medium.com/v2/resize:fit:750/1*GyiG2u4GxU95jnbcHTcYZg.gif" />
+
+- Find the green button in bottom left and click to connet to WSL. Check the
+  green button is turned into “WSL blah blah”
+
+  <img src="https://miro.medium.com/v2/resize:fit:750/1*ZyYR98e4_yXWnIg_O7ff3w.gif" />
+
+- Congratulation! You are all done. Open new terminal. Check GUI works by
+  running command `xmessage --center hello!` An ugly window should open! {" "}
+
+  <img src="https://miro.medium.com/v2/resize:fit:750/1*yAIwiBrWxsI4zgnfepwLtg.gif" />
+
+- As the final touch, make sure `sudo apt-get update` before installing other
+  packages using `apt-get`.
+
+<Comment />
