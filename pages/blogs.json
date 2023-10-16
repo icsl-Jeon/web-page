@@ -125,7 +125,7 @@
   {
     "title": "ROS Node as Adapter of Core Logic",
     "description": "Design pattern for ROS",
-    "tags": ["ros", "CMake", "Design Pattern"],
+    "tags": ["ros", "CMake", "design-pattern"],
     "link": "/blog/post5",
     "image": "/images/post5/main-min.png",
     "date": "2023-04-27"
@@ -141,7 +141,7 @@
   {
     "title": "Packaging a Mid-Size (Pure) CMake Project",
     "description": "This article describes how to organize structure and write CMakeList files in middle-scaled project.",
-    "tags": ["CMake", "Design Pattern"],
+    "tags": ["CMake", "design-pattern"],
     "link": "/blog/post7",
     "image": "/images/post7/main-min.png",
     "date": "2023-05-06"
