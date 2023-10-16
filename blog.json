@@ -1,0 +1,208 @@
+[
+  {
+    "title": "Fast ROS 2 Tutorial",
+    "description": "Concise but complete tutorial for getting familiar with ROS2. (8 pages)",
+    "tags": [
+      "ros"
+    ],
+    "link": "/blog/ros2-tutorial",
+    "image": "/images/part1/main-min.png",
+    "date": "2023-10-05"
+  },
+  {
+    "title": "Threading of ROS 2",
+    "description": "Investigate single thread and multi-thread of ROS2. (3 pages)",
+    "tags": [
+      "ros",
+      "threading"
+    ],
+    "link": "/blog/threading-ros2",
+    "image": "/images/post8/main-min.png",
+    "date": "2023-05-25"
+  },
+  {
+    "title": "Frontend (state machine) for Robotics",
+    "description": "Show an Example of How to manage states and flow",
+    "tags": [
+      "design-pattern"
+    ],
+    "link": "/blog/frontend",
+    "image": "/images/post8/main-min.png",
+    "date": "2023-05-25"
+  },
+  {
+    "title": "DDS of ROS2",
+    "description": "Advantages of ROS 2 by understanding backstory of ROS2 development",
+    "tags": [
+      "ros",
+      "communication"
+    ],
+    "link": "/blog/post1",
+    "image": "/images/post1/main-min.png",
+    "date": "2023-02-21"
+  },
+  {
+    "title": "Rearrange of einops - Input Patch Flattening in Vision Transformer",
+    "description": "This short article is to provide you with a comprehensive glance into the five big categories and general concepts of planning methods",
+    "tags": [
+      "transformer",
+      "vit",
+      "machine-learning"
+    ],
+    "link": "/blog/einops",
+    "image": "/images/einops/main-min.png",
+    "date": "2023-09-07"
+  },
+  {
+    "title": "RAPTOR Robust and Perception-aware Trajectory Replanning for Quadrotor Fast Flight",
+    "description": "This article studies the RAPTOR motion planner which improves a local planning for better risk-awareness and active exploration for the navigation in unkown environments.",
+    "tags": [
+      "motion-planning",
+      "local-planning"
+    ],
+    "link": "/blog/post11",
+    "image": "/images/post11/main-min.png",
+    "date": "2023-05-29"
+  },
+  {
+    "title": "PredRecon 3d reconstruction purposeful movement based on surface prediction",
+    "description": "This article studies the RAPTOR motion planner which improves a local planning for better risk-awareness and active exploration for the navigation in unkown environments.",
+    "tags": [
+      "motion-planning",
+      "structure-from-motion",
+      "reconstruction",
+      "supervised-learning"
+    ],
+    "link": "/blog/post12",
+    "image": "/images/post12/main-min.png",
+    "date": "2023-06-04"
+  },
+  {
+    "title": "Very Short Overview of OMPL (Open Motion Planning Library)",
+    "description": "This article briefly outlines some characteristics of OMPL which is one of the most well known motion planning library. From this writing, I hope you can get an overview before starting OMPL",
+    "tags": [
+      "motion-planning",
+      "ompl",
+      "sampling-based-planner"
+    ],
+    "link": "/blog/post13",
+    "image": "/images/post13/main-min.png",
+    "date": "2023-06-11"
+  },
+  {
+    "title": "Understanding Components of UAV for Research",
+    "description": null,
+    "tags": [
+      "uav",
+      "hardware"
+    ],
+    "link": "/blog/post17",
+    "image": "/images/post17/main-min.png",
+    "date": "2023-07-07"
+  },
+  {
+    "title": "Gentle introduction to Hybrid A star in minutes",
+    "description": null,
+    "tags": [
+      "autonomous-driving",
+      "path-planning"
+    ],
+    "link": "/blog/post19",
+    "image": "/images/post19/main-min.png",
+    "date": "2023-07-23"
+  },
+  {
+    "title": "Very short guide to use Ubuntu in Windows 11 with vscode (WSL2 with GUI support out-of-box)",
+    "description": "Very short guide to use Ubuntu in Windows 11 with vscode (WSL2 with GUI support out-of-box)",
+    "tags": [
+      "vscode",
+      "ubuntu"
+    ],
+    "link": "/blog/post2",
+    "image": "/images/post2/main-min.png",
+    "date": "2023-02-21"
+  },
+  {
+    "title": "Types of Motion Planners at a Glance",
+    "description": "This short article is to provide you with a comprehensive glance into the five big categories and general concepts of planning methods",
+    "tags": [
+      "planning",
+      "motion",
+      "framework"
+    ],
+    "link": "/blog/post20",
+    "image": "/images/post20/main-min.png",
+    "date": "2023-08-05"
+  },
+  {
+    "title": "Hierarchial Framework - Combination of Planners",
+    "description": "This short article is to provide you with a comprehensive glance into the five big categories and general concepts of planning methods",
+    "tags": [
+      "planning",
+      "motion",
+      "framework"
+    ],
+    "link": "/blog/post21",
+    "image": "/images/post21/main-min.png",
+    "date": "2023-08-12"
+  },
+  {
+    "title": "Users of Vscode, Use CMake Extension Instead of c_cpp_properties.json",
+    "description": "Very short guide why you use CMakeLists.txt for code completion",
+    "tags": [
+      "vscode",
+      "ubuntu",
+      "cmake"
+    ],
+    "link": "/blog/post3",
+    "image": "/images/post3/main-min.png",
+    "date": "2023-04-20"
+  },
+  {
+    "title": "Formatting for your cmake project",
+    "description": "When collaborating with others on a software project, it's important to ensure that the codebase is consistent and well-formatted. This can be achieved through the use of code formatting tools such as cmake-format and clang-format. cmake-format is a tool that helps to format CMake files in a consistent and readable manner. clang-format, on the other hand, is a tool that can be used to format C++, Java, JavaScript, and other code in a consistent style. By using these tools, developers can ensure that the codebase is consistent and easy to read, which can make it easier for other developers to understand and work with the code. This can be especially important when working on large projects with many contributors, where inconsistent formatting can lead to confusion and errors.",
+    "tags": [
+      "vscode",
+      "ubuntu",
+      "cmake"
+    ],
+    "link": "/blog/post4",
+    "image": "/images/post4/main-min.png",
+    "date": "2023-04-23"
+  },
+  {
+    "title": "ROS Node as Adapter of Core Logic",
+    "description": "When collaborating with others on a software project, it's important to ensure that the codebase is consistent and well-formatted. This can be achieved through the use of code formatting tools such as cmake-format and clang-format. cmake-format is a tool that helps to format CMake files in a consistent and readable manner. clang-format, on the other hand, is a tool that can be used to format C++, Java, JavaScript, and other code in a consistent style. By using these tools, developers can ensure that the codebase is consistent and easy to read, which can make it easier for other developers to understand and work with the code. This can be especially important when working on large projects with many contributors, where inconsistent formatting can lead to confusion and errors.",
+    "tags": [
+      "ros",
+      "cmake",
+      "design-pattern"
+    ],
+    "link": "/blog/post5",
+    "image": "/images/post5/main-min.png",
+    "date": "2023-04-27"
+  },
+  {
+    "title": "Setup vscode for ROS code completion and debugging",
+    "description": "This article describes setup vscode for ROS code completion and debugging. We will use ROS extension of vscode to accomplish the two.",
+    "tags": [
+      "ros",
+      "vscode"
+    ],
+    "link": "/blog/post6",
+    "image": "/images/post6/main-min.png",
+    "date": "2023-05-05"
+  },
+  {
+    "title": "Packaging a mid-size (pure) CMake project",
+    "description": "This article describes how to organize structure and write CMakeList files in middle scaled project. Repository is also available where a ROS wrapper uses the packaged CMake project.",
+    "tags": [
+      "cmake",
+      "design-pattern",
+      "project-organization"
+    ],
+    "link": "/blog/post7",
+    "image": "/images/post7/main-min.png",
+    "date": "2023-05-06"
+  }
+]

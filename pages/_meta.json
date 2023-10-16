@@ -1,25 +1,39 @@
 {
   "index": {
     "title": "Welcome to my website🌟",
+    "type": "doc",
     "theme": {
-      "typesetting": "article"
+      "sidebar": false,
+      "toc": false,
+      "footer": true,
+      "pagination": false,
+      "breadcrumb": false,
+      "timestamp": false
     }
   },
-
   "about": {
-    "title": "📓Bio",
-    "type": "page"
+    "title": "Bio",
+    "type": "page",
+    "theme": {
+      "sidebar": false,
+      "toc": false,
+      "footer": false,
+      "pagination": false,
+      "breadcrumb": false,
+      "timestamp": false
+    }
   },
-
-  "skills": {
-    "title": "⚔️Skills",
-    "type": "page"
-  },
-
-  "planning-methods": "Surveys on Motion Planning",
-  "tools": "Tools",
-  "theory": "Theory",
-  "design-pattern": "Design Pattern",
-  "threading-ros2": "Threading of ROS2",
-  "drone": "Aerial Robotics"
+  "blog": {
+    "title": "Blog",
+    "type": "page",
+    "theme": {
+      "layout": "full",
+      "sidebar": false,
+      "toc": false,
+      "footer": true,
+      "pagination": false,
+      "breadcrumb": false,
+      "timestamp": false
+    }
+  }
 }

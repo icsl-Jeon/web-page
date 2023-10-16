@@ -1,9 +1,0 @@
-{
-  "post5": {
-    "title": "Adapter pattern of ROS: separation from core"
-  },
-  "post7": {
-    "title": "Packaging a mid-size (pure) CMake project"
-  },
-  "frontend": "Frontend code for robotic system with state management"
-}

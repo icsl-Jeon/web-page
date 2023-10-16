@@ -1,261 +1,225 @@
 import Image from "next/image";
 import YouTube, { YouTubeProps } from "react-youtube";
-import ImageGrid from "../components/ImageGrid";
-import { Card } from "../components/PostSummary";
-import { project } from "../public/data";
+import ImageGrid from "@/components/ImageGrid";
+import { Card } from "@/components/PostSummary";
+import Accordion from "@/components/Accordian";
+import { targets, skills, hardware } from "../public/data";
 
+<div>
 <Image
-  src={"/images/bio/profile.jpg"}
-  width={600}
-  height={500}
-  className="mx-auto"
+  src={"/images/my-photo.png"}
+  width={300}
+  height={300}
+  className="mx-auto rounded-full my-5"
 />
+<p className="text-center text-2xl my-3 font-bold">Felipe Jeon</p>
+<p className="text-center">I build a robot 🤖 autonomy combining design, perception, reasoning, planning, and control. </p>
+
+</div>
 <br />
 
-# Hello, I am Felipe Boseong Jeon
-
-Thank you for visiting my website! I am a robotics engineer who loves building a
-robotic system and exploring the latest advancements in the field of robotics.\
-As a dedicated researcher and a developer with PhD, I have covered a wide range of
-areas from designing hardwares, object recognition, online spatial mapping, and motion
-planning & controls.
-
-### Education
-
-- Received BS in mechanical & aerospace engineering at
-  [Seoul National University](https://en.snu.ac.kr/) (FYI, best university of
-  South Korea), 2013-2017
-- Received PhD in Robotics at Lab for Autonomous Robotics Research
-  ([LARR](https://larr.snu.ac.kr/), advisor:
-  [H. Jin Kim](https://scholar.google.com/citations?user=TLQUwIMAAAAJ&hl=ko) ) ,
-  2017-2022. ( <b>5 yrs graduation 🥷</b>)
-
-### Publications
-
-<div className="p-2">
-  <Card
-    useTagLink={false}
-    title={
-      "Online trajectory generation of a mav for chasing a moving target in 3d dense environments "
+<div className="mx-auto flex flex-row items-center justify-center mb-6">
+  <a href="https://drive.google.com/file/d/1MVzmoGdF_g8l-1qdM9iFvNLW1su9z4O8/view?usp=sharing" target="_blank">
+  <button
+    className={
+      "shadow  bg-slate-200 hover:bg-slate-300 text-center text-black p-1 rounded-lg mx-1 px-4"
     }
-    imageSource="/images/bio/iros2019.png"
-    tags={["Target chasing", "Hierarchical motion planning"]}
-  ></Card> <Card
-    useTagLink={false}
-    title={
-      "Integrated Motion Planner for Real-time Aerial Videography with a Drone in a Dense Environment"
-    }
-    imageSource="/images/bio/icra2020.png"
-    tags={["Optimization", "Target Prediction"]}
-  ></Card>{" "}
-  <Card
-    useTagLink={false}
-    title={"Autonomous Aerial Dual-Target Following Among Obstacles "}
-    imageSource="/images/bio/access.jpg"
-    tags={["Outdoor flight", "Online mapping and object-tracking"]}
-  ></Card>
-</div>
-<div className="flex flex-row-reverse">
-  <a
-    href="https://scholar.google.com/citations?user=ssYQ2w4AAAAJ&hl=ko"
-    className="link flex"
-    target="_blank"
   >
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth={1.5}
-      stroke="currentColor"
-      className="mr-1 h-6 w-6"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"
-      />
-    </svg>
-    <p>Discover more publications</p>
+    cv
+  </button>
+  </a>
+  <a href="https://github.com/icsl-Jeon" target="_blank">
+  <button
+  className={
+    "shadow  bg-slate-200 hover:bg-slate-300 text-center p-1 text-black rounded-lg  mx-1  px-4"
+  }
+  >
+    Github
+  </button>
+  </a>
+ <a href="https://www.linkedin.com/in/felipe-jeon-491773226/" target="_blank">
+  <button
+  className={
+    "shadow  bg-slate-200 hover:bg-slate-300 text-center p-1 text-black rounded-lg  mx-1  px-4"
+  }
+  >
+    LinkedIn
+  </button>
+  </a>
+   <a href="https://www.youtube.com/channel/UCPeLtCD0ouhFdLO60V7pjlw" target="_blank">
+
+  <button
+  className={
+    "shadow  bg-slate-200 hover:bg-slate-300 text-center p-1 text-black rounded-lg  mx-1  px-4"
+  }
+  >
+    Youtube
+  </button>
   </a>
 </div>
 
-## What Can I Bring ?
 
-### 1. Real-time motion planning (major)
+
+
+<Accordion title="📦 Deliverables" isInitialOpen={false}>
+<div className="p-3">
+### 1. Motion (major) 🤸 
+
 
 <div className="sm:px-5 my-10">
   <YouTube videoId="ZBFRS5TpRvI" className="videoWrapper" />
 </div>
 
-I majored in 3D real-time motion planning. I covered various problems including
-boundary-value-problem (BVP), minimal time goal reaching, safe trajectory
-planning against dynamic obstacles. As the
-[next section](#2-perception-for-localization-mapping-and-recognition) says, I
-have solved the problems in very practical situations such as unstructured
-environments or noisy observation. Especially, I specialized in
-[chasing (following) trajectory generation](#publications) for dynamic targets.
 
-#### Foundations
+#### A. Tasks
+I focused on generating optimal motions for the below tasks:
+- Visible motion to chase moving targets (Ph. D research topic, [git](https://github.com/icsl-Jeon/dual_chaser), [paper](https://ieeexplore.ieee.org/abstract/document/9196703))
+- Motion for enhancing color detectability ([paper](https://ieeexplore.ieee.org/abstract/document/9341368/))
+- Safe travel from A to B 
+- Distributed motion and task allocation 
+- Exploration in unknown environments   
+- Inverse kinematics of manipulators ([paper](https://ieeexplore.ieee.org/abstract/document/8287457))
 
-- Solid understanding and hands-on experience in (non holonomic)
-  optimization-based motion planning such as LQR,
-  [CHOMP](https://github.com/icsl-Jeon/chomp_predict),
-  [TEB](https://wiki.ros.org/teb_local_planner).
-- Hierarchical planning [methods](https://github.com/icsl-Jeon/traj_gen) which
-  can joint global path planners (search or sampling based) and local planners
-  (optimal control or splines) to handle complex environments.
-- Lattice based motion planning using
-  [offline motion library](https://youtu.be/Ux1_LinLegM?t=174).
-- Fast [research skills](#publications) to cater a specific scenario (cost
-  shaping and constraint formulation).
+#### B. Hardware Targets
+The motions were targeted and tested to the below robot types:
+<div className="p-2">
+  <ImageGrid col1 = {5} col2={5} data={targets} linkOn={false}></ImageGrid>
+</div>
 
-### 2. Perception for localization, mapping and recognition
+#### C. Backgrounds
+- Search / sampling-based planning
+- Spline motion primitives such as B-spline, Bezier, piecewise polynomials. ([git](https://github.com/icsl-Jeon/traj_gen))
+- Non-holonomic curves (Dubins, Reeds-Shepp, continuous curvature)
+- Optimization-based planning (iLQR, iLQG, DDP, CHOMP)
+- Reinforcement Learning (DDPG, PPO) 
 
+
+### 2. Perception 👀
+To implement the motion autonomy in the real-world, I had multiple hands-on experiences in perception algorithms for traversability and localization.  
 <div className="sm:px-5 my-10">
   <YouTube videoId="Ux1_LinLegM" className="videoWrapper" />
 </div>
 
-To realize the motion in a real-world target, I came to have the following
-domain knowledge:
+#### A. Volumetric Mapping 
+Comfortable with optimization and tuning for the below algorithms to make occupancy from from 3D sensing.
+- Octomap and distance field for 3D environments ([git](https://github.com/icsl-Jeon/octomap_mapping/tree/kinetic-devel))
+- Voxblox (TSDF, EDSF)
+- 3D mesh generation and opengl render from pointcloud ([git](https://github.com/icsl-Jeon/see_with_you))
 
-#### Localization
+#### B. SLAM  
+- VIO (vins-mono, ZEDfu) ([git](https://github.com/icsl-Jeon/vo_comparison))
+- Graph-based SLAM (RTAB-Map) or Lidar SLAM (LOAM)
+- Intrinsic or extrinsic calibration (Kalibr)
 
-In many cases, an indoor vicon room was too small for my experiment. I had to
-test and tune the following algorithms:
+### 3. Reasoning 🧠  
+In addition to perception (occupancy, ego-localization), [reasoning about targets of interest](https://youtu.be/ZBFRS5TpRvI?t=284) is a must for the aerial chasing system.
+For real-world experiments, most of the reasoning methods were tested on the Jetson onboard computer.
 
-- ZEDfu (VIO algorithm in-house of ZED camera)
-- VINS mono (or fusion)
-- ORB slam
-- (Lego-)Loam
+#### A. Detection
 
-Also, I had to use [Kalibr](https://github.com/ethz-asl/kalibr) for extrinsic
-calibration. Although I did not self-developed the above algorithms, I have
-hands-on experience and sense about good-and-bad operating conditions, and
-parameter tunings in submodules such as keyframe generation, bundle adjustment,
-and binning & feature association of SLAM algorithms.
+Hands-on code integration to detect targets from the vision of flying drones. The below algorithms were performed: 
+- [2D / 3D bounding box from image streams](https://youtu.be/RE6pJ6QvqsA?t=77)
+- [Human skeleton detection](https://youtu.be/Ux1_LinLegM?t=207)
 
-#### Volumetric mapping
 
-In order to measure safety or visibility (or for just visualization), I am
-proficient at mapping frameworks which make (signed) distance field (ESDF) from
-point cloud. Sometimes, I have to make pointcloud
-[on my own](https://github.com/icsl-Jeon/zed2_client) from depth images using
-pin-hole model. I have many experiences on the below framework:
+#### B. Segmentation
 
-- In the simplest,
-  [costmap](https://github.com/LARR-Planning/atypical_driving_snu/blob/master/launch/occupancy2d/costmap_3d.launch)
-  of navigation stack
-- Octomap and dynamicEDT
-  ([my fork](https://github.com/icsl-Jeon/octomap_mapping))
-- Voxblox
-- [3D mesh generation & rendering](https://github.com/icsl-Jeon/see_with_you)
-  from open3d. I have
-  [an experience](https://github.com/icsl-Jeon/see_with_you/blob/b4accdc022332e80a1f3ace435dcd82d9c0ae5e3/src/SceneInterpreter.cpp#L31)
-  using cuda in open3d.
-
-#### Object perception
-
-When I implemented my chasing modules, I had to detect and track the target
-visually (2d image) and predict its motion in 3d.
-
-- I collaborated with my friend to
-  [test learning-based detection modules](https://ieeexplore.ieee.org/abstract/document/9341368).
-- I have [hands-on experience](https://www.youtube.com/watch?v=lFY6S0VNIUE) on
-  comparing visual trackers.
-- Code experiences with
-  [3D bounding box detection and skeletons](https://youtu.be/Ux1_LinLegM?t=205)
-- Combining different
-  [inference outputs to track 3D position of objects](https://youtu.be/Ux1_LinLegM?t=47).
-- [Yolo and pixel segmentation](https://www.youtube.com/watch?v=2BkRbw13rdo).
-
-### 3. System (software & hardware) integration
+Given RGB and depth streams, I have used pixel segmentation in RGB and extracted 3D points from depth information.
 
 <div className="sm:px-5 my-10">
-  <YouTube videoId="s0mc5209IiY" className="videoWrapper" />
+  <YouTube videoId="2BkRbw13rdo" className="videoWrapper" />
 </div>
-While implementing the algorithms (planning, perception) into a real-world robot,
-I spent a lot of time making hardware (drones and mobile robots) and writing a manageable
-source code for releasing and maintaining.{" "}
 
-#### Hardware integration
+  
 
-- I designed the whole [hardware configuration](/drone/post17) including
-  networks, sensors, actuation, and onboard computers. I considered a lot of
-  factors such as required battery life, payload, and even budget.
-- I have a lot of experiences using sensors and drivers. For example, as
-  illustrated [here](/skills#hardware-skills), I have used vision sensors for my
-  experiment ranging from mono camera, stereo camera, depth camera, to Lidar.
-  Also, I am familiar with other types of sensors such as IMU, baroometer, and
-  1d distance sensor (normally with pixhawk). Of course, I am comfortable with
-  filters such as KF, UKF, and EKF.
-- I can design the
-  [whole parts](https://mysnu-my.sharepoint.com/personal/a4tiv_seoul_ac_kr/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fa4tiv%5Fseoul%5Fac%5Fkr%2FDocuments%2F2021%2Fyoutube%2FRobotics%20Tutorial%2FFrameDesign%2Epng&parent=%2Fpersonal%2Fa4tiv%5Fseoul%5Fac%5Fkr%2FDocuments%2F2021%2Fyoutube%2FRobotics%20Tutorial&ga=1)
-  using CAD program such as Solidworks. I have senses of geometric tolerance for
-  production. Also, I enjoy scheduling multiple production threads.
-- Basic skills for [wiring and soldering](https://youtu.be/LNai_2giwbs).
+#### C. 3D position tracking and prediction
+Beyond detection in a single frame, 3D positions of the targets are tracked and predicted to plan the chasing motion of drones. 
+- **[3D Tracking](https://youtu.be/Ux1_LinLegM?t=154)**: combining classical approaches (color, kalman filtering), [I fine-tuned](https://youtu.be/Ux1_LinLegM?t=641) to stably identify the same object even against occlusion and deformation.
+- **Prediction**: based on the tracking algorithm, performed [3d position prediction](https://youtu.be/Ux1_LinLegM?t=182) reflecting obstacles.
 
-#### Software integration
 
-On the other hand, I have researched what is the best practice to manage a large
-set of sources codes. For example, I had to manage threads & concurrency to
-combine various sensor outputs (in many cases, from ROS spinners or executors).
-I am quite sensitive (?) with the belows:
+### 4. Design & Integration 
 
-- Clean code management including [design patterns](/design-pattern/post5)
-  (strategy pattern for algorithm comparison, factory pattern for extensibility)
-- UI implementations using [React](https://diverse-group-generation.vercel.app/)
-  (web) and [Qt](https://github.com/icsl-Jeon/px4_code2).
-- Cmake project [packaging](/design-pattern/post7) with a strong observation of
-  adaptor pattern (e.g., core and ROS separation).
-- Project management tools such as git, CI including
-  [git actions](https://github.com/LARR-Planning/los-keeper/actions), and JIRA
-  for TDD.
-- Needless to say, expert level of
-  [ROS](https://github.com/icsl-Jeon/dual_chaser) and ROS2.
+#### A. Mechanical Design
+- **Part selection**: multiple experiences in [making multiple drones myself](https://youtu.be/s0mc5209IiY?t=141), where I deliberated on the selection of battery, actuator, control & computing board, etc.
+- **Parts design and building**: Solidworks [design](https://drive.google.com/file/d/1AZcatZrFxSqTmmSoW5S2rwYxjKdrG2O0/view?usp=drive_link) and simulation. Getting my hands dirty with soldering and other hardware stuffs.
 
-<br />
+#### B. Software Integration
+- **Project**: Design pattern, cmake structuring for large projects ([example template](https://github.com/icsl-Jeon/simple-cmake-package))
+- **Packaging and deployment**: Qt for [experiment gui](https://youtu.be/9tbOiXRAKQ8?t=67), Web frontend ([link](https://diverse-group-generation.vercel.app/)) 
+- **Simulation**: testing ROS / cmake project in *unreal engine* using blueprint ([my tutorial video](https://www.youtube.com/watch?v=izSMF3auLsY))
 
-### 4. Testing and experiment management
+</div>
+</Accordion>
 
-<Image
-  src={"/images/bio/forest.PNG"}
-  width={600}
-  height={500}
-  className="m-5"
-/>
-
-I consider testing skills in a high regard, as one of the must-met
-qualifications.
-
-#### Testing and simulation
-
-- Proficiency in simulation frameworks such as gazebo and
-  [airsim](https://youtu.be/izSMF3auLsY) (w/ Unreal game engine).
-- A strict
-  [practitioner](https://github.com/icsl-Jeon/simple-robotics-pipeline/blob/main/test/pipeline_test.cc)
-  in gtesting. I am comfortable with designing a good test for TDD.
-
-#### Field experiment
-
-- I am really used to get my hands dirty. At the same time, I always thoroughly
-  design a sequence of hardware tests. For example, when building a real drone,
-  I test the belows one by one:
-
-  1. All the wiring works?
-  2. Whether the rotational direction
-     [matches](https://youtu.be/s0mc5209IiY?t=377) the airframe preset?
-  3. The speeds of each motor follow the control logic? (If RC gives a command
-     forward flight, then the latter two motors should
-     [rotate faster](https://youtu.be/s0mc5209IiY?t=462))
-  4. etc..
-
-- I plan how to record the experiment scene. For example, where to set cameras
-  to record videos, or which data to log (e.g., ROS bag or
-  [flight review](https://docs.px4.io/main/en/log/flight_review.html)).
-
-## Past projects
-
-<br />
+<Accordion title="⚔️ Skills" isInitialOpen={false}>
+<div>
+✅You can click the links on images for relevant codes or media.
 <div className="p-2">
-  <ImageGrid data={project} linkOn></ImageGrid>
+<ImageGrid data={skills} linkOn={true} border={true} ></ImageGrid>
 </div>
+
+### 1. Fundamentals
+- **Mathematics**: linear algebra, lie algebra, numerical methods and optimizations (SQP, MIQP).
+- **Robotics**: representation (SE(3), exponential coordinate), kinematics (velocity, adjoint matrix, Jacobian), dynamics (wrench).
+- **Machine learning**: reinforcement learning (DQN, PPO, DDPG), vision learning (CNN, ViT).
+- **Algorithms**: graph & tree search, dynamic programming
+
+### 2. Software
+- **Project Management**: git, docker, jira, notion, cmake
+- **Robotics**: C++(14-20), eigen, ros 1/2, qpOASES, unreal engine
+- **Machine Vision**: opencv, open3d, PIL, opengl, meshlab
+- **Machine Learning**: pytorch, stable-baseline, einops
+- **Web**: typescript, react, nextjs, django, vercel, SQL
+- **Etc**: adobe software, solidworks. 
+
+### 3. Hardware 
+❤️The below images show some of drones I made myself. 
+<ImageGrid data={hardware} border></ImageGrid>
+
+- **Sensor**: ZED 1/2, Bluefox, d435, d455, T265, Velodyne, Auster, IMU, ublox GPS
+- **Actuator & ESC**: [T-motor](https://uav-en.tmotor.com/), [DJI](https://www-v1.dji.com/e310.html), [xing motor](https://shop.iflight.com/xing2-2207-4s-6s-fpv-motor-unibell-pro1464) 
+- **Control**: Pixhawk
+
+</div>
+</Accordion>
+
+<Accordion title="🎓 Experiences" isInitialOpen={false}>
+<div className="p-2">
+### 1. Education & Company
+- **2013-2015**: Started from architecture and architectural engineering @ [Seoul National University](https://en.snu.ac.kr/).  
+- **2015-2017**: BS in mechanical & aerospace engineering @ Seoul National University
+- **2017-2022**: PhD in Robotics in [Lab for Autonomous Robotics Research](https://larr.snu.ac.kr/), advisor:
+  [H. Jin Kim](https://scholar.google.com/citations?user=TLQUwIMAAAAJ&hl=ko).
+  <b>5 yrs graduation </b>
+- **2022-Current**: Staff engineer @ Samsung Research, Robot Intelligence Team.
+
+### 2. Projects 
+
+#### Graduate School
+- Autonomous driving in unstructured environments @ Korea Electronics Technology Institute (KETI)
+- Multi-fleet exploration for rescue robots @ Korea Institute of Robotics and Technology Convergence (KIRO)
+
+#### Personal
+- Diverse group generation using genetic algorithm ([link](https://diverse-group-generation.vercel.app/)) 
+- Polynomial trajectory generation with constraints ([link](https://github.com/icsl-Jeon/traj_gen))
+- Inferring attention of a human toward ambient objects using body skeleton and head pose ([youtube](https://www.youtube.com/watch?v=2BkRbw13rdo)). 
+
+</div>
+</Accordion>
+
+<Accordion title="😀 Personality & Thoughts" isInitialOpen={false}>
+<div className="p-2">
+- I love people and enjoy mingling ❤️ (in general)
+- [MBTI](https://www.16personalities.com/personality-types) is **ESTJ**. Love organizing and planning to solve meaningful problems.   
+- Respect nerds and geeks obsessed with coding, but I am not that kind, and I do not even want to be like them. 
+- **Focus more on why and what**. Sick and tired of purposeless work, studying and research. (e.g., writing a paper for making a paper, studying coding for a higher leet code score)
+- I think Ph D. guys can be worse than a cleaning worker or a chef, unless their techs could reach and help others in the world.  
+</div>
+</Accordion>
+
+
+
+
+
+

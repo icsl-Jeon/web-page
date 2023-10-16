@@ -1,0 +1,9 @@
+{
+  "*": {
+    "theme": {
+      "layout": "default",
+      "sidebar": false,
+      "timestamp": true
+    }
+  }
+}

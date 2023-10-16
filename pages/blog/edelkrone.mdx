@@ -1,0 +1,251 @@
+---
+title:  "Extrinsic calibration for Edelkrone - ZED system"
+date:   2022-01-18 
+tags: Hardware
+---
+
+## 1. Introduction 
+
+
+These days, I am developing a pan-tilt-slide motorized system equipped with stereo vision sensor. 
+For the motion system, I chose Edelkrone (the below video is an example bundle)
+
+I came across the fact that they provide [SDK](https://edelkrone.com/products/edelkrone-link-adapter) on Windows (now LInux is also supported) + python,
+and decided to purchase a bundle with pan + tilt + slide. Let us see how it looks like (left picture): 
+
+![image tooltip here](/images/edelkrone/edelkrone_controller.png)
+
+The bundle of the above picture includes: 
+* HeadPLUS v2 (pan and tilt)
+* SliderPLUS v5 PRO (sliding)
+As can be seen, I mounted ZED2 camera instead of DSLR :) 
+
+### Robot arm  - camera system 
+The motion system is a  *robotarm-camera system*, 
+where each joint along with the slider has a state as visualized in the right of the above picture.
+Before proceeding, I define notations for the ease of our discussion. For consistency, the motor rotation axis is set to $z$ axis of its local frame.
+
+* $\mathbf{q}(t)=(d_s(t),  \theta_p(t),\theta_t(t)) \in \mathcal{R}^3$ : the state of the edelkrone (slide, pan, tilt) at a time $t$
+
+* $T_{op}(t) \in SE(3)$: the transformation from reference frame  O to the pan base frame P after $d_s(t)$ and $\theta_p(t)$ are set.  The frame O is defined as the frame when the sliding base  is unmoved (see O of the above figure).  In the current setup,  
+
+  * The rotational part of $T_{op}(t)$ is $$R _{op}(t) = {rot}_{z}(\theta_p(t))$$, 
+  * and the translational part is  $\mathbf{t}_{op}(t) = \begin{bmatrix} 0 & -d_s(t) & 0  \end{bmatrix}$.  
+
+  Thus, this $T_{op}(t)$ fully defined by the state $\mathbf{q}(t)$.
+
+* $T_{pt}(t) \in SE(3)$:  the transformation from the pan frame P to the tilt frame T. 
+
+  * Rotational part is composed of the following product: 
+
+    
+    $$
+    R_{pt}(t) = \begin{bmatrix}
+    0 & 0 & -1 \\ 
+    -1 & 0 & 0 \\
+    0 & 1 & 0 \\
+    \end{bmatrix} * \mathrm{rot}_z(\theta_t(t))
+    $$
+    
+
+    This part is also fully defined by the motor angle $\theta_p(t)$. Note that the image shows when pan = 90 deg. 
+
+  * Translation part is written as $\mathbf{t}_{pt} \in \mathcal{R}^{3}$, **BUT THIS IS UNKNOWN.**      
+
+* $T_{tc} \in SE(3)$: transformation from T to the camera base frame C. As said previously, the camera is ZED 2 and we will use the following camera coordinate:
+
+  
+
+   ![image tooltip here](/images/edelkrone/zed_coordinate_systems1.jpg)
+
+  
+
+  * Rotation part is 
+    $$
+    R_{tc}(t) = \begin{bmatrix}
+    1 & 0 & 0 \\ 
+    0 & 0 & -1 \\
+    0 & 1 & 0 \\
+    \end{bmatrix}
+    $$
+    
+  * Let us write the translational part as  $$\mathbf{t}_{tc} \in \mathcal{R}^{3} $$. In a similar manner with $$\mathbf{t}_{pt}$$,  $$\mathbf{t}_{tc} $$ is also:  **THIS IS UNKNOWN.** 
+
+* $\Delta T_{c}(t) \in SE(3)$ is the relative pose of camera C at time $t$ with respect to the  frame C at the initial time $\tau = 0$.   As  can be derived, 
+
+  
+  $$
+  \Delta T_{c}(t) = {T_{oc}}^{-1}(0) T_{oc}(t)
+  $$
+  
+  where 
+  $$
+  T_{oc}(t) =T_{op}(t)T_{pt}(t)T_{tc} =  \begin{bmatrix} R_{oc}(\mathbf{q}(t) )  & \mathbf{t}_{oc}(\mathbf{q}(t),\mathbf{t}_{pt},\mathbf{t}_{tc}) \\ \mathbf{0} & 1 \end{bmatrix}
+  $$
+  
+  
+  
+  
+  
+
+### Objectives
+
+ The zed camera supports the visual odometry and estimates $\Delta T_{c}(t)$, and the encoder value $\mathbf{q}(t)$ can be easily obtained from  SDK. In this case, I want forward kinematics and the inverse kinematics, which means the mapping between $$ \mathbf{q}(t)  \rightarrow  \Delta T_{c}(t) $$  (more commonly, kinematics refers $\mathbf{q}(t)$ to $T_{oc}(t)$, but this is not my interest).  
+
+The rotational part of $\Delta T_{c}(t)$ is not a problem, as it can readily derived from $\mathbf{q}(t)$. But the translation $$\mathbf{t}_{oc}(\mathbf{q}(t),\mathbf{t}_{pt},\mathbf{t}_{tc}) $$ cannot be computed from  $\mathbf{q}(t) $ as $${\mathbf{t}}_{pt}$$ and $$\mathbf{t}_{tc}$$ are unknown. I ambitiously aim to estimate the translational parts using dataset composed of the pair $$(\Delta T_{c}(t),\; \mathbf{q}(t))$$.  
+
+
+
+
+
+## 2. Method
+
+
+
+### Arranging the unknowns
+
+First, let us adopt a simple notation to denote the rotational and translational part of $$ T_{oc}(t) $$ as  $$R_{oc}(t) \in SE(3)$$ and $$\mathbf{t}_{oc}(t) \in \mathcal{R}^{3}$$. Then, the followings hold: 
+$$
+R_{oc}(t) = R_{op}(t)R_{pt}(t)R_{tc}
+$$
+
+$$
+\mathbf{t}_{oc}(t) = \mathbf{t}_{op}(t) + R_{op}(t)\mathbf{t}_{pt} + R_{op}(t)R_{pt}(t)\mathbf{t}_{tc} = \\ \mathbf{t}_{op}(t) + \begin{bmatrix} R_{op}(t) &   R_{op}(t)R_{pt}(t) \end{bmatrix} \begin{bmatrix} \mathbf{t}_{pt} \\ \mathbf{t}_{tc} \end{bmatrix}
+$$
+
+Thus, $$ \Delta T_{c}(t) = \begin{bmatrix} \Delta R_{c}(t) & \Delta \mathbf{t}_{c}(t) \\ \mathbf{0} & 1\end{bmatrix}$$ has the below elements:
+
+$$
+\Delta R_{c}(t) = R^T_{oc}(0)R_{oc}(t)
+$$
+
+$$
+\Delta \mathbf{t}_{c}(t) = R^T_{oc}(0)(\mathbf{t}_{oc}(t)-\mathbf{t}_{oc}(0))
+$$
+
+For the derivation, the translation $$ \Delta \mathbf{t}_{c}(t) $$ can be arranged into the following form: 
+
+
+$$
+\Delta \mathbf{t}_{c}(t) = A(\mathbf{q}(t)) \begin{bmatrix} \mathbf{t}_{pt} \\ \mathbf{t}_{tc} \end{bmatrix} + \mathbf{b}(\mathbf{q}(t))
+$$
+, where $$A(t) \in \mathcal{R}^{3 \times 6 }$$ and $$\mathbf{b}(t) \in \mathcal{R}^{3}$$. The $$A(t)$$ and $$\mathbf{b}(t)$$ are fully determined by $$\mathbf{q}(t)$$. Also,  An $$\Delta \mathbf{t}_{c}(t)$$ can be obtained by ZED VO (although it is an estimation..) 
+
+### Finding extrinsic parameters  $$\mathbf{t}_{pt}$$ and $$\mathbf{t}_{tc}$$
+
+Assuming we have gathered $$N$$ data points $$(\mathbf{q}(t_n),\Delta \mathbf{t}_{c}(t))_{n=1}^{N}$$, the parameters $$\mathbf{t}_{pt}$$ and $$\mathbf{t}_{tc}$$ are found as a minimizer of 
+
+
+$$
+\Sigma _{n=1}^{N}\lVert \Delta \mathbf{t}_{c,n} - \mathbf{b}(\mathbf{q}_n) - A(\mathbf{q}_n) \begin{bmatrix} \mathbf{t}_{pt} \\ \mathbf{t}_{tc} \end{bmatrix} \rVert^{2}
+$$
+
+
+For better readability in MATLAB , we write the below *over-determined* linear equation:
+
+
+$$
+\underbrace{\begin{bmatrix}
+\Delta \mathbf{t}_{c,1} - \mathbf{b}(\mathbf{q}_1) \\ 
+\Delta \mathbf{t}_{c,2} - \mathbf{b}(\mathbf{q}_2) \\
+\cdots \\
+\Delta \mathbf{t}_{c,N} - \mathbf{b}(\mathbf{q}_N) \\
+\end{bmatrix} }_{\mathbf{y} \in \mathcal{R}^{3N}}
+= 
+\underbrace{\begin{bmatrix}
+A(\mathbf{q}_1) \\
+A(\mathbf{q}_2) \\
+\cdots \\
+A(\mathbf{q}_N) \\
+\end{bmatrix}}_{M \in \mathcal{R}^{3N \times 6}}
+\begin{bmatrix} \mathbf{t}_{pt} \\ \mathbf{t}_{tc} \end{bmatrix}
+$$
+
+
+We might want to solve this by `M\y` in MATLAB, which is equivalent to the solution of $$\Sigma _{n=1}^{N}\lVert \Delta \mathbf{t}_{c,n} - \mathbf{b}(\mathbf{q}_n) - A(\mathbf{q}_n) \begin{bmatrix} \mathbf{t}_{pt} \\ \mathbf{t}_{tc} \end{bmatrix} \rVert^{2}$$. However, the matrix $$M$$ has a rank deficiency (rank = 4). Why? We have to investigate how the extrinsic affects the translation $$\Delta \mathbf{t}_{c}(t)$$. 
+
+#### Singularity 
+
+Singularity of the translation $$\Delta \mathbf{t}_{c}(t)$$  occurs along two directions: understandably, the length along $$z$$ axis of  $$\mathbf{t}_{pt}$$  cannot affect the translational difference. Also, the combination of $$+x$$ axis of  $$\mathbf{t}_{pt}$$ and $$+z$$ axis of $$\mathbf{t}_{tc}$$ is zero. The combined axis does not contribute to the develop of $$\Delta \mathbf{t}_{c}(t)$$. Instead,   $$+x$$ axis of  $$\mathbf{t}_{pt}$$ and $$-z$$ axis of $$\mathbf{t}_{tc}$$ affects as a radial length attached to the panning motor. 
+
+This means that we cannot determine the extrinsic which belongs to the nullspace of $$M$$. If we compute the nullspace with MATLAB by `ns = null(M)`, the result is : 
+
+```
+ns = 
+	0.7071   -0.0025
+         0   -0.0000
+    0.0036    1.0000
+   -0.0000    0.0000
+    0.0000    0.0000
+    0.7071   -0.0025
+```
+
+The above basis can be rearranged into more interpretable nullsapce vectors $$\mathbf{n}_1$$ and $$\mathbf{n}_2$$: $$\mathbf{n}_1 = \begin{bmatrix} 1 && 0 && 0&&  0&& 0 && 1 \end{bmatrix}^T$$ and $$ \mathbf{n}_2 =  \begin{bmatrix} 0 && 0 && 1&&  0&& 0 && 0 \end{bmatrix}^T$$. 
+
+Using them, we can write any vector in the nullspace as $$\mathbf{x}_n = w_1^n \mathbf{n}_1 + w_2^n  \mathbf{n}_2$$, and they do not contribute to the develop of $$\Delta \mathbf{t}_{c}(t)$$. as $$M \mathbf{x}_n = 0$$.
+
+#### Finding extrinsic 
+
+We  perform a singular value decomposition for $$M$$ to distinguish the axes which affect $$\Delta \mathbf{t}_{c}(t)$$ from those do not. Let us write the basis of range space of rank = 4 as $$V =  \begin{bmatrix} \mathbf{v}_1 && \mathbf{v}_2 && \mathbf{v}_3 && \mathbf{v}_4 \end{bmatrix} $$ where $$\mathbf{v}_n \in \mathcal{R}^{6}$$. The basis can be readily determined by `[U,S,V]=svd(M)` and taking `V = V(:,1:4)`. Now, we express a vector in the range space as $$\mathbf{x}_v =  V \begin{bmatrix}  w_1^v && w_2^v && w_3^v && w_4^v  \end{bmatrix}^T = V\mathbf{w}_v $$.
+
+Returning to the extrinsic parameters, they are written as the sum of $$\mathbf{x}_v$$ and $$\mathbf{x}_n$$:
+
+
+$$
+\begin{bmatrix} \mathbf{t}_{pt} \\ \mathbf{t}_{tc} \end{bmatrix} =\mathbf{x}_v + \mathbf{x}_n
+$$
+
+
+Here, our aim is to find $$\mathbf{w}_{v}\;(n=1,..,4)$$  to determine $$\mathbf{x}_v$$ (we cannot compute $$\mathbf{x}_n$$ ). the above equation of interest $$\mathbf{y} = M \begin{bmatrix} \mathbf{t}_{pt} \\ \mathbf{t}_{tc} \end{bmatrix} $$ can be arranged into 
+
+
+$$
+\mathbf{y} = M(\mathbf{x}_v+\mathbf{x}_n) = M\mathbf{x}_v = MV\mathbf{w}_v = M_v \mathbf{w}_v
+$$
+
+
+Taking the sudo-inverse from `M_v \ y` in MATALB, $$\mathbf{w}_v$$ and $$\mathbf{x}_v$$ is computed. In my implementation,
+
+
+$$
+\mathbf{x}_v = \begin{bmatrix}   9.8  && 6.4 &&   0  &&   9 &&  -5.6 &&  -9.8 \end{bmatrix}^T\;cm.
+$$
+From this result, the final extrinsic $$\mathbf{x}_v + \mathbf{x}_n  $$ is: 
+$$
+\begin{bmatrix} \mathbf{t}_{pt} \\ \mathbf{t}_{tc} \end{bmatrix} = \begin{bmatrix}   9.8 + w_1^n  && 6.4 &&   w_2^n  &&   9 &&  -5.6 &&  -9.8 + w_1^n \end{bmatrix}^T.
+$$
+Now, we can compute $$\Delta \mathbf{t}_{c}(t)$$_, once we have $$\mathbf{q}(t)$$ and the two unknowns $$w_1^n $$ and $$w_2^n$$ do not appear in the resultant calculation. 
+
+
+
+## 3. Result 
+
+
+
+Here, we compare the 1) zed visual odometry `zed`and 2) the forward-kinematics `delta` from computing $$ A(\mathbf{q}(t)) \begin{bmatrix} \mathbf{t}_{pt} && \mathbf{t}_{tc} \end{bmatrix}^T + \mathbf{b}(\mathbf{q}(t))  $$ given the Edelkrone state $$\mathbf{q}(t)$$ and computed extrinsics. 
+
+I tested two test cases which were not included in computing extrinsic.
+
+#### Case 1 (simple one-way moving)
+
+The below is the pose history of the zed camera (x-forwarding = optical axis).
+
+![image tooltip here](/images/edelkrone/cam_move0.gif)
+
+The following shows the difference: 
+
+![image tooltip here](/images/edelkrone/calibration-result0.png)
+
+#### Case 2 (multiple circular moving)
+
+![image tooltip here](/images/edelkrone/cam_move2.gif)
+
+![image tooltip here](/images/edelkrone/calibration-result2.png)
+
+#### Case 3 (multiple random moving)
+
+![image tooltip here](/images/edelkrone/cam_move3.gif)
+
+![image tooltip here](/images/edelkrone/calibration-result3.png)
+
+
