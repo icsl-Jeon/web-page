@@ -17,7 +17,7 @@ const ImageGrid: React.FC<Props> = ({ border, data, linkOn }) => {
     <div className="relative">
       <div className={`grid grid-cols-4 gap-1 sm:grid-cols-6`}>
         {data.map((item) => (
-          <div className="relative">
+          <div className="relative" key={item.title}>
             <a
               href={linkOn ? item.link : undefined}
               target="_blank"

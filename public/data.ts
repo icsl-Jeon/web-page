@@ -84,7 +84,7 @@ export const skills = [
   },
   {
     title: "CMake",
-    link: "https://motion-boseong.vercel.app/design-pattern/post7",
+    link: "https://felipe-jeon.vercel.app/blog/post7",
     imageUrl: "/images/bio/skill-cmake.png",
   },
   {
@@ -139,7 +139,7 @@ export const skills = [
   },
   {
     title: "Next.js",
-    link: "https://motion-boseong.vercel.app/",
+    link: "https://felipe-jeon.vercel.app/",
     imageUrl: "/images/bio/skill-next.png",
   },
   {
