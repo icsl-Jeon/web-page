@@ -32,6 +32,16 @@
     "date": "2023-05-25"
   },
   {
+    "title": "Frontend (state machine) for Robotics",
+    "description": "Show an example of how to manage states and flow",
+    "tags": [
+      "design-pattern"
+    ],
+    "link": "/blog/frontend",
+    "image": "/images/post14/main-min.png",
+    "date": "2023-06-19"
+  },
+  {
     "title": "DDS of ROS2",
     "description": "Advantages of ROS 2 by understanding backstory of ROS2 development",
     "tags": ["ros", "communication"],

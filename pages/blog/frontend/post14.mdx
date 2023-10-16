@@ -1,0 +1,172 @@
+---
+title: Part 1 - Frontend pattern for robotic system with state management
+date: 2023-06-19
+description:
+
+thumbnail: /images/post14/main.png
+keywords: design-pattern, robotics, frontend
+---
+
+import Image from "next/image";
+import Frontmatter from "../../../components/Frontmatter";
+import Comment from "../../../components/Comment";
+
+# Frontend Code for Robotic System with State Management - Part 1
+
+<Frontmatter />
+
+When designing a robotic system, the significance of state and its transition is
+often overlooked in comparison to backend processes such as algorithms or
+methods.
+
+State management plays a crucial role in governing the system's operations.
+Insufficient attention to clean code structure in state management can lead to
+significant difficulties, considering the consistent modifications to states and
+their transitions during the development process.
+
+In the upcoming articles, I will guide you on writing frontend code that is both
+manageable and adaptable.
+
+## 1. Two types of events on a robotic system
+
+Let's say you are developing a frontend code to operate an autonomous drone for
+cinematography (for example, something like [this](https://www.skydio.com/)).
+
+When building the system, you have to handle two types of events.
+
+### Command events: coming from interaction with users
+
+This system will interact with users with the following orders:
+
+1. Initially, the drone will be on the ground (landed).
+2. Then, it will hover when the user signals hovering by pressing button.
+3. When the drone is flying at a defined height, users can designate the target
+   for shooting (by dragging a bounding box on the screen).
+4. If the user presses mission-start-button, it will try to follow the defined
+   target.
+
+First, your frontend code needs to handle these user commands, and reflect them
+into drones' motion. For instance, if a user requested hovering, then the motion
+generation should produce an elegant upward motion.
+
+In the articles, I will refer to this type as **command event**.
+
+### Monitor events: to be handled by robots autonomously
+
+But, what if the drone loses a target during the flight? Should the drone notify
+about the failure and wait for human instructions? Or, what if battery level is
+low?
+
+For enhanced autonomy of the system, the drone should be capable of handling
+these events on its own. To this end, the autonomous robot should always
+**monitor** whether they are doing well, and deal with issues (events) with
+**defined logics**.
+
+For example, in response to _TargetLost_ event, the drone should scan the
+surroundings to search the target. Similarly, in reaction to _BatteryLow_ event,
+drone should choose to land even without users' command.
+
+Through articles, I will refer to this type of events as **monitor event**.
+
+### We need a good code design for frontend
+
+<div className="flex flex-col items-center">
+  <Image
+    src="/images/post14/scenario.png"
+    width={1000}
+    height={500}
+    className="my-3"
+  />
+  <p>**Fig.** Diagram of the drone system</p>
+</div>
+In sum, it seems that we have to implement the above diagram. What we have to worry
+is that: **there must be a bunch of cases we should consider in the future!** We
+have to write a manageable code to reuse our frontend code along the development.
+
+## 2. Pipeline of robotic systems (frontend / backend)
+
+For ease of further discussion, I first introduce a _model_ to describe a
+general robot software stacks including frontend and backend. This model focuses
+on state management and omits other functionalities such as
+[threading](/blog/threading-ros2) or [adaptors](/blog/post5). This is the
+model that I designed from my experience. So, it might have some limitations.
+
+<div className="flex flex-col items-center m-5">
+  <Image
+    src="/images/post14/pipeline.png"
+    width={1000}
+    height={500}
+    className="my-3"
+  />
+  <p>**Fig.** Frontend and backend of robotic system </p>
+</div>
+
+Let us read the diagram step by step, starting from backend (bottom).
+
+### (1) Backend
+
+In backend side, there exist core logics to be queried. [OMPL](tools/post13) is
+a good example. They reside in the backend of
+[moveit](https://moveit.ros.org/documentation/planners/) stacks. In general,
+backend classes are member variables of their consumers (=frontend), and the
+core logics are queried as
+[this code](https://github.com/ros-planning/moveit/blob/69ca441bc343c51544b19dde9c5a095481a3d906/moveit_ros/planning/planning_pipeline/src/planning_pipeline.cpp#LL257C36-L257C36)
+illustrates.
+
+In the above figure, backend corresponds to the `Core logics` block. From
+frontend, they are requested some to compute a motion plan, from which actuation
+inputs can be generated.
+
+Often times, from interface of backends, we can find a strategy pattern or
+switch phrases for the logics to be chosen depending on situation (= policy,
+state).
+
+### (2) Frontend
+
+As a consumer of the backend logics, the frontend source code is responsible for
+handle the various events from the world. For a robot, the world could mean
+users. But, as we examined, the other party is a set of issues by sensing the
+environment.
+
+Based on this concept, I defined the scope of frontend as the above picture
+depicts.
+
+#### Command event
+
+When users give a command (request) by either UI or urls, frontend code should
+be able to parse the inputs and interpret the request so that backend code can
+handle it. This is what `Interpret user command` represents.
+
+#### Monitor event
+
+In robotic system, we usually update sensor information (e.g., robot position,
+battery level) from callback functions. In another thread, a timer callback
+(periodic update loop) should run where the frontend should detects some
+critical events (for example, low battery level). `Detect & issue events` block
+takes this.
+
+#### Event handlers and state transition
+
+Next, the event should invoke transition state, so that the robot have a right
+policy for events. **I will define state as some entity including motion
+policy**, from which we can request a associated backend logics to generate a
+motion of the robot (eventually to actuation inputs). For example, when we got
+low-battery-event, the motion policy should be modified to a reduced version of
+movement.
+
+## 3. Wrapping up and what's next
+
+Until so far, I introduced the concept of events (command event and monitor
+event) along with the necessity of a clean code pattern for state management. As
+I elaborated generic pipeline, I can now state that the below:
+
+import { Callout } from "nextra-theme-docs";
+
+> In robotic system, state is some entity including motion policies. also,
+> action can be thought as command events and monitor events.
+
+With this concept, in part 2, I will examine the pattern shared widely by
+frontend web developers, who might have deliberated a good design for the
+history of the internet era.
+
+<Comment />
