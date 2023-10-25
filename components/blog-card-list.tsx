@@ -50,7 +50,7 @@ export const BlogCardList = ({
           hover:border-[#7F818C]
           hover:!no-underline
           dark:border-transparent
-          dark:bg-[#101218]
+          dark:bg-[#373c49]
           hover:dark:border-[#7F818C]"
         >
           <img
