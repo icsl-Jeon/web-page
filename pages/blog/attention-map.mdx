@@ -54,7 +54,7 @@ The y-axis denotes layer index $l$ and x-axis is tokens. Color denotes the atten
 For layers 4,5, and 6, the magnitudes of attention weights are flat across tokens: no useful information.
 
 Another more statistical approach is investigating **the correlation** between 1) information score vs 2) attention weights in the final layer $L$,  $w_L^{0j}$.
-1) information score of a token: a drop inference performance when a token $i$ is blank-out across layers (e.g., classification performance drop will be large if we blank out mouth patches for a network of cats vs dogs).
+1) information score of a token: a drop in inference performance when a token $i$ is blank-out across layers (e.g., classification performance drop will be large if we blank out mouth patches for a network of cats vs dogs).
 2) $w_L^{0i}$: information from the $i$th word or image token into classification token. This token is fed into the classification head (MLP) in ViT.  
 
 Let us assume that: *if attention weight $w_L^{0i}$ has well-accumulated information from token $i$ in the first layer until the final layer. 
@@ -77,7 +77,7 @@ The authors propose to encode information exchange through the single layer $l$ 
 ### Information across Multiple Layer
 
 What if we proceed with additional layer $l+1$? 
-The (r,c) element of $A (l,l-1)$ represents information transfer *from* token $c$ *to* token $r$.
+The (r,c) element of $A (l,l-1)$ represents information transfer *from* token $c$ *to* token $r$ in layer $l$.
 Across two layers $l$ and $l+1$, any pair of tokens has multiple paths. 
 For example, in the below figure, $z_{l-1}^{1}$ can transfer information into $z_{l+1}^{2}$ along all tokens $z_{l}^{*}$.
 
