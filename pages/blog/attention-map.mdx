@@ -1,0 +1,132 @@
+---
+title:
+  Attention Rollout Visualization
+date: 2023-10-24
+description:
+  This article studies attention rollout and attention map in vision transformer paper.
+thumbnail: /images/attention-map/main.png
+keywords:
+  machine-learning
+---
+
+import Frontmatter from "@/components/Frontmatter";
+import Comment from "@/components/Comment";
+import Image from "next/image";
+
+
+# Attention Rollout Visualization
+
+<Frontmatter />
+
+This article explores D.8 section of [ViT paper](https://arxiv.org/pdf/2010.11929.pdf) where we can find very interesting figures about attention maps.
+Based on the paper [*Quantifying attention flow in transformers*](https://arxiv.org/abs/2005.00928) [1], and [ViT-pytorch](https://github.com/jeonsworld/ViT-pytorch) [2], we will grab how the images were calculated.
+
+## TL;DR
+- Attention weights (self-attention) correspond to information transfer between tokens in the same layer. 
+- *Attention rollout* extends this concept to different layers: how much information is transferred from a token in layer $l_1$ to another token in layer $l_2$?
+- *Heatmap* you have seen in ViT paper corresponds to the information transfer from the embedded patch layer to the class token in the final layer: how much is each patch used for class inference?
+
+
+## 1. Recalling Self-Attention
+
+### Information Exchange in the Same Layer
+In transformers, tokens (patch in ViT) of an input sequence exchange information in the self-attention layer $l$ (refer [this colab](https://colab.research.google.com/github/tensorflow/tensor2tensor/blob/master/tensor2tensor/notebooks/hello_t2t.ipynb#scrollTo=OJKU36QAfqOC) for interactive deformation ).
+
+For an $i$th token $z_{l-1}^i$ coming from layer $l-1$ (notation borrowed from ViT paper), an attention head in layer $l$ first extracts query $q_l^i$, key $k_l^i$, and value $v_l^i$ from a linear projection of learnable weights.
+The $i$th token is associated with a vector in the value space $(v_l^0, v_l^1,...,v_l^N)$ with attention weights proportional to $w_l^{ij} = q_l^i(k_l^j)^T$ (I will omit softmax and scaling for brevity).
+This attention weight $w_l^{ij}$ can be seen as an information exchange between $i$ and $j$ tokens in a head of attention layer $l$. 
+
+
+
+### Not Eligible Accumulation of Information across Layers 
+According to the authors of [1],  $w_l^{ij}$ does not seem to *accumulate* the past information until the layer $l-1$, although the weight accounts for the exchange in the same layer. 
+
+There are multiple ways to have an intuition on this.
+First of all, attention weights $w_l^{ij}$ tend to get smaller for upper layers (larger $l$) as the below figure shows (bought from [1]).
+
+<Image
+  src={"/images/attention-map/attention_map.png"}
+  width={500}
+  height={500}
+  className="mx-auto my-5"
+/>
+The y-axis denotes layer index $l$ and x-axis is tokens. Color denotes the attention weight $w_l^{0j}$ where $0$ is class token.  
+For layers 4,5, and 6, the magnitudes of attention weights are flat across tokens: no useful information.
+
+Another more statistical approach is investigating **the correlation** between 1) information score vs 2) attention weights in the final layer $L$,  $w_L^{0j}$.
+1) information score of a token: a drop inference performance when a token $i$ is blank-out across layers (e.g., classification performance drop will be large if we blank out mouth patches for a network of cats vs dogs).
+2) $w_L^{0i}$: information from the $i$th word or image token into classification token. This token is fed into the classification head (MLP) in ViT.  
+
+Let us assume that: *if attention weight $w_L^{0i}$ has well-accumulated information from token $i$ in the first layer until the final layer. 
+Then, there should be a high correlation between the information score and the magnitude $w_L^{0i}$.* 
+But this is not true if you look into Table 1 of [1]. 
+
+In conclusion, although $w_l^{ij}$ can capture information exchange between $i$ and $j$ tokens in **the same layer $l$**,
+it is not an eligible measure **accumulated information transfer** of $j$ token until $l$th layer to $i$ token.
+
+## 2. Attention Rollout 
+
+### Information across Single Layer
+Then, what is a good metric to measure accumulated information transfer from a token $i$ in layer $l_1$ to another token $j$ in layer $l_2$?
+ (Good means high correlation in the previous section). Paper [1] presented two measures: *information rollout* and *information flow*.
+ In this article, I will examine the former only. 
+
+First of all, let us collectively denote attention weights $w_l^{ij}$ at layer $l$ into matrix $W_{att}(l) = (w_l^{ij})$ where $0<= i,j <= N$ ( $i$ = row, $j$ = col).
+The authors propose to encode information exchange through the single layer $l$ composed of self-attention and the residual connection can be encoded with $A (l,l-1) = W_{att} (l) + I$.
+
+### Information across Multiple Layer
+
+What if we proceed with additional layer $l+1$? 
+The (r,c) element of $A (l,l-1)$ represents information transfer *from* token $c$ *to* token $r$.
+Across two layers $l$ and $l+1$, any pair of tokens has multiple paths. 
+For example, in the below figure, $z_{l-1}^{1}$ can transfer information into $z_{l+1}^{2}$ along all tokens $z_{l}^{*}$.
+
+  <div className="flex flex-col mx-auto">
+    <Image
+      src="/images/attention-map/dag.png"
+      width={700}
+      height={500}
+      className=""
+    />
+    <Image
+      src="/images/attention-map/matrix.png"
+      width={700}
+      height={500}
+      className=""
+    />
+  </div>
+
+Thus, we might associate $(2,1)$ element of product $A(l+1,l-1) = A(l+1,l)A(l,l-1)$ with information transfer from  $z_{l-1}^{1}$ to  $z_{l+1}^{2}$. 
+The same chain is applied for any two tokens in different layers. This is called *attention rollout*.
+According to the paper [1], this measure gives a high correlation with information score as shown in Table 1. 
+
+### Disclaimer
+Kindly note that I skipped normalization of matrix for the clarity of explanation. 
+Also, I did not consider the presence of multiple heads. This is implementation-dependent as this [repo shows](https://github.com/jacobgil/vit-explain).
+We can take mean along the head or keep only heads with strong attention. 
+
+
+## 3. Interpreting Heatmap Visualization 
+Now, one step until D.8 section of ViT paper!
+Our interest is to measure how much information used for classification from an input patch.
+As we discussed, this can be derived from attention rollout $A(L,0) = A(L,L-1) A(L-1,L-2) ... A(1,0)$. 
+Then, what is the meaning of $0$th row of $A(L,0)$? It is accumulated information into the classification token from an input patch. 
+
+<Image
+  src="/images/attention-map/final.png"
+  width={800}
+  height={500}
+  className=""
+/>
+
+As this figure illustrates, the heatmap value of the first patch can be considered to be a measure how much information was used to infer the class of the image. 
+Of course, the size of a patch is not 1x1, thus, it will be very coarse. In general, many codes use interpolation to fit the patch heatmap into the original image. 
+
+My explanation so far is boiled down to [this notebook](https://github.com/jeonsworld/ViT-pytorch/blob/main/visualize_attention_map.ipynb) written by *jeonsworld*.
+
+
+Please leave comments if you found something weird and incorrect.
+Hope this article helped you understand the frequent heatmap in the context of transformers!
+
+
+<Comment />
