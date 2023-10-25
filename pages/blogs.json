@@ -1,5 +1,13 @@
 [
   {
+    "title": "Attention Rollout Visualization",
+    "description": "This article studies attention rollout and attention map in vision transformer paper.",  
+    "tags": ["transformer", "machine-learning"],
+    "link": "/blog/attention-map",
+    "image": "/images/attention-map/main-min.png",
+    "date": "2023-10-25"
+  },
+  {
     "title": "Types of Motion Planners at a Glance",
     "description": "Comprehensive glance into the five big categories and general concepts of planning methods",
     "tags": ["motion-planning"],
