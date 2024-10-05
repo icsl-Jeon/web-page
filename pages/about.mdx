@@ -13,8 +13,13 @@ import { targets, skills, hardware } from "../public/data";
   className="mx-auto rounded-full my-5"
 />
 <p className="text-center text-2xl my-3 font-bold">Felipe Jeon</p>
-<p className="text-center">I build a robot 🤖 autonomy combining design, perception, reasoning, planning, and control. </p>
+<p className="text-center">
 
+  🤖 I build a robot  autonomy combining design, perception, reasoning, planning, and control. 
+</p>
+<p className="text-center">
+🎨 I build generative diffusion-based large vision  AI model.  
+</p>
 </div>
 <br />
 
@@ -59,6 +64,8 @@ import { targets, skills, hardware } from "../public/data";
 </div>
 
 
+## 🤖 Robotics
+<br />
 
 
 <Accordion title="📦 Deliverables" isInitialOpen={false}>
@@ -218,6 +225,45 @@ Beyond detection in a single frame, 3D positions of the targets are tracked and 
 </div>
 </Accordion>
 
+
+## 🎨  Generative AI 
+<br />
+
+<Accordion title="📦 Deliverables" isInitialOpen={false}>
+<div className="p-3">
+### 1. Diffusion Model Development ⭐
+I have deep understanding & industrial experiences in Diffusion Models.
+For [Galaxy AI](https://www.youtube.com/watch?v=SGM4FFfz1fk), I am working on Inpainting / outpainting *on-device* model. 
+The model is focused on clean removal without unwanted object generation along with shadow removal in a single model.
+Please note that random object generations in object removal is a big problem 🗯️ due to the nature of diffusion :(, and my job is to correct it.  
+
+{/* TODO: add photos */}
+
+I am comfortable with debugging the diffusion (more like DDPM) based models (SD1.5, SDXL) and low-based models such as SD3 and Flux.
+Also, I very frequently modify [their pipes](https://huggingface.co/docs/diffusers/api/pipelines/overview).
+
+
+#### Adaptation from Large Foundation Models for On-Device Applications
+Our models are mainly oriented to on-device application with strict limitations on ROM, peak memory, NPU evaluations, even in the model sizes.
+To make adaptable LoRA weights from LVMs, I focus on how to get a good LoRA (A, B) with minimum target layers, and did multiple experiments on ranks.
+
+
+### 2. Improving Models  ✏️
+
+#### Textual Inversion (Prompt Optimization)
+{/* TODO: add photos of segscale*/}
+For commecial usages of mobile devices, I focused on **minimal prompts operation** for fast UX. 
+As an expert on this task in my team, I precisely compressed the abstract user intentions (even they often do not know how to put into texts 😼) into embedding spaces of the textual prompts, by showing the models with a good examples.  
+Also, I made a research how to apply two different intentions by spatially varying latent regions by modifying CFG. 
+
+#### Model Reinforcement
+{/* https://confluence.sec.samsung.net/display/GVAI/AlignProps */}
+Feeding the high-quality data to make good models, and optimizing task prompts are not enough for a good service.
+To align various user preferences, I have experiences apply reinforcement techinques such as [AlighProp](https://github.com/mihirp1998/AlignProp).
+
+
+</div>
+</Accordion>
 
 
 
