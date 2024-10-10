@@ -3,7 +3,7 @@ import YouTube, { YouTubeProps } from "react-youtube";
 import ImageGrid from "@/components/ImageGrid";
 import { Card } from "@/components/PostSummary";
 import Accordion from "@/components/Accordian";
-import { targets, skills, hardware } from "../public/data";
+import { targets, skills, skills_ml, hardware } from "../public/data";
 
 <div>
 <Image
@@ -13,13 +13,12 @@ import { targets, skills, hardware } from "../public/data";
   className="mx-auto rounded-full my-5"
 />
 <p className="text-center text-2xl my-3 font-bold">Felipe Jeon</p>
-<p className="text-center">
-
-  🤖 I build a robot  autonomy combining design, perception, reasoning, planning, and control. 
-</p>
-<p className="text-center">
-🎨 I build generative diffusion-based large vision  AI model.  
-</p>
+<div className="text-center">
+  🤖 I build a **robot  autonomy** combining design, perception, reasoning, planning, and control. 
+</div>
+<div className="text-center">
+🎨 I build generative diffusion-based **large vision AI model**.  
+</div>
 </div>
 <br />
 
@@ -231,41 +230,79 @@ Beyond detection in a single frame, 3D positions of the targets are tracked and 
 
 <Accordion title="📦 Deliverables" isInitialOpen={false}>
 <div className="p-3">
-### 1. Diffusion Model Development ⭐
-I have deep understanding & industrial experiences in Diffusion Models.
-For [Galaxy AI](https://www.youtube.com/watch?v=SGM4FFfz1fk), I am working on Inpainting / outpainting *on-device* model. 
-The model is focused on clean removal without unwanted object generation along with shadow removal in a single model.
+### 1. Diffusion Model ⭐
+I have deep understanding & industrial experiences in diffusion models.
+In my team, I am working on inpainting / outpainting *on-device* model, providing clean removal without unwanted object generation even in tight masks.
+Also, shadow removal is provided in the single model.
 Please note that random object generations in object removal is a big problem 🗯️ due to the nature of diffusion :(, and my job is to correct it.  
 
-{/* TODO: add photos */}
+<Image
+  src={"/images/bio/objectremoval.png"}
+  width={1000}
+  height={1000}
+  className="mx-auto my-5"
+/>
 
 I am comfortable with debugging the diffusion (more like DDPM) based models (SD1.5, SDXL) and low-based models such as SD3 and Flux.
-Also, I very frequently modify [their pipes](https://huggingface.co/docs/diffusers/api/pipelines/overview).
+Especially, I frequently modify [their pipes](https://huggingface.co/docs/diffusers/api/pipelines/overview) to manipulate denoising steps. 
 
 
 #### Adaptation from Large Foundation Models for On-Device Applications
-Our models are mainly oriented to on-device application with strict limitations on ROM, peak memory, NPU evaluations, even in the model sizes.
+I am mainly concerned with on-device application with strict limitations on ROM, peak memory, NPU evaluations, even in the model sizes.
 To make adaptable LoRA weights from LVMs, I focus on how to get a good LoRA (A, B) with minimum target layers, and did multiple experiments on ranks.
 
 
-### 2. Improving Models  ✏️
+### 2. Models Improvement  ✏️
 
 #### Textual Inversion (Prompt Optimization)
-{/* TODO: add photos of segscale*/}
-For commecial usages of mobile devices, I focused on **minimal prompts operation** for fast UX. 
-As an expert on this task in my team, I precisely compressed the abstract user intentions (even they often do not know how to put into texts 😼) into embedding spaces of the textual prompts, by showing the models with a good examples.  
+Based on the prompt optimization, I compress abstract user intentions (they often do not have an idea on how to put into textual prompts 😼) into embedding spaces, by curating and training models with a good examples.  
 Also, I made a research how to apply two different intentions by spatially varying latent regions by modifying CFG. 
+The below is an example to embed two user intentions (fill based on the context and clean removal) without text prompts.
+<Image
+  src={"/images/bio/textual-inversion.png"}
+  width={800}
+  height={800}
+  className="mx-auto my-5"
+/>
 
 #### Model Reinforcement
 {/* https://confluence.sec.samsung.net/display/GVAI/AlignProps */}
 Feeding the high-quality data to make good models, and optimizing task prompts are not enough for a good service.
-To align various user preferences, I have experiences apply reinforcement techinques such as [AlighProp](https://github.com/mihirp1998/AlignProp).
-
+To align various user preferences, I have experiences apply reinforcement techniques  such as [AlighProp](https://github.com/mihirp1998/AlignProp).
 
 </div>
 </Accordion>
 
 
+<Accordion title="⚔️ Skills" isInitialOpen={false}>
+<div>
+✅You can click the links on images for relevant codes.
+Other skills can be found in the above section 😊
 
+- Multi-node training (accelerate or pytorch lightning)
+- Mixed precision training
+- Large scale data management & transfer (rclone, aws s3)
 
+<div className="p-2">
+<ImageGrid data={skills_ml} linkOn={true} border={true} ></ImageGrid>
+</div>
+</div>
+
+</Accordion>
+
+<Accordion title="🎓 Experiences" isInitialOpen={false}>
+<div className="p-2">
+
+### Company Projects 
+
+#### On-device Model for Generative Edit of Galaxy 
+- I am responsible for training the main models and improvement  in the diffusion schedulers.
+
+#### Personal
+- Virtual influencer with face swap and dreambooth LoRA with Flux.dev ([link](https://www.instagram.com/geni.baek.art/)) 
+- Polynomial trajectory generation with constraints ([link](https://github.com/icsl-Jeon/traj_gen))
+- Inferring attention of a human toward ambient objects using body skeleton and head pose ([youtube](https://www.youtube.com/watch?v=2BkRbw13rdo)). 
+
+</div>
+</Accordion>
 

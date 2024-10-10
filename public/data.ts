@@ -202,3 +202,26 @@ export const hardware = [
     imageUrl: "/images/bio/drone-D.png",
   }
 ];
+
+export const skills_ml = [
+  {
+    title: "HuggingFace",
+    link: "https://github.com/huggingface/diffusers/pull/9565",
+    imageUrl: "/images/bio/hf.png",
+  },
+  {
+    title: "PytorchLightning",
+    link: "",
+    imageUrl: "/images/bio/pl.png",
+  },
+  {
+    title: "Rclone",
+    link: "",
+    imageUrl: "/images/bio/rclone.png",
+  },
+  {
+    title: "AWS",
+    link: "",
+    imageUrl: "/images/bio/aws.png",
+  },
+];
