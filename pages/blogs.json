@@ -1,5 +1,13 @@
 [
   {
+    "title": "Evolution of Diffusion, Generative AI (Part 1)",
+    "description": "This article studies DDPM to Flow matching algorithm",  
+    "tags": ["diffusion", "machine-learning"],
+    "link": "/blog/post22",
+    "image": "/images/post22/main-min.png",
+    "date": "2024-10-10"
+  },
+  {
     "title": "Attention Rollout Visualization",
     "description": "This article studies attention rollout and attention map in vision transformer paper.",  
     "tags": ["transformer", "machine-learning"],
