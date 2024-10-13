@@ -1,1 +1,147 @@
+---
+title: Creating Better Virtual Human
+date: 2024-10-13
+description:
+  This short article overlays methods to build virtual human from generative AI
+thumbnail: /images/post23/42_05.png
+keywords: diffusion
+---
+
+
+import Frontmatter from "../../components/Frontmatter";
+import Image from "next/image";
+
+# Creating Better Virtual Human
+<Frontmatter />
+🎨 Final result: https://www.instagram.com/geni.baek.art/
+
+It is extremely common to create virtual human these days, and there are multiple ways to it. 
+You may heard about virtual influencers such as [Rozy](https://www.instagram.com/rozy.gram/), 
+[Miquela](https://www.instagram.com/lilmiquela/), and [Imma](https://www.instagram.com/imma.gram/).
+They are not 100% generation in the sense that their faces are rigged on real human. 
+
+This article discusses how to create a good virtual human from end to end generation using diffusion or other AI models. 
+Roughly, there are three ways for this: 1) face swap after image generations, 
+2) [Ip-Adaptor Face ID](https://huggingface.co/h94/IP-Adapter-FaceID) (or similar adaptor approaches), and 
+3) training an existing model for adaptation (Dreambooth or LoRA).
+
+Here, I analyze their pros and cons in terms of costs, text alignment, and balance between diversity and consistency.  
+
+## 1. Face Swapping after Generation
+
+*Face swapping* is using the code like [inswapper](https://github.com/haofanwang/inswapper?tab=readme-ov-file), and it is well provided from webui or comfyui via ([Reactor](https://github.com/Gourieff/sd-webui-reactor)).
+In can be used for any generated images. (If you use this on the real human pictures, this act is called Deepfake.)
+
+<div className="flex flex-col items-center">
+  <Image
+    src="/images/post23/faceswap.png"
+    width={1000}
+    height={500}
+    className="my-3"
+  />
+  <p>**Fig.** Face swap pipeline</p>
+</div>
+
+### Pros
+- You do not depend on a specific generation models. You can use swapping on the images generated from various styles 
+- No training is required.
+### Cons
+- Most of the swapping models are limited to [low resolution face images](https://github.com/deepinsight/insightface/issues/2270).
+- Lose lighting or details.
+- Mal-performing on face pose changes.
+- Very difficult to have makeup variations such as face painting.
+
+<div className="flex flex-col items-center">
+  <Image
+    src="/images/post23/details.png"
+    width={1000}
+    height={500}
+    className="my-3"
+  />
+  <p>**Fig.** Lighting and resolution degraded.</p>
+</div>
+
+<div className="flex flex-col items-center">
+  <Image
+    src="/images/post23/pose.png"
+    width={1000}
+    height={500}
+    className="my-3"
+  />
+  <p>**Fig.** Only frontal pose is working good.</p>
+</div>
+
+### How to Overcome Face Resolution Drop?
+Despite of the simplicity, the biggest problem of this approach is resolution drop of the face region. 
+Using GAN based upscalers (e.g., GFPGAN) is not working very well. I would recommend inpainting a little bit ont he facial region with low strength as mush as you keep the original face identity.  
+
+<div className="flex flex-col items-center">
+  <Image
+    src="/images/post23/overcome.png"
+    width={1000}
+    height={500}
+    className="my-3"
+  />
+</div>
+
+## 2. IP-Adaptors (FaceID)
+
+IP adaptor is essentially an image **prompt**. 
+The prompt is extracted from a given image based on CLIP vision encoder. 
+[FaceID](https://huggingface.co/h94/IP-Adapter-FaceID) is a specialized IP adaptor to extract meanings from face iamges.
+By using FaceID IPadaptor, it is basically providing an additional prompt: "resembles this face".
+
+### Pros
+- Supports high resolution 1024 x 1024 image without resolution drop of the face, if you use FaceID SDXL ([here](https://huggingface.co/h94/IP-Adapter-FaceID)). 
+- We can output various pose, lighting, and so on.
+
+### Cons
+- It decreases text alignment, as the image prompt can be a big disrupter for your textual prompts. 
+Thus, it is very difficult to use long description. 
+- This adaptor will work well only with the models with which IP adaptor is trained.
+In general, those models are basic models such as sd1.5, sdxl, which produce poor realistic photos (that is why [these models](https://civitai.com/models/4201/realistic-vision-v60-b1) were picking up among users).
+- It is very well known that CLIP vision encoder is capable of grab global semantic, not a detailed information.  
+
+Personally, using IP adaptor for preserving face identity can be an over-use of CLIP vision encoder, 
+and I did not get satisfactory result in both identity preservation and text alignment. 
+
+<div className="flex flex-col items-center">
+  <Image
+    src="/images/post23/ipadator.png"
+    width={1000}
+    height={500}
+    className="my-3"
+  />
+</div>
+
+## 3. Training Customized Models (Dreambooth and LoRA)
+
+In the end, I arrived here. This is the best method if you have enough GPU power. 
+Basic concept is feeding a foundation model with your character. 
+I selected 10 best quality photos with face swapping on the images generated by [flux.dev](https://huggingface.co/black-forest-labs/FLUX.1-dev).
+Then, I trained flux.dev model with dreambooth objective by making the model to generate my character if given `sks woman`.
+`sks` means nothing but a word not used in our dictionary. Personally, I used the dreambooth training script after some fixes (here is my [PR](https://github.com/huggingface/diffusers/pull/9565) to huggingface).
+I selected flux as the foundation, as it is the best-performing in fingers, with a insane text alignment.
+
+### Pros 
+- No face resolution drop, little gap between target image and model outputs (if correctly trained). 
+- Keeping face / lighting details while makeup variation.
+
+<div className="flex flex-col items-center">
+  <Image
+    src="/images/post23/lora.png"
+    width={1000}
+    height={500}
+    className="my-3"
+  />
+</div>
+
+### Cons
+- Require many trials and errors to pick the training checkpoint, balancing id-consistency and diversity. 
+If you train too long or [without prior preservation](https://huggingface.co/docs/diffusers/training/dreambooth#prior-preservation-loss), your model will collapse into only making the photos you provided.
+In contrast, too short training will give you unsatisfactory id.  
+- Require decent GPUs. 
+
+
+
 
