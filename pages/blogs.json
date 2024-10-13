@@ -1,5 +1,13 @@
 [
   {
+    "title": "Creating Better Virtual Human",
+    "description": "This short article overlays methods to build virtual human from generative AI",  
+    "tags": ["diffusion", "machine-learning"],
+    "link": "/blog/post23",
+    "image": "/images/post23/main-min.png",
+    "date": "2024-10-10"
+  },
+  {
     "title": "Evolution of Diffusion, Generative AI (Part 1)",
     "description": "This article studies DDPM to Flow matching algorithm",  
     "tags": ["diffusion", "machine-learning"],
