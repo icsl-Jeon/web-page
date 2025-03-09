@@ -224,4 +224,9 @@ export const skills_ml = [
     link: "",
     imageUrl: "/images/bio/aws.png",
   },
+  {
+    title: "Blender",
+    link: "https://arxiv.org/pdf/2503.02577",
+    imageUrl: "/images/bio/blender.png",
+  },
 ];

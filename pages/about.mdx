@@ -230,7 +230,7 @@ Beyond detection in a single frame, 3D positions of the targets are tracked and 
 
 <Accordion title="📦 Deliverables" isInitialOpen={false}>
 <div className="p-3">
-### 1. Diffusion Model ⭐
+### 1. Training Diffusion Model ⭐
 I have deep understanding & industrial experiences in diffusion models.
 In my team, I am working on inpainting / outpainting *on-device* model, providing clean removal without unwanted object generation even in tight masks.
 Also, shadow removal is provided in the single model.
@@ -252,9 +252,10 @@ I am mainly concerned with on-device application with strict limitations on ROM,
 To make adaptable LoRA weights from LVMs, I focus on how to get a good LoRA (A, B) with minimum target layers, and did multiple experiments on ranks.
 
 
-### 2. Models Improvement  ✏️
+### 2. Control of Diffusion Models  ✏️
 
 #### Textual Inversion (Prompt Optimization)
+[Related tech. report](https://arxiv.org/pdf/2503.04268).
 Based on the prompt optimization, I compress abstract user intentions (they often do not have an idea on how to put into textual prompts 😼) into embedding spaces, by curating and training models with a good examples.  
 Also, I made a research how to apply two different intentions by spatially varying latent regions by modifying CFG. 
 The below is an example to embed two user intentions (fill based on the context and clean removal) without text prompts.
@@ -265,10 +266,10 @@ The below is an example to embed two user intentions (fill based on the context 
   className="mx-auto my-5"
 />
 
-#### Model Reinforcement
+#### Reinforcement
 {/* https://confluence.sec.samsung.net/display/GVAI/AlignProps */}
 Feeding the high-quality data to make good models, and optimizing task prompts are not enough for a good service.
-To align various user preferences, I have experiences apply reinforcement techniques  such as [AlighProp](https://github.com/mihirp1998/AlignProp).
+To align various user preferences, I have experiences apply reward-finetuning and reinforcement for non-differentiable rewards. 
 
 </div>
 </Accordion>
@@ -295,12 +296,15 @@ Other skills can be found in the above section 😊
 
 ### Company Projects 
 
-#### On-device Model for Generative Edit of Galaxy 
-- I am responsible for training the main models and improvement  in the diffusion schedulers.
+#### On-device Model for [*Generative Edit* (Galaxy S25)](https://www.linkedin.com/feed/update/urn:li:activity:7288177861780217856/)
+- building large-scale training pipeline and dataset curation (more than 55% of total PR)
+- Adapting large vision model (LVM) into the target tasks
+- Post-training to optimize the final look-and-feel
+- Earned high marks in the assessment
 
-#### Personal
-- Virtual influencer with face swap and dreambooth LoRA with Flux.dev ([link](https://www.instagram.com/geni.baek.art/)) 
-
+### Personal Projects
+- Virtual influencer with face swap and dreambooth LoRA with Flux.dev ([instalink](https://www.instagram.com/geni.baek.art/), [huggingfacePR](https://github.com/huggingface/diffusers/pull/9565?notification_referrer_id=NT_kwDOAcq3irQxMjY2MzAyOTQyNDozMDA2MjQ3NA&notifications_query=reason%3Aparticipating#issuecomment-2451286211)) 
+- Motion diffusion models ([paper under review](https://arxiv.org/pdf/2503.02577)) 
 </div>
 </Accordion>
 
