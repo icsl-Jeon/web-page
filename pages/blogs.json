@@ -1,32 +1,21 @@
 [
   {
     "title": "Creating Better Virtual Human",
-    "description": "This short article overlays methods to build virtual human from generative AI",  
-    "tags": ["diffusion", "machine-learning"],
+    "description": "This short article overlays methods to build virtual human from generative AI",
+    "tags": [
+      "diffusion",
+      "machine-learning"
+    ],
     "link": "/blog/post23",
     "image": "/images/post23/main-min.png",
     "date": "2024-10-10"
   },
   {
-    "title": "Evolution of Diffusion, Generative AI (Part 1)",
-    "description": "This article studies DDPM to Flow matching algorithm",  
-    "tags": ["diffusion", "machine-learning"],
-    "link": "/blog/post22",
-    "image": "/images/post22/main-min.png",
-    "date": "2024-10-10"
-  },
-  {
-    "title": "Attention Rollout Visualization",
-    "description": "This article studies attention rollout and attention map in vision transformer paper.",  
-    "tags": ["transformer", "machine-learning"],
-    "link": "/blog/attention-map",
-    "image": "/images/attention-map/main-min.png",
-    "date": "2023-10-25"
-  },
-  {
     "title": "Types of Motion Planners at a Glance",
     "description": "Comprehensive glance into the five big categories and general concepts of planning methods",
-    "tags": ["motion-planning"],
+    "tags": [
+      "motion-planning"
+    ],
     "link": "/blog/post20",
     "image": "/images/post20/main-min.png",
     "date": "2023-08-05"
@@ -34,148 +23,44 @@
   {
     "title": "Hierarchial Framework - Combination of Planners",
     "description": "Comprehensive glance into the five big categories and general concepts of planning methods",
-    "tags": ["motion-planning"],
+    "tags": [
+      "motion-planning"
+    ],
     "link": "/blog/post21",
     "image": "/images/post21/main-min.png",
     "date": "2023-08-12"
   },
   {
-    "title": "Fast ROS 2 Tutorial",
-    "description": "Concise but complete tutorial for getting familiar with ROS2. (8 pages)",
-    "tags": ["ros"],
-    "link": "/blog/ros2-tutorial",
-    "image": "/images/part1/main-min.png",
-    "date": "2023-10-05"
-  },
-  {
-    "title": "Threading of ROS 2",
-    "description": "Investigate single thread and multi-thread of ROS2. (3 pages)",
-    "tags": ["ros", "threading"],
-    "link": "/blog/threading-ros2",
-    "image": "/images/post8/main-min.png",
-    "date": "2023-05-25"
-  },
-  {
-    "title": "Frontend (state machine) for Robotics",
-    "description": "Show an example of how to manage states and flow",
-    "tags": [
-      "design-pattern"
-    ],
-    "link": "/blog/frontend",
-    "image": "/images/post14/main-min.png",
-    "date": "2023-06-19"
-  },
-  {
-    "title": "DDS of ROS2",
-    "description": "Advantages of ROS 2 by understanding backstory of ROS2 development",
-    "tags": ["ros", "communication"],
-    "link": "/blog/post1",
-    "image": "/images/post1/main-min.png",
-    "date": "2023-02-21"
-  },
-  {
-    "title": "Rearrange of Einops - Input Patch Flattening in Vision Transformer",
-    "description": "Examine a great library for tensor operations in machine learning",
-    "tags": ["transformer", "machine-learning"],
-    "link": "/blog/einops",
-    "image": "/images/einops/main-min.png",
-    "date": "2023-09-07"
-  },
-  {
-    "title": "RAPTOR: Robust and Perception-aware Trajectory Replanning for Quadrotors Fast Flight",
-    "description": "A local planning for better risk-awareness and active exploration for unknown environments",
-    "tags": ["motion-planning"],
-    "link": "/blog/post11",
-    "image": "/images/post11/main-min.png",
-    "date": "2023-05-29"
-  },
-  {
-    "title": "PredRecon: 3D Reconstruction Purposeful Movement Based on Surface Prediction",
-    "description": "Motion planning for 3D reconstruction",
-    "tags": ["motion-planning", "reconstruction", "supervised-learning"],
-    "link": "/blog/post12",
-    "image": "/images/post12/main-min.png",
-    "date": "2023-06-04"
-  },
-  {
-    "title": "Very Short Overview of OMPL (Open Motion Planning Library)",
-    "description": "Some features of OMPL which is one of the most well-known motion planning library.",
-    "tags": ["motion-planning", "sampling-based-planner"],
-    "link": "/blog/post13",
-    "image": "/images/post13/main-min.png",
-    "date": "2023-06-11"
-  },
-  {
-    "title": "Understanding Components of UAV for Research",
-    "description": "Introduction to general parts of UAVs",
-    "tags": ["hardware"],
-    "link": "/blog/post17",
-    "image": "/images/post17/main-min.png",
-    "date": "2023-07-07"
-  },
-  {
     "title": "Gentle Introduction to Hybrid A Star in Minutes",
     "description": "Explore how to plan motions for non-holonomic cars",
-    "tags": ["motion-planning"],
+    "tags": [
+      "motion-planning"
+    ],
     "link": "/blog/post19",
     "image": "/images/post19/main-min.png",
     "date": "2023-07-23"
   },
   {
-    "title": "Very Short Guide to Use Ubuntu in Windows 11 with VSCode (WSL2 with GUI Support Out-of-Box)",
-    "description": "Very short guide to use Ubuntu in Windows 11 with VSCode (WSL2 with GUI support out-of-box)",
-    "tags": ["VSCode"],
-    "link": "/blog/post2",
-    "image": "/images/post2/main-min.png",
-    "date": "2023-02-21"
-  },
-
-  {
-    "title": "Users of VSCode, Use CMake Extension Instead of c_cpp_properties.json",
-    "description": "Very short guide why you use CMakeLists.txt for code completion",
-    "tags": ["VSCode", "CMake"],
-    "link": "/blog/post3",
-    "image": "/images/post3/main-min.png",
-    "date": "2023-04-20"
-  },
-  {
-    "title": "Formatting for Your CMake Project",
-    "description": "How to ensure the codebase is consistent and well-formatted.",
-    "tags": ["VSCode", "CMake"],
-    "link": "/blog/post4",
-    "image": "/images/post4/main-min.png",
-    "date": "2023-04-23"
-  },
-  {
     "title": "ROS Node as Adapter of Core Logic",
     "description": "Design pattern for ROS",
-    "tags": ["ros", "CMake", "design-pattern"],
+    "tags": [
+      "ros",
+      "CMake",
+      "design-pattern"
+    ],
     "link": "/blog/post5",
     "image": "/images/post5/main-min.png",
     "date": "2023-04-27"
   },
   {
-    "title": "Setup VSCode for ROS Code Completion and Debugging",
-    "description": "This article describes setup VSCode for ROS code completion and debugging.",
-    "tags": ["ros", "VSCode"],
-    "link": "/blog/post6",
-    "image": "/images/post6/main-min.png",
-    "date": "2023-05-05"
-  },
-  {
     "title": "Packaging a Mid-Size (Pure) CMake Project",
     "description": "This article describes how to organize structure and write CMakeList files in middle-scaled project.",
-    "tags": ["CMake", "design-pattern"],
+    "tags": [
+      "CMake",
+      "design-pattern"
+    ],
     "link": "/blog/post7",
     "image": "/images/post7/main-min.png",
     "date": "2023-05-06"
-  },
-  {
-    "title": "Finding Extrinsic Parameters for Pan-Tilt-Slide System",
-    "description": "",
-    "tags": ["calibration", "forward-kinematics"],
-    "link": "/blog/edelkrone",
-    "image": "/images/edelkrone/main-min.png",
-    "date": "2022-01-18"
   }
 ]

@@ -1,40 +1,169 @@
 import Image from "next/image";
-import { Card, Cards } from "nextra-theme-docs";
+import YouTube from "react-youtube";
+import ImageGrid from "@/components/ImageGrid";
+import { Card } from "@/components/PostSummary";
+import { targets, skills, skills_ml, hardware } from "../public/data";
 
-<div>
-<div className="flex flex-row items-center">
 <Image
-  src={"/images/bio/profile-min.jpg"}
-  width={500}
-  height={500}
-  className="mx-auto sm:rounded-xl mb-5"
+  src="/images/my-photo.png"
+  width={300}
+  height={300}
+  className="mx-auto rounded-full my-5"
 />
-{/* <Image
-  src={"/images/bio/profile-min.jpg"}
-  width={500}
-  height={500}
-  className="mx-auto sm:rounded-xl mb-5"
-/> */}
+
+<p className="text-center text-2xl my-3 font-bold">Boseong Jeon</p>
+
+<div className="text-center">
+  🤖 I deliver a <strong>full-stack</strong> robot autonomy.
 </div>
-<h1 className="mx-auto text-center text-3xl font-bold mb-4"> Hello, I am Boseong Jeon :) </h1>
-<div className="mx-auto flex flex-row items-center justify-center">
-  <a href="/about">
-  <button
-    className={
-      "shadow  bg-slate-200 hover:bg-slate-300 text-center text-black p-1 rounded-lg mx-1 px-4"
-    }
-  >
-    📓Bio
-  </button>
+
+<br />
+
+<div className="mx-auto flex flex-row items-center justify-center mb-6">
+  <a href="https://drive.google.com/file/d/1ZB3JOpwllVM1j9RAzrsejKwlRrfIFufi/view?usp=drive_link" target="_blank">
+    <button className="shadow bg-slate-200 hover:bg-slate-300 text-black p-1 rounded-lg mx-1 px-4">cv</button>
   </a>
-  <a href="/blog">
-  <button
-  className={
-    "shadow  bg-slate-200 hover:bg-slate-300 text-center p-1 text-black rounded-lg  mx-1  px-4"
-  }
-  >
-    ✏️Blog
-  </button>
+  <a href="https://github.com/icsl-Jeon" target="_blank">
+    <button className="shadow bg-slate-200 hover:bg-slate-300 text-black p-1 rounded-lg mx-1 px-4">Github</button>
   </a>
+  <a href="https://www.linkedin.com/in/felipe-jeon-491773226/" target="_blank">
+    <button className="shadow bg-slate-200 hover:bg-slate-300 text-black p-1 rounded-lg mx-1 px-4">LinkedIn</button>
+  </a>
+  <a href="https://www.youtube.com/channel/UCPeLtCD0ouhFdLO60V7pjlw" target="_blank">
+    <button className="shadow bg-slate-200 hover:bg-slate-300 text-black p-1 rounded-lg mx-1 px-4">Youtube</button>
+  </a>
+  <a href="https://felipe-jeon.vercel.app/blog"  target="_blank">
+<button className="shadow bg-slate-200 hover:bg-slate-300 text-black p-1 rounded-lg mx-1 px-4">blog</button>
+    </a>
 </div>
+
+## 1. Education
+
+- **2013-2015**: Started from architecture and architectural engineering @ [Seoul National University](https://en.snu.ac.kr/).  
+- **2015-2017**: BS in mechanical & aerospace engineering @ Seoul National University
+- **2017-2022**: PhD in Robotics in [Lab for Autonomous Robotics Research](https://larr.snu.ac.kr/), advisor: [H. Jin Kim](https://scholar.google.com/citations?user=TLQUwIMAAAAJ&hl=ko).  
+  <b>5 yrs graduation</b>
+- **2022-Current**: Staff engineer @ Samsung Research
+
+## 2. Core Research
+
+### A. Hierarchical Motion Planning for Active Vision 
+
+
+<Image
+  src="/images/bio/thumbnail.png"
+  width={1200}
+  height={300}
+  className="mx-auto my-5"
+/>
+
+
+Designed a real-time motion planning framework for generating high-quality robot trajectories that balance multiple complex and often conflicting objectives. Specifically, I developed an aerial chasing system that maintains target visibility, ensures safety, and optimizes travel efficiency simultaneously. All algorithms were deployed on onboard computers, and I independently built the entire system, including the hardware.
+Watch the demo on [Youtube](https://www.youtube.com/watch?v=ZBFRS5TpRvI) 🚀
+
+#### Academic Publications (1st Author Only)
+
+- *Online trajectory generation of a mav for chasing a moving target in 3d dense environments* (2019 IROS) [📄](https://arxiv.org/pdf/1904.03421)
+- *Integrated motion planner for real-time aerial videography with a drone in a dense environment* (2020 ICRA) [📄](https://arxiv.org/pdf/1911.09280)
+- *Detection-aware trajectory generation for a drone cinematographer* (2020 IROS) [📄](https://arxiv.org/pdf/2009.01565)
+- *Autonomous aerial dual-target following among obstacles* (IEEE Access) [📄](https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=9557293)
+- *Aerial chasing of a dynamic target in complex environments* (IJCAS) [📄](https://arxiv.org/pdf/2112.06474)
+
+
+
+### B. On-device generative AI (Galaxy AI)
+<div className="flex flex-col sm:flex-row justify-center items-center gap-4 my-5">
+  <Image
+    src="/images/bio/galaxy.gif"
+    width={180}
+    height={300}
+    className="rounded-lg"
+    alt="First image"
+  />
+  <Image
+    src="/images/bio/thumbnail-v2.png"
+    width={500}
+    height={300}
+    className="rounded-lg"
+    alt="Second image"
+  />
 </div>
+
+Led the development of an **on-device generative image model deployed on Galaxy S25**, delivering performance comparable to Google’s Imagen 3 cloud model. I was responsible for the entire training and data pipeline, including: 1) LoRA-based adaptation of a large foundation model, 2) Downstream fine-tuning for image generation tasks, and 3) Reward modeling and fine-tuning prior to quantization for efficient on-device deployment.
+Special focus on enabling a single model to perform multiple tasks and enhance output quality, despite severe constraints on memory and computation time.
+#### Technical Reports 
+I wrote relevant articles. Please note that our company does not allocate dedicated time for research or paper writing.
+- *ControlFill: Spatially Adjustable Image Inpainting from Prompt Learning* (2024 Samsung Paper Award) [📄](https://arxiv.org/pdf/2503.04268)
+- *CrimEdit: Controllable Editing for Object Removal, Insertion, and Movement* (2025, under review) [📄](https://drive.google.com/file/d/10WmZGB17-UsRftRbtP_eEcD7OuBBora4/view?usp=sharing)
+- *SPG: Improving Motion Diffusion by Smooth Perturbation Guidance (2025 Arxiv)* [📄](https://arxiv.org/pdf/2503.02577)
+
+### C. Robot Foundation Model (A+B)
+Will be updated soon 🔥
+
+## 3. Past Projects
+<div className="flex flex-col sm:flex-row justify-center items-center gap-4 my-5">
+  <Image
+    src="/images/bio/disaster-robots-hover.png"
+    width={150}
+    height={200}
+    className="rounded-lg"
+    alt="First image"
+  />
+  <div>
+    <h3 className="text-lg font-semibold mb-1">Task Allocation for Rescue Robots (2017~2019)</h3>
+    <div>
+      Performed research with <a href="https://www.kiro.re.kr/default.asp" className="text-blue-600 underline">KIRO</a>. Given a fleet of atypical robots, assign the task sequence to each robot considering their mobility and mapping information. Developed <a href="https://dspace.mit.edu/handle/1721.1/44926" className="text-blue-600 underline">auction algorithm</a> incorporating A* optimal connecting path.
+    </div>
+  </div>
+</div>
+
+<div className="flex flex-col sm:flex-row justify-center items-center gap-4 my-5">
+  <Image
+    src="/images/bio/autonomous-driving.jpg"
+    width={150}
+    height={200}
+    className="rounded-lg"
+    alt="First image"
+  />
+  <div>
+    <h3 className="text-lg font-semibold mb-1">Autonomous Driving in Unstructured Environments (2019~2020)</h3>
+    <div>
+      Developed a driving stack for unstructured roads using sensors such as LiDAR and GPS. With KETI, we conducted real-car testing. The stack includes ground-based mapping, moving object prediction, and hierarchical motion planning composed of safe driving area estimation and an MPC reference tracker. <a href="https://www.youtube.com/watch?v=JKgbRNPdOzw" className="text-blue-600 underline">YouTube</a>
+    </div>
+  </div>
+</div>
+
+<div className="flex flex-col sm:flex-row justify-center items-center gap-4 my-5">
+  <Image
+    src="/images/bio/traj-gen.png"
+    width={150}
+    height={200}
+    className="rounded-lg"
+    alt="First image"
+  />
+  <div>
+    <h3 className="text-lg font-semibold mb-1"><em>traj_gen</em>: A Continuous Trajectory Generation with Simple API (230+ Stars)</h3>
+    <div>
+      <em>traj_gen</em> is a continuous trajectory generation package where high-order derivatives along the trajectory are minimized while satisfying waypoints (equality) and axis-parallel box constraints (inequality). The objective and constraints are formulated in <em>quadratic programming</em> (QP) to ensure real-time performance. <a href="https://github.com/icsl-Jeon/traj_gen" className="text-blue-600 underline">GitHub</a>
+    </div>
+  </div>
+</div>
+
+<div className="flex flex-col sm:flex-row justify-center items-center gap-4 my-5">
+  <Image
+    src="/images/bio/incubation_maze.gif"
+    width={150}
+    height={150}
+    className="rounded-lg"
+    alt="First image"
+  />
+  <div>
+    <h3 className="text-lg font-semibold mb-1">Incubation Project for Advancing Navigation of Samsung Robot Platform (SRP) (2023)</h3>
+    <div>
+      As part of an initiative to extend the navigation tree of SRP with forward–backward motion and rectangular collision modeling, I developed a reference pose trajectory and its corresponding safe corridor using a variant of the hybrid A* algorithm (<a href="https://www.youtube.com/watch?v=bJFZEHa5OZc" className="text-blue-600 underline">YouTube</a>).  
+      A real-robot demonstration video is available <a href="https://drive.google.com/file/d/1OQrqvnAVGqyMO34Tq27VXiyGhyBQRWB2/view?usp=sharing" className="text-blue-600 underline">here</a>.
+    </div>
+  </div>
+</div>
+
+

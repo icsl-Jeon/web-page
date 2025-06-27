@@ -11,18 +11,6 @@
       "timestamp": false
     }
   },
-  "about": {
-    "title": "Bio",
-    "type": "page",
-    "theme": {
-      "sidebar": false,
-      "toc": false,
-      "footer": false,
-      "pagination": false,
-      "breadcrumb": false,
-      "timestamp": false
-    }
-  },
   "blog": {
     "title": "Blog",
     "type": "page",
