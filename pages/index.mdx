@@ -1,6 +1,7 @@
 import Image from "next/image";
 import YouTube from "react-youtube";
 import ImageGrid from "@/components/ImageGrid";
+import Carousel from "@/components/Caroursel";
 import { Card } from "@/components/PostSummary";
 import { targets, skills, skills_ml, hardware } from "../public/data";
 
@@ -124,8 +125,39 @@ Based on the methods, I deployed robots on multiple edge devices.
 
 
 
-- *Shallow-π: Knowledge Distillation for Flow-based VLAs* [🖥️](https://icsl-jeon.github.io/shallow-pi/)
+- *Shallow-π: Knowledge Distillation for Flow-based VLAs* [🖥️](https://icsl-jeon.github.io/shallow-pi/) (IROS 2026 accepted; 36% acceptance rate)
 
+
+### D. World generative model (A+B+C)
+
+At 42dot, I am actively working on world models for training and evaluating driving VLA models. My focus is on developing scalable, fast, and temporally stable autoregressive (AR) video diffusion models that can reflect simulation conditions, including other vehicles and map configurations.
+
+<video
+  controls
+  playsInline
+  preload="metadata"
+  className="my-4 w-full rounded-lg bg-black shadow-lg"
+>
+  <source src="/images/bio/iter000003275_9_unique_generated_3x3.mp4" type="video/mp4" />
+</video>
+<div className="caption">
+  Autoregressive image-to-video streaming. I developed a consistent video generation system without complex training stages such as DMD distillation and self-forcing.
+</div>
+
+<Carousel
+  data={[
+    {
+      src: "/images/bio/0098624e-722b-54f3-ac9e-2d7f25850b4f_20250909000822_128_left_2_yaw_0.mp4",
+    },
+    {
+      src: "/images/bio/cycle_render__left_1_ckpt_30000__0098624e-722b-54f3-ac9e-2d7f25850b4f_20250714074642_032_CAM_FRONT.mp4",
+    },
+    {
+      src: "/images/bio/0098624e-722b-54f3-ac9e-2d7f25850b4f_20250926025105_023_right_2_yaw_0.mp4",
+    },
+  ]}
+/>
+<div className="caption">Gaussian splatting enhancement with a single step AR (streaming) diffusion</div>
 
 ## 3. Past Projects
 <div className="flex flex-col sm:flex-row justify-center items-center gap-4 my-5">
@@ -192,5 +224,3 @@ Based on the methods, I deployed robots on multiple edge devices.
     </div>
   </div>
 </div>
-
-
